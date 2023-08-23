@@ -42,6 +42,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
+import { ImageModule } from 'primeng/image';
+import { TagModule } from 'primeng/tag';
+import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
+import { ActionpanelComponent } from './views/actionpanel/actionpanel.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -71,7 +75,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AccounthubComponent,
     LinkedinRedirectComponent,
     FacebookRedirectComponent,
-    CreateContentComponent
+    CreateContentComponent,
+    AnythinghubComponent,
+    ActionpanelComponent
   ],
   imports: [
     SelectButtonModule,
