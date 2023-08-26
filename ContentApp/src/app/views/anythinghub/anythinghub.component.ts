@@ -7,13 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AnythinghubComponent {
 videotofb() {
-throw new Error('Method not implemented.');
+  throw new Error('Method not implemented.');
 }
 youtubetofb() {
-throw new Error('Method not implemented.');
+  throw new Error('Method not implemented.');
 }
 onCreateClick() {
-throw new Error('Method not implemented.');
+  throw new Error('Method not implemented.');
 }
 
 }

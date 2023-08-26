@@ -35,12 +35,12 @@ export class AppComponent implements OnInit {
     private socialAuthService: SocialAuthService
   ) {
     this.items = [
-      {
-        icon: 'pi pi-angle-left',
-      },
-      {
-        icon: 'pi pi-angle-right',
-      },
+      // {
+      //   icon: 'pi pi-angle-left',
+      // },
+      // {
+      //   icon: 'pi pi-angle-right',
+      // },
     ];
   }
 
