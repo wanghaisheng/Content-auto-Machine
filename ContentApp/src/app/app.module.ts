@@ -29,6 +29,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { FacebookRedirectComponent } from './views/redirects/facebookredirect.component';
 import { SplitterModule } from 'primeng/splitter';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService } from 'primeng/api';
@@ -84,6 +85,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ContentpanelComponent
   ],
   imports: [
+    BreadcrumbModule,
     SelectButtonModule,
     DropdownModule,
     InputTextareaModule,
