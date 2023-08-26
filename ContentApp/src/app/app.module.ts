@@ -45,7 +45,9 @@ import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
 import { ImageModule } from 'primeng/image';
 import { TagModule } from 'primeng/tag';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
-import { ActionpanelComponent } from './views/actionpanel/actionpanel.component';
+import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
+import { CreatepanelComponent } from './views/contentdashboard/createpanel/createpanel.component';
+import { ContentpanelComponent } from './views/contentdashboard/contentpanel/contentpanel.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -77,7 +79,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FacebookRedirectComponent,
     CreateContentComponent,
     AnythinghubComponent,
-    ActionpanelComponent
+    ContentDashboardComponent,
+    CreatepanelComponent,
+    ContentpanelComponent
   ],
   imports: [
     SelectButtonModule,

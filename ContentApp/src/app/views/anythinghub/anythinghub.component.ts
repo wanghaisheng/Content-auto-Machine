@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationService } from 'src/app/service/navigation.service';
 
 @Component({
   selector: 'app-anythinghub',
@@ -6,14 +7,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./anythinghub.component.css']
 })
 export class AnythinghubComponent {
-videotofb() {
-  throw new Error('Method not implemented.');
-}
-youtubetofb() {
-  throw new Error('Method not implemented.');
-}
-onCreateClick() {
-  throw new Error('Method not implemented.');
-}
 
+  constructor(
+    private navigationService: NavigationService,
+  ) { }
+  
+  videotofb() {
+    this.navigationService.navigateToDashboard();
+  }
+  youtubetofb() {
+    this.navigationService.navigateToDashboard();
+  }
+  onCreateClick() {
+    this.navigationService.navigateToDashboard();
+  }
 }

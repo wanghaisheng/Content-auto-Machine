@@ -5,14 +5,14 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
 import { FacebookRedirectComponent } from './views/redirects/facebookredirect.component';
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
-import { ActionpanelComponent } from './views/actionpanel/actionpanel.component';
+import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'facebook-callback', component: FacebookRedirectComponent },
   { path: 'linkedin-callback', component: LinkedinRedirectComponent},
   { path: '', component: AnythinghubComponent},
-  { path: 'generate', component: ActionpanelComponent},
+  { path: 'dashboard', component: ContentDashboardComponent},
   { path: '**', component: PageNotFoundComponent }
 ];
 

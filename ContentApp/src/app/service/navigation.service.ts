@@ -25,9 +25,9 @@ export class NavigationService {
     });
   }
   
-  // navigateToCopyCat() {
-  //   this.router.navigate(['maker/copycat']);
-  // }
+  navigateToDashboard() {
+    this.router.navigate(['dashboard']);
+  }
 
   // navigateToExtractDetails(id: string = '') {
   //   if (id === '') {
