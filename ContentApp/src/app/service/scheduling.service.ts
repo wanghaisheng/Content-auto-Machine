@@ -8,7 +8,7 @@ import { EventColor } from 'calendar-utils';
 @Injectable({
   providedIn: 'root',
 })
-export class ContentService {
+export class SchedulingService {
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
 

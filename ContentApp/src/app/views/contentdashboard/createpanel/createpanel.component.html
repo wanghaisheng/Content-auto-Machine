@@ -1,12 +1,12 @@
 <div style="padding: 1rem; width: 300px;" class="flex-container">
   <span class="flex-item p-input-icon-left">
-    <i class="pi pi-search"></i>
-    <input class="flex-item" type="text" pInputText formControlName="title"/>
+    <i class="pi pi-book"></i>
+    <input placeholder='Type your title...' class="flex-item" type="text" pInputText formControlName="title"/>
   </span>
   <h3 class="flex-item">Youtube Video Link</h3>
   <span class="flex-item p-input-icon-left">
-    <i class="pi pi-search"></i>
-    <input class="flex-item" type="text" pInputText formControlName="url"/>
+    <i class="pi pi-youtube"></i>
+    <input placeholder='Paste your link...' class="flex-item" type="text" pInputText formControlName="url"/>
   </span>
 
   <div class="row" style="margin-top: 1rem;">
@@ -21,7 +21,8 @@
 
   <h3 class="flex-item">Output Type</h3>
   <form [formGroup]="formGroup">
-    <p-dropdown formControlName="ai_model" [options]="models" optionLabel="name"></p-dropdown>
+    <p-dropdown class="flex-item" formControlName="model" [options]="models" optionLabel="name"></p-dropdown>
   </form>
 
+  <p-button [loading]="contentLoading" (onClick)="submitForContent()" label="Generate Content" icon="pi pi-check"></p-button>
 </div>

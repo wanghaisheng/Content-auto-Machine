@@ -46,6 +46,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
 import { ImageModule } from 'primeng/image';
 import { TagModule } from 'primeng/tag';
+import { BlockUIModule } from 'primeng/blockui';
 import { TooltipModule } from 'primeng/tooltip';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
@@ -87,6 +88,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ContentpanelComponent
   ],
   imports: [
+    BlockUIModule,
     TooltipModule,
     ImageModule,
     BreadcrumbModule,

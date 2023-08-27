@@ -1,20 +1,52 @@
+/* Flex container */
 .flex-container {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column; 
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  flex-direction: column;
 }
 
+/* Flex item */
 .flex-item {
-  flex: 1; /* This ensures each item takes up the full width */
+  flex: 1;
+  margin-bottom: 1rem;
 }
 
-.col {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Input with icon */
+.p-input-icon-left .p-inputtext {
+  width: 100%;
 }
 
+/* Image section */
 .row {
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
+
+/* Image */
+.p-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* Image details */
+.row > div:last-child {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+/* Output Type section */
+.form-group {
+  width: 100%;
+}
+
+/* Dropdown */
+.p-dropdown {
+  width: 100%;
+}
+

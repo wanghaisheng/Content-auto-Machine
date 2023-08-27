@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterContentInit, Component } from '@angular/core';
 import { NavigationService } from 'src/app/service/navigation.service';
 
 @Component({
@@ -6,11 +6,16 @@ import { NavigationService } from 'src/app/service/navigation.service';
   templateUrl: './anythinghub.component.html',
   styleUrls: ['./anythinghub.component.css']
 })
-export class AnythinghubComponent {
+export class AnythinghubComponent implements AfterContentInit {
+  blockMode: boolean = false;
 
   constructor(
     private navigationService: NavigationService,
   ) { }
+
+  ngAfterContentInit(): void {
+    this.blockMode = true;
+  }
   
   videotofb() {
     this.navigationService.navigateToDashboard();
