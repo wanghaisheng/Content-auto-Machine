@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { FireAuthRepository } from '../repository/firebase/fireauth.repo';
+import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { MenuItem } from 'primeng/api';
 import { Observable, Subject, filter } from 'rxjs';
 

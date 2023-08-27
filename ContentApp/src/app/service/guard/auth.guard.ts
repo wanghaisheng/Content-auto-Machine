@@ -3,7 +3,7 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
+import { FireAuthRepository } from '../../repository/database/fireauth.repo';
 import { map } from 'rxjs';
 
 export const authGuard = (next: ActivatedRouteSnapshot) => {

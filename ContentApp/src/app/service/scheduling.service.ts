@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
-import { FireAuthRepository } from '../repository/firebase/fireauth.repo';
+import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { Observable, Subject, concat, concatMap } from 'rxjs';
 import { CalendarEvent } from 'angular-calendar';
 import { ContentRepository } from '../repository/content.repo';

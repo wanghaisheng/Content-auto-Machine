@@ -25,20 +25,20 @@ import {
   SCOPE,
   USER_ID,
   USERS_COL,
-} from '../repository/firebase/firestore.repo';
+} from '../repository/database/firestore.repo';
 import { firebase } from 'firebaseui-angular';
 import {
   PERSONAL_ACCTS_DOC,
   PostingPlatform,
-} from '../repository/firebase/firestore.repo';
+} from '../repository/database/firestore.repo';
 import {
   ACCESS_TOKEN,
   LAST_LOGIN_AT,
   CREATION_TIME,
   REFRESH_TOKEN,
   SCOPE as SCOPES,
-} from '../repository/firebase/firestore.repo';
-import { FireAuthRepository } from '../repository/firebase/fireauth.repo';
+} from '../repository/database/firestore.repo';
+import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { YoutubeAuthRepository } from '../repository/oauth/youtubeauth.repo';
 import { LinkedinAuthRepository } from '../repository/oauth/linkedinauth.repo';
 import { FacebookRepository } from '../repository/facebook.repo';
