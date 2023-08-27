@@ -1,1 +1,27 @@
-<p>createpanel works!</p>
+<div style="padding: 1rem; width: 300px;" class="flex-container">
+  <span class="flex-item p-input-icon-left">
+    <i class="pi pi-search"></i>
+    <input class="flex-item" type="text" pInputText formControlName="title"/>
+  </span>
+  <h3 class="flex-item">Youtube Video Link</h3>
+  <span class="flex-item p-input-icon-left">
+    <i class="pi pi-search"></i>
+    <input class="flex-item" type="text" pInputText formControlName="url"/>
+  </span>
+
+  <div class="row" style="margin-top: 1rem;">
+    <div class="flex-item">
+      <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="100"></p-image>
+    </div>
+    <div>
+      <h4>Temporary Title</h4>
+      <p>Temporary Description</p>
+    </div>
+  </div>
+
+  <h3 class="flex-item">Output Type</h3>
+  <form [formGroup]="formGroup">
+    <p-dropdown formControlName="ai_model" [options]="models" optionLabel="name"></p-dropdown>
+  </form>
+
+</div>
