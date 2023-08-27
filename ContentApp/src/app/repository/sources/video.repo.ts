@@ -17,6 +17,21 @@ export class VideoRepository {
     /** */
   }
 
+  getSampleCompletion(): Observable<string> {
+    const config: AxiosRequestConfig = {
+      method: 'get',
+      url: `${contentMachineUrl}/ai/sample`,
+    };
+    return from(axios(config)).pipe(
+      tap((response: AxiosResponse<any, any>) => {
+        console.log('Response:', response.data);
+      }),
+      map((response: AxiosResponse<any, any>) => {
+        return response.data as string;
+      }
+    ));
+  }
+
   getYoutubeTranscript(videoUuid: string, model: string): Observable<YoutubeTranscript> {
     const config: AxiosRequestConfig = {
       method: 'post',

@@ -31,6 +31,11 @@ export class DashboardService {
   ) {
     let trimmedUrl = youtubeUrl.split('v=')[1];
 
+    this.videoRepo.getSampleCompletion().subscribe((response: string) => {
+      this.contentCompleteSubject.next({
+        content: response
+      });
+    });
     this.videoRepo.getYoutubeTranscript(
       trimmedUrl, 
       aiModel
