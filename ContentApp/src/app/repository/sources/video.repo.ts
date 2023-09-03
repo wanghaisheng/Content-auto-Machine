@@ -24,7 +24,7 @@ export class VideoRepository {
   ): Observable<ContentResponse> {
     const config: AxiosRequestConfig = {
       method: 'post',
-      url: `${contentMachineUrlv2}/download`,
+      url: `${contentMachineUrlv2}/content`,
       data: {
         userUuid: this.fireAuthRepo.currentSessionUser!.uid,
         videoId: videoUuid,

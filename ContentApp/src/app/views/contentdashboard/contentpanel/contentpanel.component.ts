@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { ContentComplete } from 'src/app/model/contentresponse.model';
+import { Content } from 'src/app/model/content.model';
 import { DashboardService } from 'src/app/service/dashboard.service';
 
 @Component({
@@ -48,7 +48,7 @@ isContentLoading: any;
       influencer: ['']
     });
 
-    this.dashboardService.contentObservable$.subscribe((contentComplete: ContentComplete) => {
+    this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
       this.displayContentPanel = contentComplete != undefined;
       this.content = contentComplete.content;
     });

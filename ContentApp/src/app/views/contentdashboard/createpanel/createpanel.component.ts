@@ -50,14 +50,14 @@ export class CreatepanelComponent implements OnInit {
   }
 
   submitForContent(model: string = 'gpt-4') {
-    // if (this.formGroup.valid) {
+    if (this.formGroup.valid) {
       this.dashboardService.createContent(
         this.formGroup.value.title,
         this.formGroup.value.url, 
         model
       )
-    // } else {
-    //   console.log('Form is invalid');
-    // }
+    } else {
+      console.log('Form is invalid');
+    }
   }
 }
