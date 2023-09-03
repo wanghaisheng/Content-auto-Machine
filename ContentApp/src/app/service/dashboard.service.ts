@@ -5,9 +5,10 @@ import { Observable, Subject, concat, concatMap } from 'rxjs';
 import { CalendarEvent } from 'angular-calendar';
 import { ContentRepository } from '../repository/content.repo';
 import { EventColor } from 'calendar-utils';
-import { ContentComplete } from '../model/contentcomplete.model';
+import { ContentResponse } from '../model/contentresponse.model';
+import { Content } from '../model/content.model';
 import { VideoRepository } from '../repository/sources/video.repo';
-import { YoutubeTranscript } from '../model/youtubetranscript.model';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,8 +17,8 @@ export class DashboardService {
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
 
-  private contentCompleteSubject = new Subject<ContentComplete>();
-  contentCompleteObservable$: Observable<ContentComplete> = this.contentCompleteSubject.asObservable();
+  private contentSubject = new Subject<Content>();
+  contentObservable$: Observable<Content> = this.contentSubject.asObservable();
 
   constructor(
     private videoRepo: VideoRepository
@@ -32,18 +33,13 @@ export class DashboardService {
   ) {
     let trimmedUrl = youtubeUrl.split('v=')[1];
 
-    this.videoRepo.getSampleCompletion().subscribe((response: string) => {
-      this.contentCompleteSubject.next({
-        content: response
-      });
-    });
-    this.videoRepo.getYoutubeTranscript(
+    this.videoRepo.getContentFromVideo(
+      title,
       trimmedUrl, 
       aiModel
-    ).subscribe((transcript: YoutubeTranscript) => {
-      this.contentCompleteSubject.next({
-        content: `Transcript: ${transcript.completeText} from ${transcript.userUuid} with video ${transcript.videoUuid}}`,
-      });
+    ).subscribe((response: ContentResponse) => {
+      console.log("🚀 ~ file: dashboard.service.ts:41 ~ DashboardService ~ ).subscribe ~ response:", response)
+      this.contentSubject.next(response.result);
     })
   }
 }

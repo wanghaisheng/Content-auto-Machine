@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
-import { YoutubeTranscript } from 'src/app/model/youtubetranscript.model';
+import { Observable, from, map, tap } from 'rxjs';
 import { FireAuthRepository } from '../database/fireauth.repo';
+import { ContentResponse } from 'src/app/model/contentresponse.model';
 
-const contentMachineUrl = 'http://localhost:3000/api';
+const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
 
 @Injectable({
   providedIn: 'root',
@@ -17,28 +17,18 @@ export class VideoRepository {
     /** */
   }
 
-  getSampleCompletion(): Observable<string> {
-    const config: AxiosRequestConfig = {
-      method: 'get',
-      url: `${contentMachineUrl}/ai/sample`,
-    };
-    return from(axios(config)).pipe(
-      tap((response: AxiosResponse<any, any>) => {
-        console.log('Response:', response.data);
-      }),
-      map((response: AxiosResponse<any, any>) => {
-        return response.data as string;
-      }
-    ));
-  }
-
-  getYoutubeTranscript(videoUuid: string, model: string): Observable<YoutubeTranscript> {
+  getContentFromVideo(
+    title: string, 
+    videoUuid: string, 
+    model: string
+  ): Observable<ContentResponse> {
     const config: AxiosRequestConfig = {
       method: 'post',
-      url: `${contentMachineUrl}/download`,
+      url: `${contentMachineUrlv2}/download`,
       data: {
         userUuid: this.fireAuthRepo.currentSessionUser!.uid,
-        videoUuid: videoUuid,
+        videoId: videoUuid,
+        title: title,
         model: model
       },
     };
@@ -47,7 +37,7 @@ export class VideoRepository {
         console.log('Response:', response.data);
       }),
       map((response: AxiosResponse<any, any>) => {
-        return response.data as YoutubeTranscript;
+        return response.data as ContentResponse;
       })
     );
   }
