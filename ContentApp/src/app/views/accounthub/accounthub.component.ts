@@ -8,7 +8,7 @@ import {
 import { SocialAuthService } from '../../service/socialauth.service';
 import { SocialAccount } from 'src/app/model/socialaccount.model';
 import { MenuItem, MessageService } from 'primeng/api';
-import { PostingPlatform } from 'src/app/repository/firebase/firestore.repo';
+import { PostingPlatform } from 'src/app/repository/database/firestore.repo';
 import { FacebookPage } from 'src/app/model/facebookpage.model';
 
 @Component({

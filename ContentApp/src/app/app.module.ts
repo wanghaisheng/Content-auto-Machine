@@ -22,6 +22,7 @@ import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { MenubarModule } from 'primeng/menubar';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { PanelModule } from 'primeng/panel';
 import { DividerModule } from 'primeng/divider';
 import { TabViewModule } from 'primeng/tabview';
 import { AccounthubComponent } from './views/accounthub/accounthub.component';
@@ -29,6 +30,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { FacebookRedirectComponent } from './views/redirects/facebookredirect.component';
 import { SplitterModule } from 'primeng/splitter';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService } from 'primeng/api';
@@ -41,9 +43,13 @@ import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
-import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { ImageModule } from 'primeng/image';
 import { TagModule } from 'primeng/tag';
+import { BlockUIModule } from 'primeng/blockui';
+import { TooltipModule } from 'primeng/tooltip';
+import { SkeletonModule } from 'primeng/skeleton';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 import { CreatepanelComponent } from './views/contentdashboard/createpanel/createpanel.component';
@@ -84,6 +90,12 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ContentpanelComponent
   ],
   imports: [
+    SplitButtonModule,
+    SkeletonModule,
+    BlockUIModule,
+    TooltipModule,
+    ImageModule,
+    BreadcrumbModule,
     SelectButtonModule,
     DropdownModule,
     InputTextareaModule,
@@ -98,6 +110,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     TabViewModule,
     DividerModule,
     ScrollPanelModule,
+    PanelModule,
     MenubarModule,
     DialogModule,
     ButtonModule,

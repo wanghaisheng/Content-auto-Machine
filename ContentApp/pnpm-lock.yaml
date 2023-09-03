@@ -68,9 +68,6 @@ dependencies:
   ngx-autosize:
     specifier: ^2.0.4
     version: 2.0.4(@angular/common@16.0.0)(@angular/core@16.0.0)
-  primeflex:
-    specifier: ^3.3.1
-    version: 3.3.1
   primeicons:
     specifier: ^6.0.1
     version: 6.0.1
@@ -7048,10 +7045,6 @@ packages:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
     engines: {node: '>=6'}
     dev: true
-
-  /primeflex@3.3.1:
-    resolution: {integrity: sha512-zaOq3YvcOYytbAmKv3zYc+0VNS9Wg5d37dfxZnveKBFPr7vEIwfV5ydrpiouTft8MVW6qNjfkaQphHSnvgQbpQ==}
-    dev: false
 
   /primeicons@6.0.1:
     resolution: {integrity: sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA==}

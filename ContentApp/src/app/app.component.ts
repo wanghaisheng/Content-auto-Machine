@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationService } from './service/navigation.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { SocialAuthService } from './service/socialauth.service';
 import {
   ConfirmationService,
@@ -16,7 +15,8 @@ import {
 })
 export class AppComponent implements OnInit {
   title = 'Content Machine';
-  items: MenuItem[];
+  items: MenuItem[] = [];
+  home: MenuItem = { icon: 'pi pi-home', routerLink: '/' }
 
   /**
    * 0 = twitter
@@ -34,17 +34,16 @@ export class AppComponent implements OnInit {
     private navigationService: NavigationService,
     private socialAuthService: SocialAuthService
   ) {
-    this.items = [
-      // {
-      //   icon: 'pi pi-angle-left',
-      // },
-      // {
-      //   icon: 'pi pi-angle-right',
-      // },
-    ];
+    
   }
 
   ngOnInit() {
+    // Subscribe to breadcrumb data changes
+    this.navigationService.getBreadcrumbData().subscribe((data) => {
+      console.log("🚀 ~ file: app.component.ts:44 ~ AppComponent ~ this.navigationService.getBreadcrumbData ~ data:", data)
+      this.items = data;
+    });
+
     this.socialAuthService.getFacebookAuthObservable$.subscribe((success) => {
       if (success) {
         this.accountsVisible = true;

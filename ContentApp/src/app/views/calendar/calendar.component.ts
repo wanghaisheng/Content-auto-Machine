@@ -1,5 +1,5 @@
 import { MessageService } from 'primeng/api';
-import { ContentService } from 'src/app/service/content.service';
+import { SchedulingService } from 'src/app/service/scheduling.service';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -65,7 +65,7 @@ export class CalendarComponent implements OnInit {
   private dialogRef?: DynamicDialogRef;
 
   constructor(
-    private contentService: ContentService,
+    private contentService: SchedulingService,
     private messageService: MessageService,
     public dialogService: DialogService 
   ) {

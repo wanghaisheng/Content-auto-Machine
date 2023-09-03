@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
 
-const contentMachineUrl = 'http://localhost:8000/api';
+const contentMachineUrl = 'http://localhost:3000/api';
 
 @Injectable({
   providedIn: 'root',

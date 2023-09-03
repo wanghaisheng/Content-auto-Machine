@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { ContentService } from 'src/app/service/content.service';
+import { SchedulingService } from 'src/app/service/scheduling.service';
 
 @Component({
   selector: 'app-createcontent',
@@ -28,7 +28,7 @@ export class CreateContentComponent implements OnInit {
   selectedFrequency?: { title: string; desctipion: string; value: string };
 
   constructor(
-    private contentService: ContentService,
+    private contentService: SchedulingService,
     private messageService: MessageService
   ) {
     /** */
