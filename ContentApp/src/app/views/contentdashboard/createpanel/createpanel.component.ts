@@ -9,12 +9,31 @@ import { DashboardService } from 'src/app/service/dashboard.service';
 })
 export class CreatepanelComponent implements OnInit {
 
-  models: { name: string, code: string }[] = [
-    { name: 'Quality', code: 'GPT-4' },
-    { name: 'Speed', code: 'GPT-3.5turbo' }
-  ];
+  // models: { name: string, code: string }[] = [
+  //   { name: 'Quality', code: 'GPT-4' },
+  //   { name: 'Speed', code: 'GPT-3.5turbo' }
+  // ];
+  items = [
+    {
+        label: 'Quality',
+        icon: 'pi pi-refresh',
+        command: () => {
+            this.submitForContent();
+        }
+    },
+    {
+        label: 'Speed',
+        icon: 'pi pi-times',
+        command: () => {
+            this.submitForContent('gpt-3.5turbo');
+        }
+    },
+    { separator: true },
+    { label: 'Learn how this works', icon: 'pi pi-question-circle', routerLink: ['/setup'] }
+];
   formGroup!: FormGroup;
   contentLoading: boolean = false;
+  showVideoInfo: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,15 +46,15 @@ export class CreatepanelComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       title: ['', Validators.required],
       url: ['', Validators.pattern(/https?:\/\/.*/)],
-      model: [''],
     });
   }
 
-  submitForContent() {
+  submitForContent(model: string = 'gpt-4') {
     // if (this.formGroup.valid) {
       this.dashboardService.createContent(
+        this.formGroup.value.title,
         this.formGroup.value.url, 
-        this.formGroup.value.model
+        model
       )
     // } else {
     //   console.log('Form is invalid');

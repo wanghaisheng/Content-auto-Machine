@@ -43,11 +43,13 @@ import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
-import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { ImageModule } from 'primeng/image';
 import { TagModule } from 'primeng/tag';
 import { BlockUIModule } from 'primeng/blockui';
 import { TooltipModule } from 'primeng/tooltip';
+import { SkeletonModule } from 'primeng/skeleton';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 import { CreatepanelComponent } from './views/contentdashboard/createpanel/createpanel.component';
@@ -88,6 +90,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ContentpanelComponent
   ],
   imports: [
+    SplitButtonModule,
+    SkeletonModule,
     BlockUIModule,
     TooltipModule,
     ImageModule,

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationService } from './service/navigation.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { SocialAuthService } from './service/socialauth.service';
 import {
   ConfirmationService,

@@ -1,28 +1,44 @@
-<div [formGroup]='formGroup' style="padding: 1rem; width: 400px;" class="flex-container">
-  <span class="flex-item p-input-icon-left">
-    <i class="pi pi-book"></i>
-    <input placeholder='Type your title...' class="flex-item" type="text" pInputText formControlName="title"/>
-  </span>
-  <h3 class="flex-item">Youtube Video Link</h3>
-  <span class="flex-item p-input-icon-left">
-    <i class="pi pi-youtube"></i>
-    <input placeholder='Paste your link...' class="flex-item" type="text" pInputText formControlName="url"/>
-  </span>
+<div [formGroup]='formGroup' class="flex-container">
+  <div class="header">
+    <span class="header-icon">
+      <i class="pi pi-book"></i>
+    </span>
+    <input placeholder='Type your title...' class="header-input" type="text" pInputText formControlName="title"/>
+  </div>
+  <h3 class="section-header">Youtube Video</h3>
+  <div class="header">
+    <span class="header-icon">
+      <i class="pi pi-youtube"></i>
+    </span>
+    <input placeholder='Paste your link...' class="header-input" type="text" pInputText formControlName="url"/>
+  </div>
 
-  <div class="row" style="margin-top: 1rem;">
-    <div class="flex-item">
+  <div *ngIf="showVideoInfo" class="video-info">
+    <div class="image-container">
       <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="100"></p-image>
     </div>
-    <div>
+    <div class="video-details">
       <h4>Temporary Title</h4>
       <p>Temporary Description</p>
     </div>
   </div>
 
-  <h3 class="flex-item">Output Type</h3>
-  <form [formGroup]="formGroup">
-    <p-dropdown class="flex-item" formControlName="model" [options]="models" optionLabel="name"></p-dropdown>
-  </form>
+  <div *ngIf="!showVideoInfo" class="row">
+    <p-skeleton width="100px" height="100px"></p-skeleton>
+    <div style="flex-direction: column; align-items: flex-start; margin-left: 6px; justify-content: space-between;">
+      <div class="flex-item" >
+        <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
+      </div>
+      <div class="flex-item">
+        <p-skeleton styleClass="mb-2"></p-skeleton>
+      </div>
+      <div class="flex-item">
+        <p-skeleton styleClass="mb-2"></p-skeleton>
+      </div>
+    </div>
+  </div>
 
-  <p-button [loading]="contentLoading" (onClick)="submitForContent()" label="Generate Content" icon="pi pi-check"></p-button>
+  <div class="output-type">
+    <p-splitButton label="Generate New Content" icon="pi pi-plus" (onClick)="submitForContent()" [model]="items"></p-splitButton>
+  </div>
 </div>

@@ -26,6 +26,7 @@ export class DashboardService {
   }
 
   createContent(
+    title: string,
     youtubeUrl: string,
     aiModel: string
   ) {
