@@ -1,3 +1,11 @@
+"""
+Content Machine Complete
+Version: 1.0.0
+Author: Adrian Mohnacs
+Copyright (c) 2023 Adrian Mohnacs
+All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
+"""
+
 from datetime import datetime, timedelta
 import utility.time_utils as time_utils
 
