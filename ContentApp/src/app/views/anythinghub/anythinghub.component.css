@@ -1,0 +1,15 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Adjust as needed for spacing */
+}
+
+.split-card {
+  width: calc(50% - 16px); /* 50% width minus margin */
+  margin: 8px;
+}

@@ -1,3 +1,11 @@
+/*
+ * Content Machine Complete
+ * Version: 1.0.0
+ * Author: Adrian Mohnacs
+ * Copyright (c) 2023 Adrian Mohnacs
+ * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
+ */
+
 import {
   Component,
   Input,
@@ -6,10 +14,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { SocialAuthService } from '../../service/socialauth.service';
-import { SocialAccount } from 'src/app/model/socialaccount.model';
+import { SocialAccount } from 'src/app/model/user/socialaccount.model';
 import { MenuItem, MessageService } from 'primeng/api';
 import { PostingPlatform } from 'src/app/repository/database/firestore.repo';
-import { FacebookPage } from 'src/app/model/facebookpage.model';
+import { FacebookPage } from 'src/app/model/user/facebookpage.model';
 
 @Component({
   selector: 'app-account-hub',

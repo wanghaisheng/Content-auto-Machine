@@ -1,3 +1,11 @@
+"""
+Content Machine Complete
+Version: 1.0.0
+Author: Adrian Mohnacs
+Copyright (c) 2023 Adrian Mohnacs
+All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
+"""
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests

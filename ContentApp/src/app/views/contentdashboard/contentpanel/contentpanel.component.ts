@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { Content } from 'src/app/model/content.model';
-import { DashboardService } from 'src/app/service/dashboard.service';
+import { Content } from 'src/app/model/content/content.model';
+import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 
 @Component({
   selector: 'app-contentpanel',
@@ -38,7 +38,7 @@ isContentLoading: any;
 
   constructor(
     private formBuilder: FormBuilder,
-    private dashboardService: DashboardService
+    private dashboardService: HubDashboardService
   ) {
 
   }
