@@ -6,7 +6,9 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { AfterContentInit, Component } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Generators } from 'src/app/model/response/generators.model'
+import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { NavigationService } from 'src/app/service/navigation.service';
 
 @Component({
@@ -14,24 +16,49 @@ import { NavigationService } from 'src/app/service/navigation.service';
   templateUrl: './anythinghub.component.html',
   styleUrls: ['./anythinghub.component.css']
 })
-export class AnythinghubComponent implements AfterContentInit {
-  blockMode: boolean = false;
+export class AnythinghubComponent implements OnInit, AfterContentInit {
+
+  // blockMode: boolean = false;
+  generatorsList: {
+    header: string;
+    items: {
+      type: string;
+      title: string;
+      description: string;
+      prompt: string;
+    }[];
+  }[] = [];
 
   constructor(
     private navigationService: NavigationService,
+    private hubDashboardService: HubDashboardService
   ) { }
 
+  ngOnInit(): void {
+    this.hubDashboardService.generatorsListObservable$.subscribe((genrators: {
+      header: string;
+      items: {
+        type: string;
+        title: string;
+        description: string;
+        prompt: string;
+      }[];
+    }[]) => {
+        console.log(genrators);
+        this.generatorsList = genrators;
+      }
+    )
+    this.hubDashboardService.errorObservable$.subscribe((error: string) => {
+      console.log(error);
+    });
+  }
+
   ngAfterContentInit(): void {
-    this.blockMode = true;
+    // this.blockMode = true;
+    this.hubDashboardService.getHubGenerators();
   }
   
-  videotofb() {
-    this.navigationService.navigateToDashboard();
-  }
-  youtubetofb() {
-    this.navigationService.navigateToDashboard();
-  }
-  onCreateClick() {
-    this.navigationService.navigateToDashboard();
+  itemClick(generator_type: string) {
+    this.navigationService.navigateToDashboard(generator_type)
   }
 }

@@ -57,8 +57,8 @@ export class NavigationService {
     });
   }
 
-  navigateToDashboard() {
-    this.router.navigate(['dashboard']);
+  navigateToDashboard(type: string) {
+    this.router.navigate(['dashboard', type]);
   }
 
   // navigateToExtractDetails(id: string = '') {

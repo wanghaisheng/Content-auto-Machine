@@ -8,7 +8,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DashboardService } from 'src/app/service/dashboard.service';
+import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 
 @Component({
   selector: 'app-createpanel',
@@ -45,7 +45,7 @@ export class CreatepanelComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dashboardService: DashboardService
+    private dashboardService: HubDashboardService
   ) {
     
   }

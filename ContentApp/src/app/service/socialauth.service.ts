@@ -49,10 +49,10 @@ import {
 import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { YoutubeAuthRepository } from '../repository/oauth/youtubeauth.repo';
 import { LinkedinAuthRepository } from '../repository/oauth/linkedinauth.repo';
-import { FacebookRepository } from '../repository/facebook.repo';
+import { FacebookRepository } from '../repository/apis/facebook.repo';
 import { NavigationService } from './navigation.service';
-import { SocialAccount } from '../model/socialaccount.model';
-import { FacebookPage } from '../model/facebookpage.model';
+import { SocialAccount } from '../model/user/socialaccount.model';
+import { FacebookPage } from '../model/user/facebookpage.model';
 
 @Injectable({
   providedIn: 'root',
