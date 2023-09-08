@@ -62,6 +62,7 @@ import { AnythinghubComponent } from './views/anythinghub/anythinghub.component'
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 import { CreatepanelComponent } from './views/contentdashboard/createpanel/createpanel.component';
 import { ContentpanelComponent } from './views/contentdashboard/contentpanel/contentpanel.component';
+import { SettingsComponent } from './views/settings/settings.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -95,7 +96,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AnythinghubComponent,
     ContentDashboardComponent,
     CreatepanelComponent,
-    ContentpanelComponent
+    ContentpanelComponent,
+    SettingsComponent
   ],
   imports: [
     SplitButtonModule,
