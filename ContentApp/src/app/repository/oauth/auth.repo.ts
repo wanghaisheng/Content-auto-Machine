@@ -10,18 +10,23 @@ import { Injectable } from '@angular/core';
 import { LINKEDIN_CLIENT_ID } from 'appsecrets';
 import axios from 'axios';
 import { Observable, from, map } from 'rxjs';
+import { ApiResponse } from 'src/app/model/response/apiresponse.model';
+import { ZoomUser } from 'src/app/model/user/zoomuser';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LinkedinAuthRepository {
-  private redirectUri = 'http://localhost:4200/linkedin-callback';
+export class AuthenticationRepository {
+  
+  private linkedinRedirectUri = 'http://localhost:4200/linkedin-callback';
   private linkedinScopes = ['r_liteprofile', 'r_emailaddress', 'w_member_social'];
+  
+  private zoomRedirectUri = 'http://localhost:4200/zoom-callback';
 
-  authCodeParams = {
+  linkedinAuthCodeParams = {
     response_type: 'code',
     client_id: LINKEDIN_CLIENT_ID,
-    redirect_uri: this.redirectUri,
+    redirect_uri: this.linkedinRedirectUri,
     state: this.createCSRFtoken(),
     scope: this.linkedinScopes.join(' '),
   };
@@ -60,5 +65,22 @@ export class LinkedinAuthRepository {
       token += letters.charAt(Math.floor(Math.random() * letters.length));
     }
     return token;
+  }
+
+  getAuthorizedZoomUser(zoomCode: string): Observable<ApiResponse<ZoomUser>> {
+    return from(
+      axios.get<{message: string, result: any}>('http://localhost:3000/api/v2/config/zoom', {
+        params: {
+          code: zoomCode,
+        }
+      })
+    ).pipe(
+      map((response) => {
+        if (response.data.message !== 'success') {
+          throw new Error('Failed to exchange auth code for access token');
+        }
+        return response.data.result;
+      })
+    );
   }
 }

@@ -27,7 +27,7 @@ export class AdminRepository {
     };
     return from(axios(config)).pipe(
       tap((response: AxiosResponse<any, any>) => {
-        console.log('Response:', response.data);
+        console.log('🚰 Response:', response.data);
       }),
       map((response: AxiosResponse<any, any>) => {
         const responseData = response.data as ApiResponse<Generators>;

@@ -48,7 +48,7 @@ import {
 } from '../repository/database/firestore.repo';
 import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { YoutubeAuthRepository } from '../repository/oauth/youtubeauth.repo';
-import { LinkedinAuthRepository } from '../repository/oauth/linkedinauth.repo';
+import { AuthenticationRepository } from '../repository/oauth/auth.repo';
 import { FacebookRepository } from '../repository/apis/facebook.repo';
 import { NavigationService } from './navigation.service';
 import { SocialAccount } from '../model/user/socialaccount.model';
@@ -72,6 +72,7 @@ export class SocialAuthService {
   private twitterAuthSubject = new Subject<boolean>();
   private facebookAuthSubject = new Subject<boolean>();
   private linkedinAuthSubject = new Subject<boolean>();
+  private zoomAuthSubject = new Subject<boolean>();
 
   private conectionsLoadingSubject = new Subject<boolean>();
   private errorSubject = new Subject<string>();
@@ -90,7 +91,7 @@ export class SocialAuthService {
     private fireAuthRepo: FireAuthRepository,
     private firestoreRepo: FirestoreRepository,
     private youtubeAuthRepo: YoutubeAuthRepository,
-    private linkedinAuthRepo: LinkedinAuthRepository,
+    private authRepo: AuthenticationRepository,
     private facebookRepo: FacebookRepository
   ) {
     /** */
@@ -104,6 +105,7 @@ export class SocialAuthService {
   getTwitterAuthObservable$ = this.twitterAuthSubject.asObservable();
   getFacebookAuthObservable$ = this.facebookAuthSubject.asObservable();
   getLinkedinAuthObservable$ = this.linkedinAuthSubject.asObservable();
+  getZoomAuthObservable$ = this.zoomAuthSubject.asObservable();
 
   getConnectionLoadingObservable$ =
     this.conectionsLoadingSubject.asObservable();
@@ -375,12 +377,26 @@ export class SocialAuthService {
   }
 
   getLinkedInCredentials() {
-    return this.linkedinAuthRepo.authCodeParams;
+    return this.authRepo.linkedinAuthCodeParams;
+  }
+
+  getZoomAccessToken(zoomCode: string) {
+    this.authRepo.getAuthorizedZoomUser(zoomCode).subscribe({
+      next: (result) => {
+        this.zoomAuthSubject.next(true);
+        this.navigationService.navigateToRoot();
+      },
+      error: (error) => {
+        console.log("🚀 ~ file: socialauth.service.ts:389 ~ SocialAuthService ~ this.authRepo.getAuthorizedZoomUser ~ error:", error)
+        this.errorSubject.next(error);
+        this.navigationService.navigateToRoot();
+      }
+    })
   }
 
   getLinkedInAccessToken(authCode: string) {
     this.conectionsLoadingSubject.next(true);
-    this.linkedinAuthRepo
+    this.authRepo
       .exchanceAuthCodeForAccessToken(authCode)
       .pipe(
         concatMap((accessTokenObj: { message: string; data: any }) => {

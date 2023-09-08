@@ -45,7 +45,6 @@ export class FireAuthRepository {
       if (user) {
         // Only our initial user is set for the session variable
         if (user.providerData[0].providerId == 'google.com') {
-          console.log('🚀 ~ file: fireauth.repo.ts ~ line 27 ~ FireAuthRepository ~ user', user)
           this.currentSessionUser = user;
           this.userSubject.next(user);
         } else {

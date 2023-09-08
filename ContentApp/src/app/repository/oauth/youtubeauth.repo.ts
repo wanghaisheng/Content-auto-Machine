@@ -42,8 +42,6 @@ export class YoutubeAuthRepository {
     this.identityTokenClient = google.accounts.oauth2.initTokenClient({
         client_id: YOUTUBE_CLIENT_ID,
       scope: this.youtubeScopes.join(' \ '),
-        // 'https://www.googleapis.com/auth/youtube.readonly \
-        // https://www.googleapis.com/auth/youtube',
       ux_mode: 'popup',
       // @ts-ignore
       callback: (tokenResponse) => {

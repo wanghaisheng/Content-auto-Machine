@@ -44,7 +44,6 @@ export class AnythinghubComponent implements OnInit, AfterContentInit {
         prompt: string;
       }[];
     }[]) => {
-        console.log(genrators);
         this.generatorsList = genrators;
       }
     )

@@ -13,11 +13,13 @@ import { FacebookRedirectComponent } from './views/redirects/facebookredirect.co
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
+import { ZoomRedirectComponent } from './views/redirects/zoomredirect.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'facebook-callback', component: FacebookRedirectComponent },
   { path: 'linkedin-callback', component: LinkedinRedirectComponent},
+  { path: 'zoom-callback', component: ZoomRedirectComponent},
   { path: '', component: AnythinghubComponent},
   { path: 'dashboard/:type', component: ContentDashboardComponent},
   { path: '**', component: PageNotFoundComponent }

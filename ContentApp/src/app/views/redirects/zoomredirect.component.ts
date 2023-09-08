@@ -6,18 +6,17 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SocialAuthService } from '../../service/socialauth.service';
 
 @Component({
-  selector: 'fb-redirects',
+  selector: 'zoom-redirects',
   templateUrl: './redirects.component.html',
   styleUrls: ['./redirects.component.css']
 })
-export class FacebookRedirectComponent implements OnInit {
+export class ZoomRedirectComponent {
 
-  facebookToken: string | undefined = undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,10 +24,9 @@ export class FacebookRedirectComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.facebookToken = this.route.snapshot.queryParams["code"];
-    if (this.facebookToken !== undefined && this.facebookToken !== '') {
-      this.socialAuthService.signInWithFacebook(this.facebookToken);
+    const zoomCode = this.route.snapshot.queryParams["code"];
+    if (zoomCode !== undefined && zoomCode !== '') {
+      this.socialAuthService.getZoomAccessToken(zoomCode);
     } 
   }
-
 }

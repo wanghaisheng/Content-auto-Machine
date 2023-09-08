@@ -53,7 +53,6 @@ export class HubDashboardService {
   getHubGenerators() {
     this.adminRepo.getGenerators().subscribe({
       next: (response: Generators) => {
-        console.log("🚀 ~ file: hubdashboard.service.ts:39 ~ HubDashboardService ~ this.adminRepo.getGenerators ~ response:", response)
         this.generatorsListSubject.next(this.toList(response));
       },
       error: (error: any) => {
@@ -75,7 +74,6 @@ export class HubDashboardService {
       aiModel
     ).subscribe({
       next: (response: Content) => {
-        console.log("🚀 ~ file: hubdashboard.service.ts:61 ~ HubDashboardService ~ response:", response)
         this.contentSubject.next(response);
       },
       error: (error: any) => {
@@ -112,7 +110,6 @@ export class HubDashboardService {
 
       if (generators.hasOwnProperty(key)) {
         const innerKeys = Object.keys(generators[key]);
-        console.log("🚀 ~ file: hubdashboard.service.ts:126 ~ HubDashboardService ~ toList ~ innerKeys:", innerKeys)
         innerKeys.map((innerKey) => {
           if (innerKey === 'meta') {
             resultItem['header'] = generators[key][innerKey]['title'];
