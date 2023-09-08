@@ -1,0 +1,20 @@
+<p-tabView styleClass="tabview-custom">
+  <p-tabPanel header="twitter">
+    <ng-template pTemplate="header">
+      <i class="pi pi-twitter"></i>
+      <span>Zoom Auth</span>
+    </ng-template>
+    <div class="container">
+      <div class="column" style="padding: 0.5rem;">
+        <p>
+          Grant our app access to your Twitter account and take your tweeting game to the next level. With automated
+          posting, you can schedule and publish tweets effortlessly, ensuring consistent engagement with your followers.
+          Say goodbye to the hassle of manual tweeting and hello to effortless social media management!
+        </p>
+        <p-footer>
+          <p-button label="Connect" icon="pi pi-plus" (click)="onZoomAuthentication()"></p-button>
+        </p-footer>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>

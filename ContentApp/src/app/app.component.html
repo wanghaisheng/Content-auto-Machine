@@ -11,14 +11,14 @@
       <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
       <h3>Yonni AI</h3>
     </div>
-  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
+  <!-- <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb> -->
   </ng-template>
   <ng-template pTemplate="end">
     <div class="horizontal-container">
-      <p-button icon="pi pi-calendar"
+      <!-- <p-button icon="pi pi-calendar"
         styleClass="p-button-rounded p-button-secondary p-button-text"
-        (click)="onCalendarClick()"></p-button>
-      <p-button icon="pi pi-user"
+        (click)="onCalendarClick()"></p-button> -->
+      <p-button icon="pi pi-cog"
         styleClass="p-button-rounded p-button-secondary p-button-text"
         (click)="onAccountsClick()"></p-button>
       <p-button icon="pi pi-power-off"
@@ -28,8 +28,8 @@
   </ng-template>
 </p-menubar>
 
-<p-dialog header="Please Login To Your Socials" [(visible)]="accountsVisible" [modal]="true" [style]="{ width: '60vw', height: '50vw' }" [draggable]="false" [resizable]="false">
-  <app-account-hub [parentFocusedConnection]="focusedAccount"></app-account-hub>
+<p-dialog header="Settings" [(visible)]="accountsVisible" [modal]="true" [style]="{ width: '60vw', height: '50vw' }" [draggable]="false" [resizable]="false">
+  <app-settings></app-settings>
 </p-dialog>
 
 <p-toast></p-toast>

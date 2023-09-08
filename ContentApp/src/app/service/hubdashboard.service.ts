@@ -85,16 +85,6 @@ export class HubDashboardService {
     })
   }
 
-  /*
-[key: string]: {
-    [innerKey: string]: {
-      description: string;
-      prompt: string;
-      title: string;
-    };
-  };
-  */
-
   toList(generators: Generators) {
     const resultList: {
       header: string;
