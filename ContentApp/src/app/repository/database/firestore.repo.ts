@@ -118,10 +118,8 @@ export class FirestoreRepository {
     userId: string = this.fireAuth.currentSessionUser?.uid || ''
   ): Observable<T> {
     const userDocRef = ref(this.database, `${collectionPath}/${userId}`);
-    const key = push(userDocRef, data).key;
-
-    data = this.update(data, 'uid', key);
-    return this.updateCurrentUserDocument<T>(data);
+    set(userDocRef, data);
+    return of(data);
   }
 
   updateCurrentUserDocument<T>(data: Partial<T>): Observable<T> {
@@ -167,7 +165,7 @@ export class FirestoreRepository {
           subject.error(errorObject.name);
         }
       );
-    }).pipe(filter((data) => !!data));
+    })
   }
 
   private update(item: any, key: any, value: any): any {
@@ -265,51 +263,51 @@ export class FirestoreRepository {
   //   );
   // }
 
-  // getUserCollection<T>(
-  //   collectionPath: string,
-  //   userId: string = this.fireAuth.currentSessionUser?.uid || ''
-  // ): Observable<T[]> {
-  //   if (userId === '') {
-  //     return this.fireAuth.getUserAuthObservable().pipe(
-  //       concatMap((user) => {
-  //         return this.getSpecificCollectionRef<T>(collectionPath, user.uid);
-  //       })
-  //     );
-  //   } else {
-  //     return this.getSpecificCollectionRef<T>(collectionPath, userId);
-  //   }
-  // }
+  getUserCollection<T>(
+    collectionPath: string,
+    userId: string = this.fireAuth.currentSessionUser?.uid || ''
+  ): Observable<T[]> {
+    if (userId === '') {
+      return this.fireAuth.getUserAuthObservable().pipe(
+        concatMap((user) => {
+          return this.getSpecificCollectionRef<T>(collectionPath, user.uid);
+        })
+      );
+    } else {
+      return this.getSpecificCollectionRef<T>(collectionPath, userId);
+    }
+  }
 
-  // private getSpecificCollectionRef<T>(
-  //   collectionPath: string,
-  //   userId: string
-  // ): Observable<T[]> {
-  //   const collectionRef = collection(
-  //     this.firestore,
-  //     USERS_COL,
-  //     userId,
-  //     collectionPath
-  //   );
-  //   return from(getDocs(collectionRef)).pipe(
-  //     map((querySnapshot) => {
-  //       const data: T[] = [];
-  //       querySnapshot.forEach((doc) => {
-  //         const docData = doc.data();
-  //         data.push(docData as T);
-  //       });
-  //       return data;
-  //     }),
-  //     tap((data) => {
-  //       if (!environment.production) {
-  //         console.groupCollapsed(
-  //           `❤️‍🔥 Firestore Streaming [${collectionRef.path}] [getUserCollection] [${userId}]`
-  //         );
-  //         console.log(data);
-  //         console.groupEnd();
-  //       }
-  //     })
-  //   );
-  // }
+  private getSpecificCollectionRef<T>(
+    collectionPath: string,
+    userId: string
+  ): Observable<T[]> {
+    const collectionRef = collection(
+      this.firestore,
+      USERS_COL,
+      userId,
+      collectionPath
+    );
+    return from(getDocs(collectionRef)).pipe(
+      map((querySnapshot) => {
+        const data: T[] = [];
+        querySnapshot.forEach((doc) => {
+          const docData = doc.data();
+          data.push(docData as T);
+        });
+        return data;
+      }),
+      tap((data) => {
+        if (!environment.production) {
+          console.groupCollapsed(
+            `❤️‍🔥 Firestore Streaming [${collectionRef.path}] [getUserCollection] [${userId}]`
+          );
+          console.log(data);
+          console.groupEnd();
+        }
+      })
+    );
+  }
 
   /**
    * Only for creating a top level property entry
@@ -415,75 +413,6 @@ export class FirestoreRepository {
   //     console.groupEnd();
   //   }
   // }
-
-  // Observes a single Firestore document
-  observeSpecificDocument<T>(
-    collectionName: string,
-    documentId: string
-  ): Observable<T> {
-    const collectionRef = collection(this.firestore, collectionName);
-    const documentRef = doc(collectionRef, documentId);
-
-    return from(getDoc(documentRef)).pipe(
-      map((data) => {
-        const docData = data.data() as T;
-        const id = data.id;
-        return { id, ...docData };
-      })
-    );
-  }
-
-  // Observe a collection of documents
-  observeSpecificCollection<T>(
-    collectionPath: string,
-    queryFn: Query
-  ): Observable<T[]> {
-    const collectionRef = collection(this.firestore, collectionPath);
-    const querySnapshot = getDocs(queryFn);
-
-    return from(querySnapshot).pipe(
-      map((querySnapshot) => {
-        const data: T[] = [];
-        querySnapshot.forEach((doc) => {
-          const docData = doc.data();
-          data.push(docData as T);
-        });
-        return data;
-      }),
-      tap((data) => {
-        if (!environment.production) {
-          console.groupCollapsed(
-            `❤️‍🔥 Firestore Streaming [${collectionPath}] [observeCollection]`
-          );
-          console.table(data);
-          console.groupEnd();
-        }
-      })
-    );
-  }
-
-  // Creates a new Firestore document using the full path
-  createSpecificDocument<T>(collectionName: string, data: T): Promise<boolean> {
-    const collectionRef = collection(this.firestore, collectionName);
-    const documentRef = addDoc(collectionRef, this.sanitizeObject(data));
-
-    return new Promise<boolean>((resolve, reject) => {
-      documentRef
-        .then(() => {
-          if (!environment.production) {
-            console.groupCollapsed(
-              `❤️‍🔥 Firestore Service [${collectionRef.path}] [updateUserDocument]`
-            );
-            console.groupEnd();
-          }
-          resolve(true); // Resolving the Promise with a boolean value indicating success
-        })
-        .catch((error: any) => {
-          console.error('❤️‍🔥 Request failed', error);
-          resolve(false); // Resolving the Promise with a boolean value indicating failure
-        });
-    });
-  }
 
   // Helper function to sanitize the object and remove undefined values
   private sanitizeObject(obj: any): any {

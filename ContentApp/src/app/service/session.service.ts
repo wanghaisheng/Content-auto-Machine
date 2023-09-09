@@ -86,10 +86,11 @@ export class SessionService {
   verifyPurchaseEmail(email: string): Observable<boolean> {
     return this.firestoreRepo.getUserInfoAsDocument(PURCHASED_USERS_COL, email).pipe(
       map((doc) => {
-        if (doc !== undefined) {
+        if (doc !== undefined && doc !== null) {
+          console.log("🚀 ~ file: session.service.ts:89 ~ SessionService ~ map ~ doc:", doc)
           return true;
         } else {
-          console.debug('No such document!');
+          console.log("🚀 ~ file: session.service.ts:92 ~ SessionService ~ map ~ else:", 'no such document!')
           return false;
         }
       })
@@ -115,16 +116,14 @@ export class SessionService {
     // const isFirstTimeUser = signinSuccessData.authResult.additionalUserInfo?.isNewUser;
 
     if (email !== undefined && email !== '') {
-      this.verifyPurchaseEmail(email!!).subscribe({
+      this.firestoreRepo.getUserInfoAsDocument(PURCHASED_USERS_COL, email ?? '').subscribe({
         next: (userExists) => {
           if (userExists) {
             this.setUserData({
               ...authUser,
               // isVirgin: isFirstTimeUser,
             });
-            //
             this.navigationService.navigateToRoot();
-            //
           } else {
             this.fireAuthRepo.signOut();
             this.errorSubject.next(
@@ -150,9 +149,6 @@ export class SessionService {
    * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service
    */
   async setUserData(user: any) {
-    // const existingUserRef = this.angularFirestore.doc(
-    //   `${USERS_COL}/${user.uid}`
-    // );
     const userData = {
       email: user.email,
       displayName: user.displayName,
@@ -166,7 +162,7 @@ export class SessionService {
 
     // Check if the user document exists
     this.firestoreRepo.getUserInfoAsDocument(USERS_COL, user.uid).subscribe((doc) => {
-      if (doc !== undefined) {
+      if (doc !== undefined && doc !== null) {
         console.log("🚀 ~ Updating user")
         // User exists, update the existing user data
         // userData.isVirgin = false;

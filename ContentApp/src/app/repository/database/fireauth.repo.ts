@@ -52,7 +52,6 @@ export class FireAuthRepository {
         }
       } else {
         // reset sessionUser
-        console.log('🚀 ~ file: fireauth.repo.ts ~ line 36 ~ FireAuthRepository ~ user', user)
         this.currentSessionUser = undefined;
       }
     });
