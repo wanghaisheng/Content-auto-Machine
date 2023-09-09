@@ -7,7 +7,7 @@
  */
 
 import { AfterContentInit, Component, OnInit } from '@angular/core';
-import { Generators } from 'src/app/model/response/generators.model'
+import { Generators } from 'src/app/model/admin/generators.model'
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { NavigationService } from 'src/app/service/navigation.service';
 

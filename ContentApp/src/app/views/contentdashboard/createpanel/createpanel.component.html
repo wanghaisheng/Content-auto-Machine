@@ -5,12 +5,23 @@
     </span>
     <input placeholder='Type your title...' class="header-input" type="text" pInputText formControlName="title"/>
   </div>
-  <h3 class="section-header">Youtube Video</h3>
-  <div class="header">
-    <span class="header-icon">
-      <i class="pi pi-youtube"></i>
-    </span>
-    <input placeholder='Paste your link...' class="header-input" type="text" pInputText formControlName="url"/>
+  <div *ngIf="createMode == 'youtube'">
+    <h3 class="section-header">Youtube Video</h3>
+    <div class="header">
+      <span class="header-icon">
+        <i class="pi pi-youtube"></i>
+      </span>
+      <input placeholder='Paste your link...' class="header-input" type="text" pInputText formControlName="url"/>
+    </div>
+  </div>
+  <div *ngIf="createMode == 'zoom'">
+    <h3 class="section-header">Zoom Recordings</h3>
+    <div class="header">
+      <span class="header-icon">
+        <i class="pi pi-youtube"></i>
+      </span>
+      <p-dropdown placeholder='Pick a past call' formControlName="recordingId" [options]="recordings" optionLabel="label"></p-dropdown>
+    </div>
   </div>
 
   <div *ngIf="showVideoInfo" class="video-info">

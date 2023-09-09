@@ -11,12 +11,15 @@ import { Observable, Subject, concat, concatMap } from 'rxjs';
 import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
-import { Generators } from '../model/response/generators.model';
+import { Generators } from '../model/admin/generators.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HubDashboardService {
+
+  private recordingsSubject = new Subject<string[]>();
+  recordingsObservable$ = this.recordingsSubject.asObservable();
   
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
@@ -123,7 +126,10 @@ export class HubDashboardService {
         resultList.push(resultItem);
       }
     }
-  
     return resultList;
+  }
+
+  getZoomRecordings() {
+    throw new Error('Method not implemented.');
   }
 }

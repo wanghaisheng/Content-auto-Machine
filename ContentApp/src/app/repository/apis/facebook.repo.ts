@@ -9,7 +9,7 @@
 import { Injectable } from "@angular/core";
 import axios from 'axios';
 import { Observable, from, map, tap } from 'rxjs';
-import { FacebookPage } from "../../model/user/facebookpage.model";
+import { FacebookPage } from "../../model/content/facebookpage.model";
 
 @Injectable({
   providedIn: 'root',

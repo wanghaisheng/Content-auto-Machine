@@ -52,7 +52,7 @@ import { AuthenticationRepository } from '../repository/oauth/auth.repo';
 import { FacebookRepository } from '../repository/apis/facebook.repo';
 import { NavigationService } from './navigation.service';
 import { SocialAccount } from '../model/user/socialaccount.model';
-import { FacebookPage } from '../model/user/facebookpage.model';
+import { FacebookPage } from '../model/content/facebookpage.model';
 
 @Injectable({
   providedIn: 'root',
