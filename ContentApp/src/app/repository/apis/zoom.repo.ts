@@ -7,10 +7,10 @@
  */
 import { Injectable } from "@angular/core";
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Observable, from, map, tap } from 'rxjs';
+import { Observable, concat, concatMap, from, map, tap } from 'rxjs';
 import { FireAuthRepository } from "../database/fireauth.repo";
 import { ApiResponse } from "src/app/model/response/apiresponse.model";
-import { Recording, ZoomRecordings } from "src/app/model/source/zoomrecordings.model";
+import { Meeting, Recording, ZoomRecordings } from "src/app/model/source/zoomrecordings.model";
 
 @Injectable({
   providedIn: 'root',
@@ -23,24 +23,24 @@ export class ZoomRepository {
     private firebaseAuthRepo: FireAuthRepository
   ) {}
 
-  // getZoomRecordings(): Observable<Recording> {
-  //   const config: AxiosRequestConfig = {
-  //     method: 'get',
-  //     url: `${this.contentMachineUrlv2}/meetings/recordings`,
-  //     data: {},
-  //   };
-  //   return from(axios(config)).pipe(
-  //     tap((response: AxiosResponse<any, any>) => {
-  //       console.log('🚰 Response:', response.data);
-  //     }),
-  //     map((response: AxiosResponse<any, any>) => {
-  //       const responseData = response.data as ApiResponse<ZoomRecordings>;
-  //       if (responseData.message !== 'success') {
-  //         throw new Error('🔥 Failed to get content from video');
-  //       } else {
-  //         return responseData.result;
-  //       }
-  //     })
-  //   );
-  // }
+  getZoomMeetings(): Observable<Meeting[]> {
+    return this.firebaseAuthRepo.getUserAuthObservable().pipe(
+      concatMap((user) => { 
+        const config: AxiosRequestConfig = {
+          method: 'get',
+          url: `${this.contentMachineUrlv2}/meetings/all?userId=${user.uid}`,
+          data: {},
+        };
+        return from(axios(config))
+      }),
+      map((response: AxiosResponse<any, any>) => {
+        const responseData = response.data as ApiResponse<Meeting[]>;
+        if (responseData.message !== 'success') {
+          throw new Error('🔥 Failed to get success');
+        } else {
+          return responseData.result;
+        }
+      })
+    )
+  }
 }

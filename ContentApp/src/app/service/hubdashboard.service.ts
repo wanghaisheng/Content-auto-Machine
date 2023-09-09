@@ -12,14 +12,16 @@ import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
 import { Generators } from '../model/admin/generators.model';
+import { ZoomRepository } from '../repository/apis/zoom.repo';
+import { Meeting } from '../model/source/zoomrecordings.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HubDashboardService {
 
-  private recordingsSubject = new Subject<string[]>();
-  recordingsObservable$ = this.recordingsSubject.asObservable();
+  private meetingsSubject = new Subject<Meeting[]>();
+  meetingsObservable$ = this.meetingsSubject.asObservable();
   
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
@@ -48,7 +50,8 @@ export class HubDashboardService {
 
   constructor(
     private adminRepo: AdminRepository,
-    private contentRepo: ContentRepository
+    private contentRepo: ContentRepository,
+    private zoomRepo: ZoomRepository
   ) {
     /** */
   }
@@ -130,6 +133,9 @@ export class HubDashboardService {
   }
 
   getZoomRecordings() {
-    throw new Error('Method not implemented.');
+    this.zoomRepo.getZoomMeetings().subscribe({
+      next: (response) => this.meetingsSubject.next(response),
+      error: (error) => this.errorSubject.next(error.message)
+    })
   }
 }

@@ -15,6 +15,7 @@ import {
   MessageService,
   ConfirmEventType,
 } from 'primeng/api';
+import { ZOOM_CLIENT_ID } from 'appsecrets';
 
 @Component({
   selector: 'app-root',
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit {
   onAccountsClick() {
     const params = {
       //TODO: move to appsecrets
-      client_id: 'v6c4slYJRDGzpwoZY8h_Nw',
+      client_id: ZOOM_CLIENT_ID,
       redirect_uri: 'http://localhost:4200/zoom-callback',
     };
     window.location.href = `https://zoom.us/oauth/authorize?response_type=code&client_id=${params.client_id}&redirect_uri=${params.redirect_uri}`;

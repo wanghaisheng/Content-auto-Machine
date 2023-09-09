@@ -63,8 +63,13 @@ export class CreatepanelComponent implements OnInit {
       recordingId: ['']
     });
 
-    this.dashboardService.recordingsObservable$.subscribe((recordings) => {
-
+    this.dashboardService.meetingsObservable$.subscribe((meetings) => {
+      meetings.forEach((meeting) => {
+        this.recordings.push({
+          label: meeting.topic,
+          value: meeting.uuid
+        })
+      });
     })
     
     if (this.createMode == 'zoom') {
