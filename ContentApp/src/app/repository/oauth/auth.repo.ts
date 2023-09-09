@@ -9,24 +9,30 @@
 import { Injectable } from '@angular/core';
 import { LINKEDIN_CLIENT_ID } from 'appsecrets';
 import axios from 'axios';
-import { Observable, from, map } from 'rxjs';
+import { Observable, concat, concatMap, from, map } from 'rxjs';
+import { ApiResponse } from 'src/app/model/response/apiresponse.model';
+import { ZoomUser } from 'src/app/model/user/zoomuser';
+import { FireAuthRepository } from '../database/fireauth.repo';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LinkedinAuthRepository {
-  private redirectUri = 'http://localhost:4200/linkedin-callback';
+export class AuthenticationRepository {
+  
+  private linkedinRedirectUri = 'http://localhost:4200/linkedin-callback';
   private linkedinScopes = ['r_liteprofile', 'r_emailaddress', 'w_member_social'];
-
-  authCodeParams = {
+  
+  linkedinAuthCodeParams = {
     response_type: 'code',
     client_id: LINKEDIN_CLIENT_ID,
-    redirect_uri: this.redirectUri,
+    redirect_uri: this.linkedinRedirectUri,
     state: this.createCSRFtoken(),
     scope: this.linkedinScopes.join(' '),
   };
 
-  constructor() {
+  constructor(
+    private fireAuthRepo: FireAuthRepository
+  ) {
     /** */
   }
 
@@ -60,5 +66,33 @@ export class LinkedinAuthRepository {
       token += letters.charAt(Math.floor(Math.random() * letters.length));
     }
     return token;
+  }
+
+  getAuthorizedZoomUser(zoomCode: string): Observable<ApiResponse<ZoomUser>> {
+    if (this.fireAuthRepo.currentSessionUser?.uid == undefined) {
+      return this.fireAuthRepo.getUserAuthObservable().pipe(
+        concatMap((user) => this.getZoomAuthConfig(zoomCode, user.uid))
+      );
+    } else {
+      return this.getZoomAuthConfig(zoomCode, this.fireAuthRepo.currentSessionUser?.uid);
+    }
+  }
+
+  getZoomAuthConfig(zoomCode: string, userId: string) {
+    return from(
+      axios.get<{message: string, result: any}>('http://localhost:3000/api/v2/config/zoom', {
+        params: {
+          code: zoomCode,
+          userId: userId,
+        }
+      })
+    ).pipe(
+      map((response) => {
+        if (response.data.message !== 'success') {
+          throw new Error('Failed to exchange auth code for access token');
+        }
+        return response.data.result;
+      })
+    );
   }
 }

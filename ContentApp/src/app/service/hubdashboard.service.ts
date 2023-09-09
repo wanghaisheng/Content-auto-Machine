@@ -11,12 +11,17 @@ import { Observable, Subject, concat, concatMap } from 'rxjs';
 import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
-import { Generators } from '../model/response/generators.model';
+import { Generators } from '../model/admin/generators.model';
+import { ZoomRepository } from '../repository/apis/zoom.repo';
+import { Meeting } from '../model/source/zoomrecordings.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HubDashboardService {
+
+  private meetingsSubject = new Subject<Meeting[]>();
+  meetingsObservable$ = this.meetingsSubject.asObservable();
   
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
@@ -45,7 +50,8 @@ export class HubDashboardService {
 
   constructor(
     private adminRepo: AdminRepository,
-    private contentRepo: ContentRepository
+    private contentRepo: ContentRepository,
+    private zoomRepo: ZoomRepository
   ) {
     /** */
   }
@@ -53,7 +59,6 @@ export class HubDashboardService {
   getHubGenerators() {
     this.adminRepo.getGenerators().subscribe({
       next: (response: Generators) => {
-        console.log("🚀 ~ file: hubdashboard.service.ts:39 ~ HubDashboardService ~ this.adminRepo.getGenerators ~ response:", response)
         this.generatorsListSubject.next(this.toList(response));
       },
       error: (error: any) => {
@@ -75,7 +80,6 @@ export class HubDashboardService {
       aiModel
     ).subscribe({
       next: (response: Content) => {
-        console.log("🚀 ~ file: hubdashboard.service.ts:61 ~ HubDashboardService ~ response:", response)
         this.contentSubject.next(response);
       },
       error: (error: any) => {
@@ -112,7 +116,6 @@ export class HubDashboardService {
 
       if (generators.hasOwnProperty(key)) {
         const innerKeys = Object.keys(generators[key]);
-        console.log("🚀 ~ file: hubdashboard.service.ts:126 ~ HubDashboardService ~ toList ~ innerKeys:", innerKeys)
         innerKeys.map((innerKey) => {
           if (innerKey === 'meta') {
             resultItem['header'] = generators[key][innerKey]['title'];
@@ -126,7 +129,13 @@ export class HubDashboardService {
         resultList.push(resultItem);
       }
     }
-  
     return resultList;
+  }
+
+  getZoomRecordings() {
+    this.zoomRepo.getZoomMeetings().subscribe({
+      next: (response) => this.meetingsSubject.next(response),
+      error: (error) => this.errorSubject.next(error.message)
+    })
   }
 }

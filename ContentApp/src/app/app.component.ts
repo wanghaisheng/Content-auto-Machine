@@ -15,6 +15,7 @@ import {
   MessageService,
   ConfirmEventType,
 } from 'primeng/api';
+import { ZOOM_CLIENT_ID } from 'appsecrets';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
    * 4 = linkedin
    */
   focusedAccount = 0;
-  accountsVisible = false;
+  settingsVisible = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -54,14 +55,19 @@ export class AppComponent implements OnInit {
 
     this.socialAuthService.getFacebookAuthObservable$.subscribe((success) => {
       if (success) {
-        this.accountsVisible = true;
+        this.settingsVisible = true;
         this.focusedAccount = 1;
       }
     });
     this.socialAuthService.getLinkedinAuthObservable$.subscribe((success) => {
       if (success) {
-        this.accountsVisible = true;
+        this.settingsVisible = true;
         this.focusedAccount = 4;
+      }
+    });
+    this.socialAuthService.getZoomAuthObservable$.subscribe((success) => {
+      if (success) {
+        this.settingsVisible = true;
       }
     });
   }
@@ -69,9 +75,16 @@ export class AppComponent implements OnInit {
   onCalendarClick() {
     this.navigationService.navigateToRoot();
   }
+
   onAccountsClick() {
-    this.accountsVisible = true;
+    const params = {
+      //TODO: move to appsecrets
+      client_id: ZOOM_CLIENT_ID,
+      redirect_uri: 'http://localhost:4200/zoom-callback',
+    };
+    window.location.href = `https://zoom.us/oauth/authorize?response_type=code&client_id=${params.client_id}&redirect_uri=${params.redirect_uri}`;
   }
+
   onLogoutClick() {
     this.confirmationService.confirm({
       message:

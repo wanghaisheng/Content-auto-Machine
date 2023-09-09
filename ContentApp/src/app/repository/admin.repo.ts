@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
 import { ApiResponse } from '../model/response/apiresponse.model';
-import { Generators } from '../model/response/generators.model';
+import { Generators } from '../model/admin/generators.model';
 
 const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
 
@@ -27,7 +27,7 @@ export class AdminRepository {
     };
     return from(axios(config)).pipe(
       tap((response: AxiosResponse<any, any>) => {
-        console.log('Response:', response.data);
+        console.log('🚰 Response:', response.data);
       }),
       map((response: AxiosResponse<any, any>) => {
         const responseData = response.data as ApiResponse<Generators>;
