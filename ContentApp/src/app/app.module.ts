@@ -17,8 +17,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoginComponent } from './views/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getDatabase, provideDatabase } from '@angular/fire/database';import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from 'environments/environment';
 import { ConfirmationDialogComponent } from './views/common/confirmationdialog.component';
 import { CalendarComponent } from './views/calendar/calendar.component';
@@ -37,7 +36,6 @@ import { AccounthubComponent } from './views/accounthub/accounthub.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { FacebookRedirectComponent } from './views/redirects/facebookredirect.component';
-import { ZoomRedirectComponent } from './views/redirects/zoomredirect.component';
 import { SplitterModule } from 'primeng/splitter';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -64,6 +62,8 @@ import { ContentDashboardComponent } from './views/contentdashboard/contentdashb
 import { CreatepanelComponent } from './views/contentdashboard/createpanel/createpanel.component';
 import { ContentpanelComponent } from './views/contentdashboard/contentpanel/contentpanel.component';
 import { SettingsComponent } from './views/settings/settings.component';
+import { provideFirestore } from '@angular/fire/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -138,6 +138,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     }),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
+    provideDatabase(() => getDatabase()),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
   ],
