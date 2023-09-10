@@ -49,7 +49,8 @@ export class CreatepanelComponent implements OnInit, OnChanges {
   contentLoading: boolean = false;
   showVideoInfo: boolean = false;
 
-  meetings: Meeting[] = [];
+  meetings: Meeting[] | undefined;
+  selectedMeeting!:  Meeting;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,7 +61,7 @@ export class CreatepanelComponent implements OnInit, OnChanges {
     this.formGroup = this.formBuilder.group({
       title: [''],
       url: ['', Validators.pattern(/https?:\/\/.*/)],
-      meetingId: ['']
+      meetingId: []
     });
 
     this.dashboardService.meetingsObservable$.subscribe((meetings) => {
@@ -78,14 +79,23 @@ export class CreatepanelComponent implements OnInit, OnChanges {
   }
 
   submitForContent(model: string = 'gpt-4') {
-    if (this.formGroup.valid) {
-      this.dashboardService.createContent(
-        this.formGroup.value.title,
-        this.formGroup.value.url, 
-        model
-      )
-    } else {
-      console.log('Form is invalid');
-    }
+    console.log("🚀 ~ file: createpanel.component.ts:82 ~ CreatepanelComponent ~ submitForContent ~ submitForContent:", this.selectedMeeting)
+    // if (this.formGroup.valid) {
+      if (this.mode == 'zoom') {
+        this.dashboardService.createZoomContent(
+          this.formGroup.value.title,
+          this.selectedMeeting.id,
+          model
+        )
+      } else {
+        this.dashboardService.createYoutubeContent(
+          this.formGroup.value.title,
+          this.formGroup.value.url, 
+          model
+        )
+      }
+    // } else {
+    //   console.log('Form is invalid');
+    // }
   }
 }

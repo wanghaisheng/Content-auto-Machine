@@ -1,9 +1,9 @@
-<div [formGroup]='formGroup' class="flex-container">
+<div class="flex-container">
   <div class="header">
     <span class="header-icon">
       <i class="pi pi-book"></i>
     </span>
-    <input placeholder='Type your title...' class="header-input" type="text" pInputText formControlName="title"/>
+    <input placeholder='Type your title...' class="header-input" type="text" pInputText/>
   </div>
   <div *ngIf="mode == 'youtube'">
     <h3 class="section-header">Youtube Video</h3>
@@ -11,7 +11,7 @@
       <span class="header-icon">
         <i class="pi pi-youtube"></i>
       </span>
-      <input placeholder='Paste your link...' class="header-input" type="text" pInputText formControlName="url"/>
+      <input placeholder='Paste your link...' class="header-input" type="text" pInputText/>
     </div>
   </div>
   <div *ngIf="mode == 'zoom'">
@@ -20,14 +20,14 @@
       <span class="header-icon">
         <i class="pi pi-youtube"></i>
       </span>
-      <p-dropdown placeholder='Pick a past call' formControlName="meetingId" [options]="meetings" optionLabel="topic">
+      <p-dropdown placeholder='Pick a past call' [(ngModel)]="selectedMeeting" [options]="meetings!" optionLabel="topic">
         <ng-template let-meeting pTemplate="item">
           <h3>{{ meeting.topic }}</h3>
           <div class="flex row" style="align-content: center;">
               <p>Start: {{ meeting.start_time }}</p>
               <p>Duration: {{ meeting.duration }} minutes</p>
           </div>
-      </ng-template>
+        </ng-template>
       </p-dropdown>
     </div>
   </div>

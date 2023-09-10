@@ -67,7 +67,27 @@ export class HubDashboardService {
     })
   }
 
-  createContent(
+  createZoomContent(
+    title: string,
+    zoomMeetingId: number,
+    aiModel: string
+  ) {
+    this.zoomRepo.getContentFromMeeting(
+      title,
+      zoomMeetingId,
+      aiModel
+    ).subscribe({
+      next: (response: Content) => {
+        this.contentSubject.next(response);
+      },
+      error: (error: any) => {
+        console.log("🔥 ~ file: hubdashboard.service.ts:62 ~ HubDashboardService ~ error:", error)
+        this.errorSubject.next(error);
+      }
+    })
+  }
+
+  createYoutubeContent(
     title: string,
     youtubeUrl: string,
     aiModel: string
