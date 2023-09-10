@@ -6,19 +6,21 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SelectItem } from 'primeng/api';
+import { Meeting } from 'src/app/model/source/zoomrecordings.model';
 
 @Component({
   selector: 'app-createpanel',
   templateUrl: './createpanel.component.html',
   styleUrls: ['./createpanel.component.css']
 })
-export class CreatepanelComponent implements OnInit {
+export class CreatepanelComponent implements OnInit, OnChanges {
 
   @Input() createMode: string = '';
+  mode: string = ''
 
   // models: { name: string, code: string }[] = [
   //   { name: 'Quality', code: 'GPT-4' },
@@ -47,9 +49,7 @@ export class CreatepanelComponent implements OnInit {
   contentLoading: boolean = false;
   showVideoInfo: boolean = false;
 
-  recordings: SelectItem[] = [
-    // { label: 'Alex Hormozi', value: 'hormozi' }
-  ];
+  meetings: Meeting[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,20 +60,20 @@ export class CreatepanelComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       title: [''],
       url: ['', Validators.pattern(/https?:\/\/.*/)],
-      recordingId: ['']
+      meetingId: ['']
     });
 
     this.dashboardService.meetingsObservable$.subscribe((meetings) => {
-      meetings.forEach((meeting) => {
-        this.recordings.push({
-          label: meeting.topic,
-          value: meeting.uuid
-        })
-      });
+      this.meetings = meetings;
     })
-    
-    if (this.createMode == 'zoom') {
-      this.dashboardService.getZoomRecordings();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['createMode']) {
+      this.mode = changes['createMode'].currentValue;
+      if (this.createMode == 'zoom') {
+        this.dashboardService.getZoomRecordings();
+      }
     }
   }
 

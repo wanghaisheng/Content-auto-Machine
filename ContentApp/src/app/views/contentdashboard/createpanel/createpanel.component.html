@@ -5,7 +5,7 @@
     </span>
     <input placeholder='Type your title...' class="header-input" type="text" pInputText formControlName="title"/>
   </div>
-  <div *ngIf="createMode == 'youtube'">
+  <div *ngIf="mode == 'youtube'">
     <h3 class="section-header">Youtube Video</h3>
     <div class="header">
       <span class="header-icon">
@@ -14,13 +14,21 @@
       <input placeholder='Paste your link...' class="header-input" type="text" pInputText formControlName="url"/>
     </div>
   </div>
-  <div *ngIf="createMode == 'zoom'">
+  <div *ngIf="mode == 'zoom'">
     <h3 class="section-header">Zoom Recordings</h3>
     <div class="header">
       <span class="header-icon">
         <i class="pi pi-youtube"></i>
       </span>
-      <p-dropdown placeholder='Pick a past call' formControlName="recordingId" [options]="recordings" optionLabel="label"></p-dropdown>
+      <p-dropdown placeholder='Pick a past call' formControlName="meetingId" [options]="meetings" optionLabel="topic">
+        <ng-template let-meeting pTemplate="item">
+          <h3>{{ meeting.topic }}</h3>
+          <div class="flex row" style="align-content: center;">
+              <p>Start: {{ meeting.start_time }}</p>
+              <p>Duration: {{ meeting.duration }} minutes</p>
+          </div>
+      </ng-template>
+      </p-dropdown>
     </div>
   </div>
 
@@ -33,22 +41,6 @@
       <p>Temporary Description</p>
     </div>
   </div>
-
-  <div *ngIf="!showVideoInfo" class="row">
-    <p-skeleton width="100px" height="100px"></p-skeleton>
-    <div style="flex-direction: column; align-items: flex-start; margin-left: 6px; justify-content: space-between;">
-      <div class="flex-item" >
-        <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
-      </div>
-      <div class="flex-item">
-        <p-skeleton styleClass="mb-2"></p-skeleton>
-      </div>
-      <div class="flex-item">
-        <p-skeleton styleClass="mb-2"></p-skeleton>
-      </div>
-    </div>
-  </div>
-
   <div class="output-type">
     <p-splitButton label="Generate New Content" icon="pi pi-plus" (onClick)="submitForContent()" [model]="items"></p-splitButton>
   </div>
