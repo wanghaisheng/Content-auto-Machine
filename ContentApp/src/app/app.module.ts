@@ -6,7 +6,7 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HammerModule } from '@angular/platform-browser';
@@ -64,6 +64,7 @@ import { ContentpanelComponent } from './views/contentdashboard/contentpanel/con
 import { SettingsComponent } from './views/settings/settings.component';
 import { provideFirestore } from '@angular/fire/firestore';
 import { getFirestore } from 'firebase/firestore';
+import { TypewriterComponent } from './views/common/typewriter/typewriter.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -98,7 +99,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ContentDashboardComponent,
     CreatepanelComponent,
     ContentpanelComponent,
-    SettingsComponent
+    SettingsComponent,
+    TypewriterComponent
   ],
   imports: [
     SplitButtonModule,
