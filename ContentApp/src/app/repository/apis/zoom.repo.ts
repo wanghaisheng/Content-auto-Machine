@@ -35,6 +35,7 @@ export class ZoomRepository {
         return from(axios(config))
       }),
       map((response: AxiosResponse<any, any>) => {
+        console.log("🚀 ~ file: zoom.repo.ts:39 ~ ZoomRepository ~ map ~ response:", response)
         const responseData = response.data as ApiResponse<Meeting[]>;
         if (responseData.message !== 'success') {
           throw new Error('🔥 Failed to get success');
@@ -45,11 +46,11 @@ export class ZoomRepository {
     )
   }
 
-  getContentFromMeeting(title: string, zoomMeetingId: number, aiModel: string): Observable<Content> {
+  getContentFromMeeting(title: string, zoomMeetingId: number, aiModel: string, contentType: string): Observable<Content> {
     console.log("🚀 ~ file: zoom.repo.ts:49 ~ ZoomRepository ~ getContentFromMeeting ~ zoomMeetingId:", zoomMeetingId)
     const config: AxiosRequestConfig = {
       method: 'get',
-      url: `${this.contentMachineUrlv2}/meetings/recording?userId=${this.firebaseAuthRepo.currentSessionUser?.uid}&meetingId=${zoomMeetingId}&model=${aiModel}`,
+      url: `${this.contentMachineUrlv2}/meetings/recording?userId=${this.firebaseAuthRepo.currentSessionUser?.uid}&meetingId=${zoomMeetingId}&model=${aiModel}&contentType=${contentType}`,
       data: {},
     };
     return from(axios(config)).pipe(

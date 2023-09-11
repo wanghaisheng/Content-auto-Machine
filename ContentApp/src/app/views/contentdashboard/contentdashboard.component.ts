@@ -26,13 +26,7 @@ export class ContentDashboardComponent implements OnInit {
     this.route.url.subscribe((segments) => {
       if (segments.length > 0) {
         const segment = segments[segments.length - 1].path;
-        if (segment.includes('youtube')) {
-          this.panelCreateMode = 'youtube';
-        } else if (segment.includes('zoom')) {
-          this.panelCreateMode = 'zoom';
-        } else {
-          throw new Error('Invalid route');
-        }
+        this.panelCreateMode = segment;
       }
     })
   }

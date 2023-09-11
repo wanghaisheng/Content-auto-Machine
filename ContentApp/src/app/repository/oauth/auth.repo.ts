@@ -69,13 +69,9 @@ export class AuthenticationRepository {
   }
 
   getAuthorizedZoomUser(zoomCode: string): Observable<ApiResponse<ZoomUser>> {
-    if (this.fireAuthRepo.currentSessionUser?.uid == undefined) {
-      return this.fireAuthRepo.getUserAuthObservable().pipe(
-        concatMap((user) => this.getZoomAuthConfig(zoomCode, user.uid))
-      );
-    } else {
-      return this.getZoomAuthConfig(zoomCode, this.fireAuthRepo.currentSessionUser?.uid);
-    }
+    return this.fireAuthRepo.getUserAuthObservable().pipe(
+      concatMap((user) => this.getZoomAuthConfig(zoomCode, user.uid))
+    );
   }
 
   getZoomAuthConfig(zoomCode: string, userId: string) {

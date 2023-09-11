@@ -6,26 +6,25 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SelectItem } from 'primeng/api';
 import { Meeting } from 'src/app/model/source/zoomrecordings.model';
+import { Observable } from 'rxjs';
+import { NgIfContext } from '@angular/common';
 
 @Component({
   selector: 'app-createpanel',
   templateUrl: './createpanel.component.html',
-  styleUrls: ['./createpanel.component.css']
+  styleUrls: ['./createpanel.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreatepanelComponent implements OnInit, OnChanges {
+export class CreatepanelComponent implements OnInit, AfterContentInit {
 
   @Input() createMode: string = '';
   mode: string = ''
 
-  // models: { name: string, code: string }[] = [
-  //   { name: 'Quality', code: 'GPT-4' },
-  //   { name: 'Speed', code: 'GPT-3.5turbo' }
-  // ];
   items = [
     {
         label: 'Quality',
@@ -46,13 +45,16 @@ export class CreatepanelComponent implements OnInit, OnChanges {
 ];
 
   formGroup!: FormGroup;
-  contentLoading: boolean = false;
+  contentLoading$!: Observable<boolean>;
   showVideoInfo: boolean = false;
 
   meetings: Meeting[] | undefined;
   selectedMeeting!:  Meeting;
 
+  contentLoaded!: TemplateRef<NgIfContext<boolean|null>>|null;
+
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private dashboardService: HubDashboardService
   ) { /** */ }
@@ -65,27 +67,32 @@ export class CreatepanelComponent implements OnInit, OnChanges {
     });
 
     this.dashboardService.meetingsObservable$.subscribe((meetings) => {
+      console.log("🚀 ~ file: createpanel.component.ts:65 ~ CreatepanelComponent ~ this.dashboardService.meetingsObservable$.subscribe ~ meetings:", meetings)
       this.meetings = meetings;
     })
+    
+    this.contentLoading$ = this.dashboardService.loadingObservable$;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['createMode']) {
-      this.mode = changes['createMode'].currentValue;
-      if (this.createMode == 'zoom') {
-        this.dashboardService.getZoomRecordings();
-      }
-    }
+  ngAfterContentInit(): void {
+    this.changeDetectorRef.detectChanges();
+    if (this.createMode.includes('zoom')) {
+      this.dashboardService.getZoomMeetings();
+    } 
+  } 
+
+  ngAfterViewInit(): void {
+    this.changeDetectorRef.markForCheck();
   }
 
   submitForContent(model: string = 'gpt-4') {
-    console.log("🚀 ~ file: createpanel.component.ts:82 ~ CreatepanelComponent ~ submitForContent ~ submitForContent:", this.selectedMeeting)
     // if (this.formGroup.valid) {
-      if (this.mode == 'zoom') {
+      if (this.createMode.includes('zoom')) {
         this.dashboardService.createZoomContent(
           this.formGroup.value.title,
           this.selectedMeeting.id,
-          model
+          model,
+          this.createMode
         )
       } else {
         this.dashboardService.createYoutubeContent(

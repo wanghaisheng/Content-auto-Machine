@@ -90,19 +90,12 @@ export class SchedulingService {
   }
 
   getAllEvents() {
-    if (this.fireAuthRepo.currentSessionUser == null || this.fireAuthRepo.currentSessionUser == undefined) {
-      this.fireAuthRepo.getUserAuthObservable().pipe(
-        concatMap((user) => this.contentRepo.getAllContent(user.uid)),
-      ).subscribe({
-        next: (postResponse: {}[]) => { this.calendarCompleteSubject.next(this.postsToEvents(postResponse)); },
-        error: (error) => { this.errorSubject.next(error); }
-      });
-    } else {
-      this.contentRepo.getAllContent(this.fireAuthRepo.currentSessionUser.uid).subscribe({
-        next: (postResponse: {}[]) => { this.calendarCompleteSubject.next(this.postsToEvents(postResponse)); },
-        error: (error) => { this.errorSubject.next(error); }
-      });
-    }
+    this.fireAuthRepo.getUserAuthObservable().pipe(
+      concatMap((user) => this.contentRepo.getAllContent(user.uid)),
+    ).subscribe({
+      next: (postResponse: {}[]) => { this.calendarCompleteSubject.next(this.postsToEvents(postResponse)); },
+      error: (error) => { this.errorSubject.next(error); }
+    });
   }
 
   postsToEvents(postResponse: {}[]): CalendarEvent[] {

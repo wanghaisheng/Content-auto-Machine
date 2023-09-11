@@ -25,7 +25,11 @@ export class FireAuthRepository {
   private userSubject: Subject<FirebaseUser> = new Subject<FirebaseUser>();
   
   getUserAuthObservable(): Observable<FirebaseUser> {
-    return this.userSubject.asObservable();
+    if (this.currentSessionUser) {
+      return of(this.currentSessionUser);
+    } else {
+      return this.userSubject.asObservable();
+    }
   }
 
   isAuthenticated(): Observable<boolean> {

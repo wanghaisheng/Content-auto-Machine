@@ -20,8 +20,8 @@ import { Meeting } from '../model/source/zoomrecordings.model';
 })
 export class HubDashboardService {
 
-  private meetingsSubject = new Subject<Meeting[]>();
-  meetingsObservable$ = this.meetingsSubject.asObservable();
+  private loadingSubject = new Subject<boolean>();
+  loadingObservable$ = this.loadingSubject.asObservable();
   
   private errorSubject = new Subject<string>();
   errorObservable$ = this.errorSubject.asObservable();
@@ -48,6 +48,9 @@ export class HubDashboardService {
   private contentSubject = new Subject<Content>();
   contentObservable$: Observable<Content> = this.contentSubject.asObservable();
 
+  private meetingsSubject = new Subject<Meeting[]>();
+  meetingsObservable$ = this.meetingsSubject.asObservable();
+
   constructor(
     private adminRepo: AdminRepository,
     private contentRepo: ContentRepository,
@@ -70,12 +73,14 @@ export class HubDashboardService {
   createZoomContent(
     title: string,
     zoomMeetingId: number,
-    aiModel: string
+    aiModel: string,
+    contentType: string
   ) {
     this.zoomRepo.getContentFromMeeting(
       title,
       zoomMeetingId,
-      aiModel
+      aiModel,
+      contentType
     ).subscribe({
       next: (response: Content) => {
         this.contentSubject.next(response);
@@ -152,10 +157,17 @@ export class HubDashboardService {
     return resultList;
   }
 
-  getZoomRecordings() {
+  getZoomMeetings() {
+    this.loadingSubject.next(true);
     this.zoomRepo.getZoomMeetings().subscribe({
-      next: (response) => this.meetingsSubject.next(response),
-      error: (error) => this.errorSubject.next(error.message)
+      next: (response) => {
+        this.loadingSubject.next(false);
+        this.meetingsSubject.next(response)
+      },
+      error: (error) => {
+        this.loadingSubject.next(false);
+        this.errorSubject.next(error.message)
+      }
     })
   }
 }
