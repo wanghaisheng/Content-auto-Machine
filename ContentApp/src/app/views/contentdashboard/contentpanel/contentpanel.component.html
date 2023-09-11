@@ -1,25 +1,7 @@
 <strong *ngIf="!displayContentPanel">
   👈 To get started, just go to the left and drop in a youtube link then click submit.
 </strong>
-
-<div *ngIf="isContentLoading">
-  <div>
-    <p-skeleton width="100px" height="100px"></p-skeleton>
-    <div style="flex-direction: column; align-items: flex-start; margin-left: 6px; justify-content: space-between;">
-      <div class="flex-item" >
-        <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
-      </div>
-      <div class="flex-item">
-        <p-skeleton styleClass="mb-2"></p-skeleton>
-      </div>
-      <div class="flex-item">
-        <p-skeleton styleClass="mb-2"></p-skeleton>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p-panel style="margin: 1rem;" *ngIf="displayContentPanel">
+<p-panel *ngIf="displayContentPanel">
   <ng-template pTemplate="header">
     <span class="flex-item p-input-icon-left row">
       <i class="pi pi-bolt"></i>

@@ -47,7 +47,6 @@ export class ZoomRepository {
   }
 
   getContentFromMeeting(title: string, zoomMeetingId: number, aiModel: string, contentType: string): Observable<Content> {
-    console.log("🚀 ~ file: zoom.repo.ts:49 ~ ZoomRepository ~ getContentFromMeeting ~ zoomMeetingId:", zoomMeetingId)
     const config: AxiosRequestConfig = {
       method: 'get',
       url: `${this.contentMachineUrlv2}/meetings/recording?userId=${this.firebaseAuthRepo.currentSessionUser?.uid}&meetingId=${zoomMeetingId}&model=${aiModel}&contentType=${contentType}`,

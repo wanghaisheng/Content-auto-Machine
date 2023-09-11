@@ -25,33 +25,20 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   @Input() createMode: string = '';
   mode: string = ''
 
+  contentLoading$!: Observable<boolean>;
+
   items = [
-    {
-        label: 'Quality',
-        icon: 'pi pi-refresh',
-        command: () => {
-            this.submitForContent();
-        }
-    },
-    {
-        label: 'Speed',
-        icon: 'pi pi-times',
-        command: () => {
-            this.submitForContent('gpt-3.5turbo');
-        }
-    },
+    { label: 'Quality', icon: 'pi pi-refresh', command: () => {this.submitForContent(); }},
+    { label: 'Speed', icon: 'pi pi-times', command: () => { this.submitForContent('gpt-3.5turbo'); }},
     { separator: true },
     { label: 'Learn how this works', icon: 'pi pi-question-circle', routerLink: ['/setup'] }
 ];
 
   formGroup!: FormGroup;
-  contentLoading$!: Observable<boolean>;
   showVideoInfo: boolean = false;
 
   meetings: Meeting[] | undefined;
   selectedMeeting!:  Meeting;
-
-  contentLoaded!: TemplateRef<NgIfContext<boolean|null>>|null;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -67,11 +54,10 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     });
 
     this.dashboardService.meetingsObservable$.subscribe((meetings) => {
-      console.log("🚀 ~ file: createpanel.component.ts:65 ~ CreatepanelComponent ~ this.dashboardService.meetingsObservable$.subscribe ~ meetings:", meetings)
       this.meetings = meetings;
     })
     
-    this.contentLoading$ = this.dashboardService.loadingObservable$;
+    this.contentLoading$ = this.dashboardService.creteLoadingObservable$;
   }
 
   ngAfterContentInit(): void {

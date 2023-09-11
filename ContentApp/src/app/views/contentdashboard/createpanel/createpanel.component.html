@@ -17,7 +17,7 @@
   <div *ngIf="createMode.includes('zoom')">
     <h3 class="section-header">Zoom Recordings</h3>
     <div class="header">
-      <div *ngIf="(contentLoading$ | async) else contentLoaded" class="flex-item">
+      <div *ngIf="(contentLoading$ | async)" class="flex-item">
         <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
       </div>
       <p-dropdown *ngIf="meetings?.length ?? 0 > 0" placeholder='Pick a past call' [(ngModel)]="selectedMeeting" [options]="meetings!" optionLabel="topic">

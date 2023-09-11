@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
+import { Observable } from 'rxjs';
 import { Content } from 'src/app/model/content/content.model';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 
@@ -11,8 +12,9 @@ import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 })
 export class ContentpanelComponent implements OnInit {
 
-  formGroup!: FormGroup;
+  loadingObservable$!: Observable<boolean>;
 
+  formGroup!: FormGroup;
   displayContentPanel = false;
   contentLoading = false;
   content = '';
@@ -34,7 +36,6 @@ export class ContentpanelComponent implements OnInit {
     { label: 'Make it more conversational', value: 'belfort' },
     { label: 'Make it more human', value: 'belfort' }
   ];
-isContentLoading: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,7 +48,7 @@ isContentLoading: any;
     this.formGroup = this.formBuilder.group({
       influencer: ['']
     });
-
+    this.loadingObservable$ = this.dashboardService.contentLoadingObservable$;
     this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
       this.displayContentPanel = contentComplete != undefined;
       this.content = contentComplete.content;
