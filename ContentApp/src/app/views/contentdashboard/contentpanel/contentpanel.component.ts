@@ -46,7 +46,9 @@ export class ContentpanelComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      influencer: ['']
+      influencer: [''],
+      control: [''],
+      enhance: [''],
     });
     this.loadingObservable$ = this.dashboardService.contentLoadingObservable$;
     this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
