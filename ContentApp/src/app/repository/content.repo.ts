@@ -81,21 +81,23 @@ export class ContentRepository {
   getContentFromVideo(
     title: string, 
     videoUuid: string, 
-    model: string
+    model: string,
+    contentType: string
   ): Observable<Content> {
-    const config: AxiosRequestConfig = {
-      method: 'post',
-      url: `${contentMachineUrlv2}/content`,
-      data: {
-        userId: this.fireAuthRepo.currentSessionUser!.uid,
-        videoId: videoUuid,
-        title: title,
-        model: model
-      },
-    };
-    return from(axios(config)).pipe(
-      tap((response: AxiosResponse<any, any>) => {
-        console.log('Response:', response.data);
+    return this.fireAuthRepo.getUserAuthObservable().pipe(
+      concatMap((user) => {
+        const config: AxiosRequestConfig = {
+          method: 'post',
+          url: `${contentMachineUrlv2}/videos`,
+          data: {
+            userId: user.uid,
+            videoId: videoUuid,
+            title: title,
+            model: model,
+            contentType: contentType
+          },
+        };
+        return from(axios(config))
       }),
       map((response: AxiosResponse<any, any>) => {
         const responseData = response.data as ApiResponse<Content>;
@@ -105,6 +107,19 @@ export class ContentRepository {
           return responseData.result;
         }
       })
-    );
+    )
+    // return from(axios(config)).pipe(
+    //   tap((response: AxiosResponse<any, any>) => {
+    //     console.log('Response:', response.data);
+    //   }),
+    //   map((response: AxiosResponse<any, any>) => {
+    //     const responseData = response.data as ApiResponse<Content>;
+    //     if (responseData.message !== 'success') {
+    //       throw new Error('🔥 Failed to get content from video');
+    //     } else {
+    //       return responseData.result;
+    //     }
+    //   })
+    // );
   }
 }

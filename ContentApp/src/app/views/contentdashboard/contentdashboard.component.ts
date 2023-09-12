@@ -6,20 +6,24 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 
 @Component({
   selector: 'app-contentdashboard',
   templateUrl: './contentdashboard.component.html',
   styleUrls: ['./contentdashboard.component.css']
 })
-export class ContentDashboardComponent implements OnInit {
+export class ContentDashboardComponent implements OnInit, OnChanges {
  
   panelCreateMode = '';
 
   constructor(
     private route: ActivatedRoute,
+    private messageService: MessageService,
+    private dashboardService: HubDashboardService
   ) { /** */ }
 
   ngOnInit(): void {
@@ -29,5 +33,28 @@ export class ContentDashboardComponent implements OnInit {
         this.panelCreateMode = segment;
       }
     })
+    this.dashboardService.errorObservable$.subscribe((message) => {
+      this.receiveErrorMessage(message);
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      /** */
+  }
+
+  receiveErrorMessage(message: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: message,
+    });
+  }
+
+  receiveInfoMessage(message: string) {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Confirmed',
+      detail: message,
+    });
   }
 }

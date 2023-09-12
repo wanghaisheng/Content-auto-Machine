@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Content } from 'src/app/model/content/content.model';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 
@@ -15,7 +15,6 @@ export class ContentpanelComponent implements OnInit {
   loadingObservable$!: Observable<boolean>;
 
   formGroup!: FormGroup;
-  displayContentPanel = false;
   contentLoading = false;
   content = '';
   
@@ -50,9 +49,12 @@ export class ContentpanelComponent implements OnInit {
       control: [''],
       enhance: [''],
     });
-    this.loadingObservable$ = this.dashboardService.contentLoadingObservable$;
+    this.dashboardService.contentLoadingObservable$.subscribe({
+      next: (loading) => {
+        this.contentLoading = loading;
+      }
+    });
     this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
-      this.displayContentPanel = contentComplete != undefined;
       this.content = contentComplete.content;
     });
   }
