@@ -6,7 +6,7 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FireAuthRepository } from '../repository/database/fireauth.repo';
 import { MenuItem } from 'primeng/api';
@@ -15,7 +15,7 @@ import { Observable, Subject, filter } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class NavigationService {
+export class NavigationService implements OnInit {
 
   breadcrumbData: Subject<MenuItem[]> = new Subject<MenuItem[]>();
 
@@ -28,23 +28,7 @@ export class NavigationService {
   }
 
   ngOnInit() {
-    // Subscribe to route changes
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        // Get the current route snapshot
-        let route = this.activatedRoute.root;
-        console.log("🚀 ~ file: navigation.service.ts:29 ~ NavigationService ~ .subscribe ~ route:", route)
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-
-        // Build breadcrumb data based on route hierarchy
-        const breadcrumbData = this.buildBreadcrumb(route);
-
-        // Update breadcrumb data in the service
-        this.setBreadcrumbData(breadcrumbData);
-      });
+    
   }
 
   navigateToRoot() {

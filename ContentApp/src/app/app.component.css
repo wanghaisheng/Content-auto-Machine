@@ -24,7 +24,6 @@
 
 .horizontal-container {
   display: flex;
-  align-items: center;
 }
 
 .horizontal-container img,

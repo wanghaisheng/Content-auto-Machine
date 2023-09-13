@@ -5,24 +5,24 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!-- Navigation bar -->
-<p-menubar [model]="items">
+<p-menubar [model]="items" *ngIf="( loggedInObserver$ | async )">
   <ng-template pTemplate="start">
     <div class="horizontal-container">
       <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
       <h2>Yonni AI</h2>
     </div>
-  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
   </ng-template>
   <ng-template pTemplate="end">
     <div class="horizontal-container">
-      <!-- <p-button icon="pi pi-calendar"
-        styleClass="p-button-rounded p-button-secondary p-button-text"
-        (click)="onCalendarClick()"></p-button> -->
-      <p-button (click)="onAccountsClick()">Connect Zoom</p-button>
-      <p-button (click)="onLogoutClick()">Log Out</p-button>
-    </div>
-  </ng-template>
-</p-menubar>
+      <p-button icon="pi pi-cog"
+      styleClass="p-button-rounded p-button-secondary p-button-text"
+      (click)="onAccountsClick()"></p-button>
+      <!-- <p-button  (click)="onAccountsClick()">Connect Zoom</p-button>
+        <p-button (click)="onLogoutClick()">Log Out</p-button> -->
+      </div>
+    </ng-template>
+  </p-menubar>
+  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
 
 <p-dialog header="Settings" [(visible)]="settingsVisible" [modal]="true" [style]="{ width: '60vw', height: '50vw' }" [draggable]="false" [resizable]="false">
   <app-settings></app-settings>

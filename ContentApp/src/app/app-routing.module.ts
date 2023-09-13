@@ -20,8 +20,16 @@ const routes: Routes = [
   { path: 'facebook-callback', component: FacebookRedirectComponent },
   { path: 'linkedin-callback', component: LinkedinRedirectComponent},
   { path: 'zoom-callback', component: ZoomRedirectComponent},
-  { path: '', component: AnythinghubComponent},
-  { path: 'dashboard/:type', component: ContentDashboardComponent},
+  { 
+    path: '', 
+    component: AnythinghubComponent,
+    data: { breadcrumb: 'Homebase' }
+  },
+  { 
+    path: 'dashboard/:type', 
+    component: ContentDashboardComponent,
+    data: { breadcrumb: 'Dashboard' }
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 

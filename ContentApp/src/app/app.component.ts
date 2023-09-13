@@ -16,6 +16,9 @@ import {
   ConfirmEventType,
 } from 'primeng/api';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
+import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Observable, Subject, filter } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -23,9 +26,17 @@ import { ZOOM_CLIENT_ID } from 'appsecrets';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  loggedInObserver$?: Observable<boolean>;
+
+  breadcrumbData: Subject<MenuItem[]> = new Subject<MenuItem[]>();
+  
   title = 'Content Machine';
   items: MenuItem[] = [];
-  home: MenuItem = { icon: 'pi pi-home', routerLink: '/' }
+  home: MenuItem = { 
+    label: ' Home',
+    icon: 'pi pi-home', 
+    routerLink: '/' 
+  }
 
   /**
    * 0 = twitter
@@ -38,6 +49,8 @@ export class AppComponent implements OnInit {
   settingsVisible = false;
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private navigationService: NavigationService,
@@ -47,12 +60,24 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Subscribe to breadcrumb data changes
-    this.navigationService.getBreadcrumbData().subscribe((data) => {
-      console.log("🚀 ~ file: app.component.ts:44 ~ AppComponent ~ this.navigationService.getBreadcrumbData ~ data:", data)
-      this.items = data;
-    });
+    this.loggedInObserver$ = this.socialAuthService.isUserLoggedIn();
+    // Subscribe to route changes
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Get the current route snapshot
+        let route = this.activatedRoute.root;
+        console.log("🚀 ~ file: app.component.ts:67 ~ AppComponent ~ .subscribe ~ route:", route.children)
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
 
+        // Build breadcrumb data based on child route hierarchy
+        const breadcrumbData = this.buildBreadcrumb(
+          route = route
+        );
+        this.items = breadcrumbData;
+      });
     this.socialAuthService.getFacebookAuthObservable$.subscribe((success) => {
       if (success) {
         this.settingsVisible = true;
@@ -70,6 +95,34 @@ export class AppComponent implements OnInit {
         this.settingsVisible = true;
       }
     });
+  }
+  private buildBreadcrumb(
+    route: ActivatedRoute,
+    url: string = '',
+    breadcrumbs: any[] = []
+  ): any[] {
+    const label = route.routeConfig ? route.routeConfig.data!['breadcrumb'] : '';
+    console.log("🚀 ~ file: app.component.ts:102 ~ AppComponent ~ label:", label)
+    const path = route.routeConfig ? route.routeConfig.path : '';
+
+    if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {
+      return breadcrumbs;
+    }
+
+    // Don't include empty labels
+    const nextUrl = `${url}${path}/`;
+    const breadcrumb = {
+      label,
+      url: nextUrl,
+    };
+
+    const newBreadcrumbs = breadcrumb.label
+      ? [...breadcrumbs, breadcrumb]
+      : [...breadcrumbs];
+    if (route.firstChild) {
+      return this.buildBreadcrumb(route.firstChild, nextUrl, newBreadcrumbs);
+    }
+    return newBreadcrumbs;
   }
 
   onCalendarClick() {

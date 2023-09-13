@@ -58,7 +58,6 @@ import { FacebookPage } from '../model/content/facebookpage.model';
   providedIn: 'root',
 })
 export class SocialAuthService {
-
   private auth = getAuth();
 
   private googleProvider = new GoogleAuthProvider();
@@ -99,7 +98,8 @@ export class SocialAuthService {
 
   getPersonalAccountsObservable$ = this.userPersonalAccounts.asObservable();
   getFacebookPagesObservable$ = this.userFacebookPages.asObservable();
-  getInstagramLinkSuccessObservable$ = this.userInstagramLinkSuccess.asObservable();
+  getInstagramLinkSuccessObservable$ =
+    this.userInstagramLinkSuccess.asObservable();
 
   getMediumAuthObservable$ = this.mediumAuthSubject.asObservable();
   getTwitterAuthObservable$ = this.twitterAuthSubject.asObservable();
@@ -138,48 +138,62 @@ export class SocialAuthService {
         PostingPlatform.FACEBOOK
       )
       .pipe(
-        concatMap((facebookAccount: SocialAccount) => 
+        concatMap((facebookAccount: SocialAccount) =>
           this.facebookRepo.getFacebookPages(
             facebookAccount.user_id ?? '',
             facebookAccount.access_token
           )
         )
-      ).subscribe({
+      )
+      .subscribe({
         next: (facebookPages) => {
-          console.log("🚀 ~ file: socialauth.service.ts:135 ~ SocialAuthService ~ getFacebookPages ~ facebookPages:", facebookPages)
+          console.log(
+            '🚀 ~ file: socialauth.service.ts:135 ~ SocialAuthService ~ getFacebookPages ~ facebookPages:',
+            facebookPages
+          );
           this.userFacebookPages.next(facebookPages);
         },
         error: (error) => {
-          console.log("🚀 ~ file: socialauth.service.ts:139 ~ SocialAuthService ~ getFacebookPages ~ error:", error)
+          console.log(
+            '🚀 ~ file: socialauth.service.ts:139 ~ SocialAuthService ~ getFacebookPages ~ error:',
+            error
+          );
           this.errorSubject.next(error);
-        }
+        },
       });
   }
 
   getAssociatedInstagramAccounts(page: FacebookPage) {
     // TODO error hadling if page does not have instagram account
-    from(this.firestoreRepo.updateCurrentUserCollectionDocument(
-      PERSONAL_ACCTS_DOC,
-      PostingPlatform.FACEBOOK,
-      {
-        [PAGE]: page
-      }
-    )).pipe(
-      concatMap(() => this.facebookRepo.getAssociatedInstagramAccounts(page)),
-      concatMap((instagramAccounts) => {
-        return from(this.firestoreRepo.updateCurrentUserCollectionDocument(
-          PERSONAL_ACCTS_DOC,
-          PostingPlatform.INSTAGRAM,
-          instagramAccounts
-      ))
-    })).subscribe({
-      next: (success) => {
-        this.userInstagramLinkSuccess.next(success);
-      },
-      error: (error) => {
-        this.errorSubject.next(error);
-      }
-    })
+    from(
+      this.firestoreRepo.updateCurrentUserCollectionDocument(
+        PERSONAL_ACCTS_DOC,
+        PostingPlatform.FACEBOOK,
+        {
+          [PAGE]: page,
+        }
+      )
+    )
+      .pipe(
+        concatMap(() => this.facebookRepo.getAssociatedInstagramAccounts(page)),
+        concatMap((instagramAccounts) => {
+          return from(
+            this.firestoreRepo.updateCurrentUserCollectionDocument(
+              PERSONAL_ACCTS_DOC,
+              PostingPlatform.INSTAGRAM,
+              instagramAccounts
+            )
+          );
+        })
+      )
+      .subscribe({
+        next: (success) => {
+          this.userInstagramLinkSuccess.next(success);
+        },
+        error: (error) => {
+          this.errorSubject.next(error);
+        },
+      });
   }
 
   getPersonalAccounts() {
@@ -235,17 +249,19 @@ export class SocialAuthService {
     this.facebookRepo
       .exchangeAuthCodeForAccessToken(authCode)
       .pipe(
-        concatMap((accessTokenObj: { accessToken: string }) =>{
+        concatMap((accessTokenObj: { accessToken: string }) => {
           console.log(accessTokenObj);
-          return this.facebookRepo.getFacebookUserId(accessTokenObj.accessToken).pipe(
-            map((user_id: string) => {
-              return {
-                [USER_ID]: user_id,
-                [ACCESS_TOKEN]: accessTokenObj.accessToken,
-              };
-            })
-          )}
-        ),
+          return this.facebookRepo
+            .getFacebookUserId(accessTokenObj.accessToken)
+            .pipe(
+              map((user_id: string) => {
+                return {
+                  [USER_ID]: user_id,
+                  [ACCESS_TOKEN]: accessTokenObj.accessToken,
+                };
+              })
+            );
+        }),
         concatMap((accessTokenObj: { user_id: string; access_token: string }) =>
           this.firestoreRepo.updateCurrentUserCollectionDocument(
             PERSONAL_ACCTS_DOC,
@@ -387,11 +403,14 @@ export class SocialAuthService {
         this.navigationService.navigateToRoot();
       },
       error: (error) => {
-        console.log("🚀 ~ file: socialauth.service.ts:389 ~ SocialAuthService ~ this.authRepo.getAuthorizedZoomUser ~ error:", error)
+        console.log(
+          '🚀 ~ file: socialauth.service.ts:389 ~ SocialAuthService ~ this.authRepo.getAuthorizedZoomUser ~ error:',
+          error
+        );
         this.errorSubject.next(error);
         this.navigationService.navigateToRoot();
-      }
-    })
+      },
+    });
   }
 
   getLinkedInAccessToken(authCode: string) {
@@ -438,5 +457,13 @@ export class SocialAuthService {
           this.navigationService.navigateToRoot();
         },
       });
+  }
+
+  isUserLoggedIn(): Observable<boolean> {
+    return this.fireAuthRepo.getUserAuthObservable().pipe(
+      map((user) => {
+        return user !== undefined;
+      })
+    );
   }
 }
