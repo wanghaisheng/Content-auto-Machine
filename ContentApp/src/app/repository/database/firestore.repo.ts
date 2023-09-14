@@ -42,7 +42,7 @@ import { sub } from 'date-fns';
 export const PURCHASED_USERS_COL = 'purchased_users';
 
 export const USERS_COL = 'users';
-export const PERSONAL_ACCTS_DOC = 'personal_accounts';
+export const PERSONAL_ACCTS_DOC = 'social_accounts';
 
 export const PostingPlatform = {
   FACEBOOK: 'facebook',

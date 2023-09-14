@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 
   breadcrumbData: Subject<MenuItem[]> = new Subject<MenuItem[]>();
   
-  title = 'Content Machine';
+  title = 'Yoni AI';
   items: MenuItem[] = [];
   home: MenuItem = { 
     label: ' Home',
@@ -47,6 +47,8 @@ export class AppComponent implements OnInit {
   focusedAccount = 0;
   settingsVisible = false;
   avatarUrl = ''
+  hasError = false; //this needs to be updated authenticating with zoom
+  inputErrorText = 'You have not authenticated with Zoom. Start there to get the most out of our platform.';
 
   constructor(
     private router: Router,
@@ -56,7 +58,7 @@ export class AppComponent implements OnInit {
     private navigationService: NavigationService,
     private socialAuthService: SocialAuthService
   ) {
-    
+    /** */
   }
 
   ngOnInit() {
@@ -67,7 +69,6 @@ export class AppComponent implements OnInit {
       .subscribe(() => {
         // Get the current route snapshot
         let route = this.activatedRoute.root;
-        console.log("🚀 ~ file: app.component.ts:67 ~ AppComponent ~ .subscribe ~ route:", route.children)
         while (route.firstChild) {
           route = route.firstChild;
         }
@@ -97,7 +98,7 @@ export class AppComponent implements OnInit {
     });
     this.socialAuthService.getUserAccountObservable$.subscribe((user) => {
       if (user) {
-        this.avatarUrl = user.photoURL!;
+        this.avatarUrl = user.photoURL ?? '';
       }
     });
     this.messengerService.errorMessageObservable$.subscribe((message) => {
@@ -122,7 +123,6 @@ export class AppComponent implements OnInit {
     breadcrumbs: any[] = []
   ): any[] {
     const label = route.routeConfig ? route.routeConfig.data!['breadcrumb'] : '';
-    console.log("🚀 ~ file: app.component.ts:102 ~ AppComponent ~ label:", label)
     const path = route.routeConfig ? route.routeConfig.path : '';
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {

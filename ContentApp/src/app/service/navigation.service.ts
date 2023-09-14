@@ -7,10 +7,8 @@
  */
 
 import { Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FireAuthRepository } from '../repository/database/fireauth.repo';
-import { MenuItem } from 'primeng/api';
-import { Observable, Subject, filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

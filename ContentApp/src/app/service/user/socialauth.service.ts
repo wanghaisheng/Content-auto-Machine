@@ -203,7 +203,11 @@ export class SocialAuthService {
       .getUserCollection<SocialAccount>(PERSONAL_ACCTS_DOC)
       .subscribe({
         next: (personalAccounts) => {
-          this.userPersonalAccounts.next(personalAccounts);
+          if (personalAccounts !== null && personalAccounts.length > 0) {
+            this.userPersonalAccounts.next(personalAccounts);
+          } else {
+            this.userPersonalAccounts.next([]);
+          }
         },
         error: (error) => {
           this.errorSubject.next(error);

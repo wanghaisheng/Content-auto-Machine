@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
@@ -8,13 +8,15 @@ import { NavigationService } from 'src/app/service/navigation.service';
 import { SocialAccount } from 'src/app/model/user/socialaccount.model';
 import { FacebookPage } from 'src/app/model/content/facebookpage.model';
 import { PostingPlatform } from 'src/app/repository/database/firestore.repo';
+import { Panel } from 'primeng/panel';
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
 })
-export class SettingsComponent {
+export class SettingsComponent implements AfterViewInit{
   
   @Input() parentFocusedConnection = 0;
 
@@ -22,6 +24,7 @@ export class SettingsComponent {
 
   isAccountsLoading = true;
   isLoading = false;
+  isBlocked = false;
 
   twitterConnected = false;
   youtubeConnected = false;
@@ -29,7 +32,7 @@ export class SettingsComponent {
   facebookConnected = false;
   mediumConnected = false;
 
-  mediumIntegKey: string = '';
+  mediumIntegKey = '';
 
   faceebookAuthMenuItems: MenuItem[] = [
     {
@@ -46,7 +49,7 @@ export class SettingsComponent {
   userFacebookPages: FacebookPage[] = [];
   userSelectedFacebookPage: FacebookPage | undefined = undefined;
 
-  currentView = 'profile';
+  currentView = 'Profile';
   menuItems: MenuItem[] = [
     {
       label: 'Personal',
@@ -55,6 +58,7 @@ export class SettingsComponent {
           label: 'Profile',
           icon: 'pi pi-user',
           command: () => {
+            this.isBlocked = false;
             this.currentView = 'Profile';
           },
         },
@@ -62,6 +66,7 @@ export class SettingsComponent {
           label: 'Your AI',
           icon: 'pi pi-android',
           command: () => {
+            this.isBlocked = false;
             this.currentView = 'Your AI';
           },
         },
@@ -72,42 +77,50 @@ export class SettingsComponent {
       items: [
         {
           label: 'Zoom',
-          icon: 'pi pi-external-link',
+          icon: 'pi pi-video',
           command: () => {
+            this.isBlocked = false;
             this.currentView = 'Zoom';
           },
         },
         {
           label: 'Facebook',
-          icon: 'pi pi-external-link',
+          icon: 'pi pi-facebook',
           command: () => {
+            this.isBlocked = true;
             this.currentView = 'Facebook';
           },
         },
         {
           label: 'LinkedIn',
-          icon: 'pi pi-external-link',
+          icon: 'pi pi-linkedin',
           command: () => {
+            this.isBlocked = true;
             this.currentView = 'LinkedIn';
           },
         },
         {
           label: 'Twitter',
-          icon: 'pi pi-external-link',
+          icon: 'pi pi-twitter',
           command: () => {
+            this.isBlocked = true;
             this.currentView = 'Twitter';
           },
         },
         {
           label: 'Email',
-          icon: 'pi pi-external-link',
+          icon: 'pi pi-send',
           command: () => {
             this.currentView = 'Email';
+            this.isBlocked = true;
           },
         },
       ],
     },
   ];
+
+  @ViewChild('pnl', {static: false}) paneler?: ElementRef<Panel>;
+  @ViewChild('menu', {static: false}) menu?: Menu;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -131,6 +144,10 @@ export class SettingsComponent {
         this.socialAuthService.getFacebookPages();
       }
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.menu?.hide();
   }
 
   private setupObservers() {

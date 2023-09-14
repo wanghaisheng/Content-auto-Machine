@@ -1,8 +1,13 @@
+<p-blockUI [target]="paneler" [blocked]="isBlocked">
+  <i class="pi pi-lock" style="font-size: 3rem" fullscreen="false"></i>
+</p-blockUI>
+
 <h1>Settings</h1>
 <div class="row" style="height: 80vw">
-  <p-menu [model]="menuItems"></p-menu>
+  <p-menu #menu [model]="menuItems"></p-menu>
   <p-divider layout="vertical"></p-divider>
-  <p-panel header="{{ currentView }}" class="container">
+  
+  <p-panel #pnl header="{{ currentView }}" class="container">
 
     <div *ngIf="currentView == 'Zoom'" class="container">
       <div class="column" style="padding: 0.5rem;">
