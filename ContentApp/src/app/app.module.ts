@@ -65,6 +65,7 @@ import { SettingsComponent } from './views/settings/settings.component';
 import { provideFirestore } from '@angular/fire/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { TypewriterComponent } from './views/common/typewriter/typewriter.component';
+import { AvatarModule } from 'primeng/avatar';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -100,9 +101,10 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     CreatepanelComponent,
     ContentpanelComponent,
     SettingsComponent,
-    TypewriterComponent
+    TypewriterComponent,
   ],
   imports: [
+    AvatarModule,
     SplitButtonModule,
     SkeletonModule,
     BlockUIModule,

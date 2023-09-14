@@ -8,21 +8,47 @@
 <p-menubar [model]="items" *ngIf="( loggedInObserver$ | async )">
   <ng-template pTemplate="start">
     <div class="horizontal-container">
-      <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
-      <h2>Yonni AI</h2>
+      <img src="../assets/images/yoni_logo.png" height="50" class="mr-2" />
     </div>
   </ng-template>
   <ng-template pTemplate="end">
     <div class="horizontal-container">
       <p-button icon="pi pi-cog"
-      styleClass="p-button-rounded p-button-secondary p-button-text"
-      (click)="onAccountsClick()"></p-button>
-      <!-- <p-button  (click)="onAccountsClick()">Connect Zoom</p-button>
-        <p-button (click)="onLogoutClick()">Log Out</p-button> -->
+        styleClass="p-button-rounded p-button-secondary p-button-text"
+        (click)="onSettingsClick()"></p-button>
+      <p-avatar
+        *ngIf="avatarUrl !== ''" 
+        [image]="avatarUrl" 
+        styleClass="mr-2" 
+        size="large" 
+        shape="circle"
+        (click)="onAccountClick()"
+      ></p-avatar>
+      <p-avatar
+        *ngIf="avatarUrl == ''" 
+        icon="pi pi-user"
+        styleClass="mr-2" 
+        size="large" 
+        shape="circle"
+        (click)="onAccountClick()"
+      ></p-avatar>
+
+
+        <!-- <p-button 
+          icon="pi pi-cog"
+          styleClass="p-button-rounded p-button-secondary p-button-text"
+          (click)="onAccountClick()"
+        >Log Out</p-button> -->
       </div>
     </ng-template>
   </p-menubar>
-  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
+  <p-breadcrumb 
+    *ngIf="( loggedInObserver$ | async )" 
+    class="max-w-full" 
+    [model]="items" 
+    [home]="home"
+    [style]="{ 'background-color': 'transparent', 'border': 'none' }"
+  ></p-breadcrumb>
 
 <p-dialog header="Settings" [(visible)]="settingsVisible" [modal]="true" [style]="{ width: '60vw', height: '50vw' }" [draggable]="false" [resizable]="false">
   <app-settings></app-settings>

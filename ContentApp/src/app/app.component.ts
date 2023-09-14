@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
    */
   focusedAccount = 0;
   settingsVisible = false;
+  avatarUrl = ''
 
   constructor(
     private router: Router,
@@ -129,7 +130,7 @@ export class AppComponent implements OnInit {
     this.navigationService.navigateToRoot();
   }
 
-  onAccountsClick() {
+  onSettingsClick() {
     const params = {
       //TODO: move to appsecrets
       client_id: ZOOM_CLIENT_ID,
@@ -138,7 +139,7 @@ export class AppComponent implements OnInit {
     window.location.href = `https://zoom.us/oauth/authorize?response_type=code&client_id=${params.client_id}&redirect_uri=${params.redirect_uri}`;
   }
 
-  onLogoutClick() {
+  onAccountClick() {
     this.confirmationService.confirm({
       message:
         'You are about to log out of the app.  Are you sure that you want to proceed?',
