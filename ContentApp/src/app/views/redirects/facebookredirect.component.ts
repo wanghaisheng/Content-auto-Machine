@@ -8,7 +8,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SocialAuthService } from '../../service/socialauth.service';
+import { SocialAuthService } from '../../service/user/socialauth.service';
 
 @Component({
   selector: 'fb-redirects',

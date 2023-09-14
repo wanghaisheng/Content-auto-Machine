@@ -43,6 +43,10 @@ export class NavigationService implements OnInit {
     this.router.navigate(['dashboard', type]);
   }
 
+  navigateToSettings() {
+    this.router.navigate(['settings']);
+  }
+
   // navigateToExtractDetails(id: string = '') {
   //   if (id === '') {
   //     this.router.navigate(['maker/copycat/details']);

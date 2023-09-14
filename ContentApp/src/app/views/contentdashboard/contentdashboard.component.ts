@@ -21,9 +21,7 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
   panelCreateMode = '';
 
   constructor(
-    private route: ActivatedRoute,
-    private messageService: MessageService,
-    private dashboardService: HubDashboardService
+    private route: ActivatedRoute
   ) { /** */ }
 
   ngOnInit(): void {
@@ -33,28 +31,9 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
         this.panelCreateMode = segment;
       }
     })
-    this.dashboardService.errorObservable$.subscribe((message) => {
-      this.receiveErrorMessage(message);
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
       /** */
-  }
-
-  receiveErrorMessage(message: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: message,
-    });
-  }
-
-  receiveInfoMessage(message: string) {
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Confirmed',
-      detail: message,
-    });
   }
 }

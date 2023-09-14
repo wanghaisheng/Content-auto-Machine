@@ -8,7 +8,7 @@
 
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SessionService } from '../../service/session.service';
+import { SessionService } from '../../service/user/session.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

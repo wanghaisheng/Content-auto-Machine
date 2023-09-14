@@ -14,6 +14,7 @@ import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.co
 import { AnythinghubComponent } from './views/anythinghub/anythinghub.component';
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 import { ZoomRedirectComponent } from './views/redirects/zoomredirect.component';
+import { SettingsComponent } from './views/settings/settings.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -29,6 +30,11 @@ const routes: Routes = [
     path: 'dashboard/:type', 
     component: ContentDashboardComponent,
     data: { breadcrumb: 'Dashboard' }
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    data: { breadcrumb: 'Settings' }
   },
   { path: '**', component: PageNotFoundComponent }
 ];

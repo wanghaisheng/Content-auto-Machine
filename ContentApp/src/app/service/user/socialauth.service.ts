@@ -33,26 +33,26 @@ import {
   SCOPE,
   USER_ID,
   USERS_COL,
-} from '../repository/database/firestore.repo';
+} from '../../repository/database/firestore.repo';
 import { firebase } from 'firebaseui-angular';
 import {
   PERSONAL_ACCTS_DOC,
   PostingPlatform,
-} from '../repository/database/firestore.repo';
+} from '../../repository/database/firestore.repo';
 import {
   ACCESS_TOKEN,
   LAST_LOGIN_AT,
   CREATION_TIME,
   REFRESH_TOKEN,
   SCOPE as SCOPES,
-} from '../repository/database/firestore.repo';
-import { FireAuthRepository } from '../repository/database/fireauth.repo';
-import { YoutubeAuthRepository } from '../repository/oauth/youtubeauth.repo';
-import { AuthenticationRepository } from '../repository/oauth/auth.repo';
-import { FacebookRepository } from '../repository/apis/facebook.repo';
-import { NavigationService } from './navigation.service';
-import { SocialAccount } from '../model/user/socialaccount.model';
-import { FacebookPage } from '../model/content/facebookpage.model';
+} from '../../repository/database/firestore.repo';
+import { FireAuthRepository } from '../../repository/database/fireauth.repo';
+import { YoutubeAuthRepository } from '../../repository/oauth/youtubeauth.repo';
+import { SocialAuthRepository as SocialAuthRepository } from '../../repository/oauth/socialauth.repo';
+import { FacebookRepository } from '../../repository/apis/facebook.repo';
+import { NavigationService } from '../navigation.service';
+import { SocialAccount } from '../../model/user/socialaccount.model';
+import { FacebookPage } from '../../model/content/facebookpage.model';
 
 @Injectable({
   providedIn: 'root',
@@ -90,13 +90,15 @@ export class SocialAuthService {
     private fireAuthRepo: FireAuthRepository,
     private firestoreRepo: FirestoreRepository,
     private youtubeAuthRepo: YoutubeAuthRepository,
-    private authRepo: AuthenticationRepository,
+    private socialAuthRepo: SocialAuthRepository,
     private facebookRepo: FacebookRepository
   ) {
     /** */
   }
 
+  getUserAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
   getPersonalAccountsObservable$ = this.userPersonalAccounts.asObservable();
+
   getFacebookPagesObservable$ = this.userFacebookPages.asObservable();
   getInstagramLinkSuccessObservable$ =
     this.userInstagramLinkSuccess.asObservable();
@@ -393,11 +395,11 @@ export class SocialAuthService {
   }
 
   getLinkedInCredentials() {
-    return this.authRepo.linkedinAuthCodeParams;
+    return this.socialAuthRepo.linkedinAuthCodeParams;
   }
 
   getZoomAccessToken(zoomCode: string) {
-    this.authRepo.getAuthorizedZoomUser(zoomCode).subscribe({
+    this.socialAuthRepo.getAuthorizedZoomUser(zoomCode).subscribe({
       next: (result) => {
         this.zoomAuthSubject.next(true);
         this.navigationService.navigateToRoot();
@@ -415,7 +417,7 @@ export class SocialAuthService {
 
   getLinkedInAccessToken(authCode: string) {
     this.conectionsLoadingSubject.next(true);
-    this.authRepo
+    this.socialAuthRepo
       .exchanceAuthCodeForAccessToken(authCode)
       .pipe(
         concatMap((accessTokenObj: { message: string; data: any }) => {

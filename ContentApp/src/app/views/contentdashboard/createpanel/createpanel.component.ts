@@ -13,6 +13,7 @@ import { SelectItem } from 'primeng/api';
 import { Meeting } from 'src/app/model/source/zoomrecordings.model';
 import { Observable } from 'rxjs';
 import { NgIfContext } from '@angular/common';
+import { MessengerService } from 'src/app/service/messenger.service';
 
 @Component({
   selector: 'app-createpanel',
@@ -24,9 +25,6 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
 
   @Input() createMode: string = '';
   mode: string = ''
-
-  @Output() errorMessage = new EventEmitter<string>();
-  @Output() infoMessage = new EventEmitter<string>();
 
   contentLoading$!: Observable<boolean>;
 
@@ -49,7 +47,8 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private dashboardService: HubDashboardService
+    private dashboardService: HubDashboardService,
+    private messengerService: MessengerService
   ) { /** */ }
 
   ngOnInit() {
@@ -94,10 +93,10 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
           this.createMode
         )
       } else {
-        this.errorMessage.emit('Please enter a valid YouTube URL');
+        this.messengerService.setErrorMessage('Please enter a valid YouTube URL');
       }
     } else {
-      this.errorMessage.emit('Something went wrong. Please try again later.');
+      this.messengerService.setErrorMessage('Something went wrong. Please try again later.');
     }
   }
 }

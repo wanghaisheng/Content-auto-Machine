@@ -17,7 +17,7 @@ import { FireAuthRepository } from '../database/fireauth.repo';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationRepository {
+export class SocialAuthRepository {
   
   private linkedinRedirectUri = 'http://localhost:4200/linkedin-callback';
   private linkedinScopes = ['r_liteprofile', 'r_emailaddress', 'w_member_social'];

@@ -2,8 +2,6 @@
 <div class="row full-height">
   <app-createpanel 
     [createMode]="panelCreateMode"
-    (errorMessage)="receiveErrorMessage($event)"
-    (infoMessage)="receiveInfoMessage($event)"
   ></app-createpanel>
   <p-divider layout="vertical"></p-divider>
   <app-contentpanel></app-contentpanel>
