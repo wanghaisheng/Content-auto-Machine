@@ -7,9 +7,9 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { NavigationService } from 'src/app/service/navigation.service';
 import { SocialAccount } from 'src/app/model/user/socialaccount.model';
 import { FacebookPage } from 'src/app/model/content/facebookpage.model';
-import { PostingPlatform } from 'src/app/repository/database/firestore.repo';
 import { Panel } from 'primeng/panel';
 import { Menu } from 'primeng/menu';
+import { PostingPlatform } from 'src/app/constants';
 
 @Component({
   selector: 'app-settings',
@@ -26,6 +26,7 @@ export class SettingsComponent implements AfterViewInit{
   isLoading = false;
   isBlocked = false;
 
+  zoomConnected = false;
   twitterConnected = false;
   youtubeConnected = false;
   linkedinConnected = false;
@@ -134,7 +135,7 @@ export class SettingsComponent implements AfterViewInit{
 
   ngOnInit(): void {
     this.setupObservers();
-    this.socialAuthService.getPersonalAccounts();
+    this.socialAuthService.getAuthenticatedPersonalAccts();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -302,5 +303,9 @@ export class SettingsComponent implements AfterViewInit{
         // }
       },
     });
+  }
+
+  onProfileSaved() {
+
   }
 }

@@ -30,6 +30,8 @@ export class SocialAuthRepository {
     scope: this.linkedinScopes.join(' '),
   };
 
+  private SOCIAL_AUTH_DOCS = 'social_accounts';
+
   constructor(
     private fireAuthRepo: FireAuthRepository
   ) {

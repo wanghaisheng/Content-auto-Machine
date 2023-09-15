@@ -34,11 +34,6 @@ import {
   USER_ID,
   USERS_COL,
 } from '../../repository/database/firestore.repo';
-import { firebase } from 'firebaseui-angular';
-import {
-  PERSONAL_ACCTS_DOC,
-  PostingPlatform,
-} from '../../repository/database/firestore.repo';
 import {
   ACCESS_TOKEN,
   LAST_LOGIN_AT,
@@ -53,6 +48,7 @@ import { FacebookRepository } from '../../repository/apis/facebook.repo';
 import { NavigationService } from '../navigation.service';
 import { SocialAccount } from '../../model/user/socialaccount.model';
 import { FacebookPage } from '../../model/content/facebookpage.model';
+import { PostingPlatform } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -96,6 +92,8 @@ export class SocialAuthService {
     /** */
   }
 
+  private SOCIAL_ACCTS_DOC = 'social_accounts';
+
   getUserAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
   getPersonalAccountsObservable$ = this.userPersonalAccounts.asObservable();
 
@@ -123,7 +121,7 @@ export class SocialAuthService {
         };
 
         this.firestoreRepo.updateCurrentUserCollectionDocument(
-          PERSONAL_ACCTS_DOC,
+          this.SOCIAL_ACCTS_DOC,
           PostingPlatform.YOUTUBE,
           oAuth2Payload
         );
@@ -136,7 +134,7 @@ export class SocialAuthService {
   getFacebookPages() {
     this.firestoreRepo
       .getDocumentAsUser<SocialAccount>(
-        PERSONAL_ACCTS_DOC,
+        this.SOCIAL_ACCTS_DOC,
         PostingPlatform.FACEBOOK
       )
       .pipe(
@@ -149,18 +147,10 @@ export class SocialAuthService {
       )
       .subscribe({
         next: (facebookPages) => {
-          console.log(
-            '🚀 ~ file: socialauth.service.ts:135 ~ SocialAuthService ~ getFacebookPages ~ facebookPages:',
-            facebookPages
-          );
           this.userFacebookPages.next(facebookPages);
         },
         error: (error) => {
-          console.log(
-            '🚀 ~ file: socialauth.service.ts:139 ~ SocialAuthService ~ getFacebookPages ~ error:',
-            error
-          );
-          this.errorSubject.next(error);
+          this.errorSubject.next(error.name);
         },
       });
   }
@@ -169,7 +159,7 @@ export class SocialAuthService {
     // TODO error hadling if page does not have instagram account
     from(
       this.firestoreRepo.updateCurrentUserCollectionDocument(
-        PERSONAL_ACCTS_DOC,
+        this.SOCIAL_ACCTS_DOC,
         PostingPlatform.FACEBOOK,
         {
           [PAGE]: page,
@@ -181,7 +171,7 @@ export class SocialAuthService {
         concatMap((instagramAccounts) => {
           return from(
             this.firestoreRepo.updateCurrentUserCollectionDocument(
-              PERSONAL_ACCTS_DOC,
+              this.SOCIAL_ACCTS_DOC,
               PostingPlatform.INSTAGRAM,
               instagramAccounts
             )
@@ -198,11 +188,12 @@ export class SocialAuthService {
       });
   }
 
-  getPersonalAccounts() {
+  getAuthenticatedPersonalAccts() {
     this.firestoreRepo
-      .getUserCollection<SocialAccount>(PERSONAL_ACCTS_DOC)
+      .getUserCollection<SocialAccount>(this.SOCIAL_ACCTS_DOC)
       .subscribe({
         next: (personalAccounts) => {
+          console.log("🚀 ~ file: socialauth.service.ts:206 ~ SocialAuthService ~ getPersonalAccounts ~ personalAccounts:", personalAccounts)
           if (personalAccounts !== null && personalAccounts.length > 0) {
             this.userPersonalAccounts.next(personalAccounts);
           } else {
@@ -270,7 +261,7 @@ export class SocialAuthService {
         }),
         concatMap((accessTokenObj: { user_id: string; access_token: string }) =>
           this.firestoreRepo.updateCurrentUserCollectionDocument(
-            PERSONAL_ACCTS_DOC,
+            this.SOCIAL_ACCTS_DOC,
             PostingPlatform.FACEBOOK,
             {
               [PLATFORM]: PostingPlatform.FACEBOOK,
@@ -298,7 +289,7 @@ export class SocialAuthService {
   signInWithMedium(mediumAccessToken: string) {
     from(
       this.firestoreRepo.updateCurrentUserCollectionDocument(
-        PERSONAL_ACCTS_DOC,
+        this.SOCIAL_ACCTS_DOC,
         PostingPlatform.MEDIUM,
         {
           [PLATFORM]: PostingPlatform.MEDIUM,
@@ -343,7 +334,7 @@ export class SocialAuthService {
             };
 
             this.firestoreRepo.updateCurrentUserCollectionDocument(
-              PERSONAL_ACCTS_DOC,
+              this.SOCIAL_ACCTS_DOC,
               PostingPlatform.TWITTER,
               oAuth2Payload
             );
@@ -425,12 +416,8 @@ export class SocialAuthService {
       .exchanceAuthCodeForAccessToken(authCode)
       .pipe(
         concatMap((accessTokenObj: { message: string; data: any }) => {
-          console.log(
-            '🚀 ~ file: socialauth.service.ts:255 ~ SocialAuthService ~ concatMap ~ accessTokenObj:',
-            accessTokenObj
-          );
           return this.firestoreRepo.updateCurrentUserCollectionDocument(
-            PERSONAL_ACCTS_DOC,
+            this.SOCIAL_ACCTS_DOC,
             PostingPlatform.LINKEDIN,
             {
               [PLATFORM]: PostingPlatform.LINKEDIN,

@@ -9,15 +9,32 @@
   
   <p-panel #pnl header="{{ currentView }}" class="container">
 
+    <div *ngIf="currentView == 'Profile'" class="container">
+      <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
+        <p>
+          Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
+          posting, you can schedule and share valuable content with your connections, establishing thought leadership
+          and boosting your professional brand. Experience the ease of automated LinkedIn posts!
+        </p>
+        <p-footer>
+          <p-button label="Save" icon="pi pi-plus" (click)="onProfileSaved()" [disabled]="isLoading">
+            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          </p-button>
+        </p-footer>
+      </div>
+    </div>
+
     <div *ngIf="currentView == 'Zoom'" class="container">
       <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
           Connect our app to your Zoom account and streamline your content efforts. 
           Turn your old calls and coaching sessions or onboardings into leads.
           Get sales from your all those recordings you just have sitting around.
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="linkedinConnected">
+          <p-button label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading">
             <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
           </p-button>
         </p-footer>
@@ -30,7 +47,8 @@
       [model]="faceebookAuthMenuItems" 
       [readonly]="true" 
       [activeIndex]="facebookAuthMenuItemIndex">
-    </p-steps>
+      </p-steps>
+      <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
       <!-- First step conenct -->
       <div class="container" *ngIf="facebookAuthMenuItemIndex === 0">
         <div class="column" style="padding: 0.5rem;">
@@ -43,7 +61,7 @@
           </p>
           <p-footer>
             <button pButton type="button" label="Connect" icon="pi pi-plus" styleClass="p-button-success"
-              [disabled]="facebookConnected" (click)="onFacebookLogin()">
+              [disabled]="isLoading" (click)="onFacebookLogin()">
               <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" /></button>
           </p-footer>
         </div>
@@ -78,13 +96,14 @@
 
     <div *ngIf="currentView == 'LinkedIn'" class="container">
       <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership
           and boosting your professional brand. Experience the ease of automated LinkedIn posts!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="linkedinConnected">
+          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
             <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
           </p-button>
         </p-footer>
@@ -95,13 +114,14 @@
 
     <div *ngIf="currentView == 'Twitter'" >
       <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
           Grant our app access to your Twitter account and take your tweeting game to the next level. With automated
           posting, you can schedule and publish tweets effortlessly, ensuring consistent engagement with your followers.
           Say goodbye to the hassle of manual tweeting and hello to effortless social media management!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onTwitterLogin()"> <!--[disabled]="twitterConnected"> -->
+          <p-button label="Connect" icon="pi pi-plus" (click)="onTwitterLogin()" [disabled]="isLoading">
             <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
           </p-button>
         </p-footer>
@@ -111,13 +131,14 @@
     
     <div *ngIf="currentView == 'Email'" class="container">
       <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership
           and boosting your professional brand. Experience the ease of automated LinkedIn posts!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="linkedinConnected">
+          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
             <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
           </p-button>
         </p-footer>
