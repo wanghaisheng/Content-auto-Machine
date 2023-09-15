@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
         this.settingsVisible = true;
       }
     });
-    this.socialAuthService.getUserAccountObservable$.subscribe((user) => {
+    this.socialAuthService.userAccountObservable$.subscribe((user) => {
       if (user) {
         this.avatarUrl = user.photoURL ?? '';
       }

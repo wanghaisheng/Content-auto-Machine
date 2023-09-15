@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
@@ -10,17 +10,17 @@ import { FacebookPage } from 'src/app/model/content/facebookpage.model';
 import { Panel } from 'primeng/panel';
 import { Menu } from 'primeng/menu';
 import { PostingPlatform } from 'src/app/constants';
+import { Change } from 'firebase-functions/v1';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit{
   
   @Input() parentFocusedConnection = 0;
-
-  personalAccounts: SocialAccount[] = [];
 
   isAccountsLoading = true;
   isLoading = false;
@@ -135,14 +135,18 @@ export class SettingsComponent implements AfterViewInit{
 
   ngOnInit(): void {
     this.setupObservers();
-    this.socialAuthService.getAuthenticatedPersonalAccts();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['parentFocusedConnection']) {
       if (changes['parentFocusedConnection'].currentValue === 1) {
         this.facebookAuthMenuItemIndex = 1;
-        this.socialAuthService.getFacebookPages();
+        //TODO not optimal because we create a new object each time
+        this.socialAuthService.facebookPagesObservable$.subscribe({
+          next: (pages) => {
+            this.userFacebookPages = pages;
+          },
+        });
       }
     }
   }
@@ -164,29 +168,17 @@ export class SettingsComponent implements AfterViewInit{
         });
       },
     });
-    this.socialAuthService.getFacebookPagesObservable$.subscribe({
-      next: (pages) => {
-        this.userFacebookPages = pages;
-      },
-    });
-    this.socialAuthService.getPersonalAccountsObservable$.subscribe({
+    this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
+        console.log("🚀 ~ file: settings.component.ts:171 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
-        this.personalAccounts = accounts;
-        this.personalAccounts.forEach((account) => {
-          // we should only label as connected if a FB page and IG is connected
-          if (account.platform === PostingPlatform.FACEBOOK) {
-            this.facebookConnected = true;
-          } else if (account.platform === PostingPlatform.LINKEDIN) {
-            this.linkedinConnected = true;
-          } else if (account.platform === PostingPlatform.MEDIUM) {
-            this.mediumConnected = true;
-          } else if (account.platform === PostingPlatform.YOUTUBE) {
-            this.youtubeConnected = true;
-          } else if (account.platform === PostingPlatform.TWITTER) {
-            this.twitterConnected = true;
-          } 
-        });
+        // we should only label as connected if a FB page and IG is connected
+        // this.zoomConnected = accounts['zoom'];
+        // this.facebookConnected = accounts['facebook'];
+        // this.linkedinConnected = accounts['linkedin'];
+        // this.mediumConnected = accounts['medium'];
+        // this.youtubeConnected = accounts['youtube'];
+        // this.twitterConnected = accounts['twitter'];
       },
       error: (error) => {
         this.isAccountsLoading = false;
@@ -197,7 +189,7 @@ export class SettingsComponent implements AfterViewInit{
         });
       },
     });
-    this.socialAuthService.getYoutubeAuthObservable$.subscribe({
+    this.socialAuthService.youtubeAuthObservable$.subscribe({
       next: (isConnected) => {
         this.youtubeConnected = isConnected;
       },
@@ -243,7 +235,7 @@ export class SettingsComponent implements AfterViewInit{
   }
 
   onTwitterLogin() {
-    this.socialAuthService.signInWithTwitter();
+    // this.socialAuthService.signInWithTwitter();
   }
 
   onYoutubeLogin() {
@@ -256,7 +248,7 @@ export class SettingsComponent implements AfterViewInit{
   }
 
   onMediumSubmit() {
-    this.socialAuthService.signInWithMedium(this.mediumIntegKey);
+    // this.socialAuthService.signInWithMedium(this.mediumIntegKey);
   }
 
   onFacebookPageSelected() {

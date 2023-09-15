@@ -6,4 +6,5 @@ export const PostingPlatform = {
   MEDIUM: 'medium',
   TIKTOK: 'tiktok',
   LINKEDIN: 'linkedin',
+  ZOOM: 'zoom'
 };

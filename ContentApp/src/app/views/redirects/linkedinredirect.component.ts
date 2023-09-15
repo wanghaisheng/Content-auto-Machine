@@ -27,7 +27,7 @@ export class LinkedinRedirectComponent {
   ngOnInit(): void {
     this.linkedInToken = this.route.snapshot.queryParams["code"];
     if (this.linkedInToken !== undefined && this.linkedInToken !== '') {
-      this.socialAuthService.getLinkedInAccessToken(this.linkedInToken);
+      // this.socialAuthService.getLinkedInAccessToken(this.linkedInToken);
     } 
   }
 }

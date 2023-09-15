@@ -11,7 +11,6 @@
 
     <div *ngIf="currentView == 'Profile'" class="container">
       <div class="column" style="padding: 0.5rem;">
-        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership
@@ -43,12 +42,12 @@
 
 
     <div *ngIf="currentView == 'Facebook'">
+      <p-tag *ngIf="facebookConnected" severity="success" value="Connected"></p-tag>
       <p-steps 
       [model]="faceebookAuthMenuItems" 
       [readonly]="true" 
       [activeIndex]="facebookAuthMenuItemIndex">
       </p-steps>
-      <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
       <!-- First step conenct -->
       <div class="container" *ngIf="facebookAuthMenuItemIndex === 0">
         <div class="column" style="padding: 0.5rem;">
@@ -96,7 +95,7 @@
 
     <div *ngIf="currentView == 'LinkedIn'" class="container">
       <div class="column" style="padding: 0.5rem;">
-        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
+        <p-tag *ngIf="linkedinConnected" severity="success" value="Connected"></p-tag>
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership
@@ -114,7 +113,7 @@
 
     <div *ngIf="currentView == 'Twitter'" >
       <div class="column" style="padding: 0.5rem;">
-        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
+        <p-tag *ngIf="twitterConnected" severity="success" value="Connected"></p-tag>
         <p>
           Grant our app access to your Twitter account and take your tweeting game to the next level. With automated
           posting, you can schedule and publish tweets effortlessly, ensuring consistent engagement with your followers.
@@ -131,7 +130,7 @@
     
     <div *ngIf="currentView == 'Email'" class="container">
       <div class="column" style="padding: 0.5rem;">
-        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
+      <!-- <p-tag *ngIf="[emailConnected]" severity="success" value="Connected"></p-tag> -->
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership

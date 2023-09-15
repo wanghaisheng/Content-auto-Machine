@@ -23,32 +23,16 @@ import {
   Observable,
   Subject,
   switchMap,
+  tap,
 } from 'rxjs';
-import {
-  DISPLAY_NAME,
-  FirestoreRepository,
-  HANDLE,
-  PAGE,
-  PLATFORM,
-  SCOPE,
-  USER_ID,
-  USERS_COL,
-} from '../../repository/database/firestore.repo';
-import {
-  ACCESS_TOKEN,
-  LAST_LOGIN_AT,
-  CREATION_TIME,
-  REFRESH_TOKEN,
-  SCOPE as SCOPES,
-} from '../../repository/database/firestore.repo';
 import { FireAuthRepository } from '../../repository/database/fireauth.repo';
 import { YoutubeAuthRepository } from '../../repository/oauth/youtubeauth.repo';
 import { SocialAuthRepository as SocialAuthRepository } from '../../repository/oauth/socialauth.repo';
-import { FacebookRepository } from '../../repository/apis/facebook.repo';
 import { NavigationService } from '../navigation.service';
-import { SocialAccount } from '../../model/user/socialaccount.model';
 import { FacebookPage } from '../../model/content/facebookpage.model';
 import { PostingPlatform } from 'src/app/constants';
+import { FacebookRepository } from 'src/app/repository/apis/facebook.repo';
+import { error } from 'firebase-functions/logger';
 
 @Injectable({
   providedIn: 'root',
@@ -59,10 +43,6 @@ export class SocialAuthService {
   private googleProvider = new GoogleAuthProvider();
   private twitterProvider = new TwitterAuthProvider();
 
-  private userPersonalAccounts = new Subject<SocialAccount[]>();
-  private userFacebookPages = new Subject<FacebookPage[]>();
-  private userInstagramLinkSuccess = new Subject<boolean>();
-
   private mediumAuthSubject = new Subject<boolean>();
   private twitterAuthSubject = new Subject<boolean>();
   private facebookAuthSubject = new Subject<boolean>();
@@ -72,19 +52,9 @@ export class SocialAuthService {
   private conectionsLoadingSubject = new Subject<boolean>();
   private errorSubject = new Subject<string>();
 
-  private googleScopes = [];
-  private mediumScopes = [];
-  private twitterScopes = [
-    'tweet.read',
-    'tweet.write',
-    'tweet.delete',
-    'follows.write',
-  ];
-
   constructor(
     private navigationService: NavigationService,
     private fireAuthRepo: FireAuthRepository,
-    private firestoreRepo: FirestoreRepository,
     private youtubeAuthRepo: YoutubeAuthRepository,
     private socialAuthRepo: SocialAuthRepository,
     private facebookRepo: FacebookRepository
@@ -92,92 +62,29 @@ export class SocialAuthService {
     /** */
   }
 
-  private SOCIAL_ACCTS_DOC = 'social_accounts';
-
-  getUserAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
-  getPersonalAccountsObservable$ = this.userPersonalAccounts.asObservable();
-
-  getFacebookPagesObservable$ = this.userFacebookPages.asObservable();
+  
+  
+  private userInstagramLinkSuccess = new Subject<boolean>();
   getInstagramLinkSuccessObservable$ =
-    this.userInstagramLinkSuccess.asObservable();
-
+  this.userInstagramLinkSuccess.asObservable();
+  
   getMediumAuthObservable$ = this.mediumAuthSubject.asObservable();
   getTwitterAuthObservable$ = this.twitterAuthSubject.asObservable();
   getFacebookAuthObservable$ = this.facebookAuthSubject.asObservable();
   getLinkedinAuthObservable$ = this.linkedinAuthSubject.asObservable();
   getZoomAuthObservable$ = this.zoomAuthSubject.asObservable();
-
+  
   getConnectionLoadingObservable$ =
-    this.conectionsLoadingSubject.asObservable();
+  this.conectionsLoadingSubject.asObservable();
   getErrorObservable$ = this.errorSubject.asObservable();
-
-  getYoutubeAuthObservable$: Observable<boolean> =
-    this.youtubeAuthRepo.tokenResponseObserver$.pipe(
-      map((tokenResponse) => {
-        const oAuth2Payload = {
-          [PLATFORM]: PostingPlatform.YOUTUBE,
-          [ACCESS_TOKEN]: tokenResponse,
-          [SCOPES]: this.youtubeAuthRepo.youtubeScopes,
-        };
-
-        this.firestoreRepo.updateCurrentUserCollectionDocument(
-          this.SOCIAL_ACCTS_DOC,
-          PostingPlatform.YOUTUBE,
-          oAuth2Payload
-        );
-
-        this.conectionsLoadingSubject.next(false);
-        return tokenResponse !== null;
-      })
-    );
-
-  getFacebookPages() {
-    this.firestoreRepo
-      .getDocumentAsUser<SocialAccount>(
-        this.SOCIAL_ACCTS_DOC,
-        PostingPlatform.FACEBOOK
-      )
-      .pipe(
-        concatMap((facebookAccount: SocialAccount) =>
-          this.facebookRepo.getFacebookPages(
-            facebookAccount.user_id ?? '',
-            facebookAccount.access_token
-          )
-        )
-      )
-      .subscribe({
-        next: (facebookPages) => {
-          this.userFacebookPages.next(facebookPages);
-        },
-        error: (error) => {
-          this.errorSubject.next(error.name);
-        },
-      });
-  }
+  
+  userAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
+  userSocialAccountsObservable$ = this.socialAuthRepo.getAuthenticatedSocialAccts();
+  youtubeAuthObservable$ = this.socialAuthRepo.saveYoutubeAuth();
+  facebookPagesObservable$ = this.socialAuthRepo.getFacebookPages();
 
   getAssociatedInstagramAccounts(page: FacebookPage) {
-    // TODO error hadling if page does not have instagram account
-    from(
-      this.firestoreRepo.updateCurrentUserCollectionDocument(
-        this.SOCIAL_ACCTS_DOC,
-        PostingPlatform.FACEBOOK,
-        {
-          [PAGE]: page,
-        }
-      )
-    )
-      .pipe(
-        concatMap(() => this.facebookRepo.getAssociatedInstagramAccounts(page)),
-        concatMap((instagramAccounts) => {
-          return from(
-            this.firestoreRepo.updateCurrentUserCollectionDocument(
-              this.SOCIAL_ACCTS_DOC,
-              PostingPlatform.INSTAGRAM,
-              instagramAccounts
-            )
-          );
-        })
-      )
+    this.socialAuthRepo.updateFacebookPageForInstagramAccts(page)
       .subscribe({
         next: (success) => {
           this.userInstagramLinkSuccess.next(success);
@@ -185,25 +92,7 @@ export class SocialAuthService {
         error: (error) => {
           this.errorSubject.next(error);
         },
-      });
-  }
-
-  getAuthenticatedPersonalAccts() {
-    this.firestoreRepo
-      .getUserCollection<SocialAccount>(this.SOCIAL_ACCTS_DOC)
-      .subscribe({
-        next: (personalAccounts) => {
-          console.log("🚀 ~ file: socialauth.service.ts:206 ~ SocialAuthService ~ getPersonalAccounts ~ personalAccounts:", personalAccounts)
-          if (personalAccounts !== null && personalAccounts.length > 0) {
-            this.userPersonalAccounts.next(personalAccounts);
-          } else {
-            this.userPersonalAccounts.next([]);
-          }
-        },
-        error: (error) => {
-          this.errorSubject.next(error);
-        },
-      });
+      });  
   }
 
   signInWithGoogle(): Observable<any> {
@@ -242,147 +131,147 @@ export class SocialAuthService {
   /**
    * This is not working except in HTTPS published
    */
-  signInWithFacebook(authCode: string) {
-    this.facebookRepo
-      .exchangeAuthCodeForAccessToken(authCode)
-      .pipe(
-        concatMap((accessTokenObj: { accessToken: string }) => {
-          console.log(accessTokenObj);
-          return this.facebookRepo
-            .getFacebookUserId(accessTokenObj.accessToken)
-            .pipe(
-              map((user_id: string) => {
-                return {
-                  [USER_ID]: user_id,
-                  [ACCESS_TOKEN]: accessTokenObj.accessToken,
-                };
-              })
-            );
-        }),
-        concatMap((accessTokenObj: { user_id: string; access_token: string }) =>
-          this.firestoreRepo.updateCurrentUserCollectionDocument(
-            this.SOCIAL_ACCTS_DOC,
-            PostingPlatform.FACEBOOK,
-            {
-              [PLATFORM]: PostingPlatform.FACEBOOK,
-              ...accessTokenObj,
-            }
-          )
-        )
-      )
-      .subscribe({
-        next: (result) => {
-          if (result) {
-            this.navigationService.navigateToRoot();
-            this.facebookAuthSubject.next(true);
-          } else {
-            this.errorSubject.next('LinkedIn Auth Error');
-          }
-        },
-        error: (error) => {
-          this.navigationService.navigateToRoot();
-          this.errorSubject.next(error);
-        },
-      });
-  }
+  // signInWithFacebook(authCode: string) {
+  //   this.facebookRepo
+  //     .exchangeAuthCodeForAccessToken(authCode)
+  //     .pipe(
+  //       concatMap((accessTokenObj: { accessToken: string }) => {
+  //         console.log(accessTokenObj);
+  //         return this.facebookRepo
+  //           .getFacebookUserId(accessTokenObj.accessToken)
+  //           .pipe(
+  //             map((user_id: string) => {
+  //               return {
+  //                 [USER_ID]: user_id,
+  //                 [ACCESS_TOKEN]: accessTokenObj.accessToken,
+  //               };
+  //             })
+  //           );
+  //       }),
+  //       concatMap((accessTokenObj: { user_id: string; access_token: string }) =>
+  //         this.firestoreRepo.updateCurrentUserCollectionDocument(
+  //           this.SOCIAL_ACCTS_DOC,
+  //           PostingPlatform.FACEBOOK,
+  //           {
+  //             [PLATFORM]: PostingPlatform.FACEBOOK,
+  //             ...accessTokenObj,
+  //           }
+  //         )
+  //       )
+  //     )
+  //     .subscribe({
+  //       next: (result) => {
+  //         if (result) {
+  //           this.navigationService.navigateToRoot();
+  //           this.facebookAuthSubject.next(true);
+  //         } else {
+  //           this.errorSubject.next('LinkedIn Auth Error');
+  //         }
+  //       },
+  //       error: (error) => {
+  //         this.navigationService.navigateToRoot();
+  //         this.errorSubject.next(error);
+  //       },
+  //     });
+  // }
 
-  signInWithMedium(mediumAccessToken: string) {
-    from(
-      this.firestoreRepo.updateCurrentUserCollectionDocument(
-        this.SOCIAL_ACCTS_DOC,
-        PostingPlatform.MEDIUM,
-        {
-          [PLATFORM]: PostingPlatform.MEDIUM,
-          [ACCESS_TOKEN]: mediumAccessToken,
-        }
-      )
-    ).subscribe({
-      next: (result) => {
-        if (result) {
-          this.mediumAuthSubject.next(true);
-        } else {
-          this.errorSubject.next('Medium Auth Error');
-        }
-      },
-      error: (error) => {
-        this.errorSubject.next(error);
-      },
-    });
-  }
+  // signInWithMedium(mediumAccessToken: string) {
+  //   from(
+  //     this.firestoreRepo.updateCurrentUserCollectionDocument(
+  //       this.SOCIAL_ACCTS_DOC,
+  //       PostingPlatform.MEDIUM,
+  //       {
+  //         [PLATFORM]: PostingPlatform.MEDIUM,
+  //         [ACCESS_TOKEN]: mediumAccessToken,
+  //       }
+  //     )
+  //   ).subscribe({
+  //     next: (result) => {
+  //       if (result) {
+  //         this.mediumAuthSubject.next(true);
+  //       } else {
+  //         this.errorSubject.next('Medium Auth Error');
+  //       }
+  //     },
+  //     error: (error) => {
+  //       this.errorSubject.next(error);
+  //     },
+  //   });
+  // }
 
-  signInWithTwitter() {
-    this.conectionsLoadingSubject.next(true);
-    from(signInWithPopup(this.auth, this.twitterProvider))
-      .pipe(
-        map((result) => {
-          const resultUser = result.user;
-          // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
-          // You can use these server side with your app's credentials to access the Twitter API.
-          const credential = TwitterAuthProvider.credentialFromResult(result);
-          if (credential !== null) {
-            const token = credential.accessToken;
-            const secret = credential.secret;
+  // signInWithTwitter() {
+  //   this.conectionsLoadingSubject.next(true);
+  //   from(signInWithPopup(this.auth, this.twitterProvider))
+  //     .pipe(
+  //       map((result) => {
+  //         const resultUser = result.user;
+  //         // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
+  //         // You can use these server side with your app's credentials to access the Twitter API.
+  //         const credential = TwitterAuthProvider.credentialFromResult(result);
+  //         if (credential !== null) {
+  //           const token = credential.accessToken;
+  //           const secret = credential.secret;
 
-            const oAuth2Payload = {
-              [PLATFORM]: PostingPlatform.TWITTER,
-              [HANDLE]: resultUser?.displayName || 'error',
-              [ACCESS_TOKEN]: token,
-              [REFRESH_TOKEN]: secret,
-              [SCOPE]: this.twitterScopes,
-              [LAST_LOGIN_AT]: resultUser.metadata.lastSignInTime,
-              [CREATION_TIME]: resultUser.metadata.creationTime,
-            };
+  //           const oAuth2Payload = {
+  //             [PLATFORM]: PostingPlatform.TWITTER,
+  //             [HANDLE]: resultUser?.displayName || 'error',
+  //             [ACCESS_TOKEN]: token,
+  //             [REFRESH_TOKEN]: secret,
+  //             [SCOPE]: this.twitterScopes,
+  //             [LAST_LOGIN_AT]: resultUser.metadata.lastSignInTime,
+  //             [CREATION_TIME]: resultUser.metadata.creationTime,
+  //           };
 
-            this.firestoreRepo.updateCurrentUserCollectionDocument(
-              this.SOCIAL_ACCTS_DOC,
-              PostingPlatform.TWITTER,
-              oAuth2Payload
-            );
-          } else {
-            this.errorSubject.next('Twitter Auth Error');
-          }
+  //           this.firestoreRepo.updateCurrentUserCollectionDocument(
+  //             this.SOCIAL_ACCTS_DOC,
+  //             PostingPlatform.TWITTER,
+  //             oAuth2Payload
+  //           );
+  //         } else {
+  //           this.errorSubject.next('Twitter Auth Error');
+  //         }
 
-          // The signed-in user info.
-          const user = result.user;
-          // IdP data available using getAdditionalUserInfo(result)
-          // ...
-        }),
-        concatMap((result) => {
-          const currentUser = this.fireAuthRepo.currentSessionUser;
-          if (currentUser === undefined) {
-            throw new Error('No current user');
-          }
-          return this.firestoreRepo.getUserInfoAsDocument(
-            USERS_COL,
-            currentUser?.uid
-          );
-        }),
-        concatMap((userDoc: any) => {
-          const constidToken = userDoc?.idToken;
-          // Build Firebase credential with the Google ID token.
-          const credential = GoogleAuthProvider.credential(constidToken);
-          return signInWithCredential(this.auth, credential);
-        })
-      )
-      .subscribe({
-        next: (result) => {
-          this.conectionsLoadingSubject.next(false);
-        },
-        error: (error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.customData.email;
-          // The AuthCredential type that was used.
-          const credential = GoogleAuthProvider.credentialFromError(error);
+  //         // The signed-in user info.
+  //         const user = result.user;
+  //         // IdP data available using getAdditionalUserInfo(result)
+  //         // ...
+  //       }),
+  //       concatMap((result) => {
+  //         const currentUser = this.fireAuthRepo.currentSessionUser;
+  //         if (currentUser === undefined) {
+  //           throw new Error('No current user');
+  //         }
+  //         return this.firestoreRepo.getUserInfoAsDocument(
+  //           USERS_COL,
+  //           currentUser?.uid
+  //         );
+  //       }),
+  //       concatMap((userDoc: any) => {
+  //         const constidToken = userDoc?.idToken;
+  //         // Build Firebase credential with the Google ID token.
+  //         const credential = GoogleAuthProvider.credential(constidToken);
+  //         return signInWithCredential(this.auth, credential);
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: (result) => {
+  //         this.conectionsLoadingSubject.next(false);
+  //       },
+  //       error: (error) => {
+  //         // Handle Errors here.
+  //         const errorCode = error.code;
+  //         const errorMessage = error.message;
+  //         // The email of the user's account used.
+  //         const email = error.customData.email;
+  //         // The AuthCredential type that was used.
+  //         const credential = GoogleAuthProvider.credentialFromError(error);
 
-          this.twitterAuthSubject.next(true);
-          this.conectionsLoadingSubject.next(false);
-          this.errorSubject.next(errorMessage);
-        },
-      });
-  }
+  //         this.twitterAuthSubject.next(true);
+  //         this.conectionsLoadingSubject.next(false);
+  //         this.errorSubject.next(errorMessage);
+  //       },
+  //     });
+  // }
 
   signInWithYoutube() {
     this.conectionsLoadingSubject.next(true);
@@ -400,57 +289,53 @@ export class SocialAuthService {
         this.navigationService.navigateToRoot();
       },
       error: (error) => {
-        console.log(
-          '🚀 ~ file: socialauth.service.ts:389 ~ SocialAuthService ~ this.authRepo.getAuthorizedZoomUser ~ error:',
-          error
-        );
         this.errorSubject.next(error);
         this.navigationService.navigateToRoot();
       },
     });
   }
 
-  getLinkedInAccessToken(authCode: string) {
-    this.conectionsLoadingSubject.next(true);
-    this.socialAuthRepo
-      .exchanceAuthCodeForAccessToken(authCode)
-      .pipe(
-        concatMap((accessTokenObj: { message: string; data: any }) => {
-          return this.firestoreRepo.updateCurrentUserCollectionDocument(
-            this.SOCIAL_ACCTS_DOC,
-            PostingPlatform.LINKEDIN,
-            {
-              [PLATFORM]: PostingPlatform.LINKEDIN,
-              ...accessTokenObj,
-            }
-          );
-        })
-      )
-      .subscribe({
-        next: (result) => {
-          this.conectionsLoadingSubject.next(false);
-          console.log(
-            '🚀 ~ file: socialaccount.service.ts:233 ~ SocialAccountService ~ .subscribe ~ result',
-            result
-          );
-          if (result) {
-            this.linkedinAuthSubject.next(true);
-          } else {
-            this.errorSubject.next('LinkedIn Auth Error');
-          }
-          this.navigationService.navigateToRoot();
-        },
-        error: (error) => {
-          this.conectionsLoadingSubject.next(false);
-          this.errorSubject.next(error);
-          console.log(
-            '🔥 ~ file: socialaccount.service.ts:235 ~ SocialAccountService ~ .subscribe ~ error',
-            error
-          );
-          this.navigationService.navigateToRoot();
-        },
-      });
-  }
+  // getLinkedInAccessToken(authCode: string) {
+  //   this.conectionsLoadingSubject.next(true);
+  //   this.socialAuthRepo
+  //     .exchanceAuthCodeForAccessToken(authCode)
+  //     .pipe(
+  //       concatMap((accessTokenObj: { message: string; data: any }) => {
+  //         return this.firestoreRepo.updateCurrentUserCollectionDocument(
+  //           this.SOCIAL_ACCTS_DOC,
+  //           PostingPlatform.LINKEDIN,
+  //           {
+  //             [PLATFORM]: PostingPlatform.LINKEDIN,
+  //             ...accessTokenObj,
+  //           }
+  //         );
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: (result) => {
+  //         this.conectionsLoadingSubject.next(false);
+  //         console.log(
+  //           '🚀 ~ file: socialaccount.service.ts:233 ~ SocialAccountService ~ .subscribe ~ result',
+  //           result
+  //         );
+  //         if (result) {
+  //           this.linkedinAuthSubject.next(true);
+  //         } else {
+  //           this.errorSubject.next('LinkedIn Auth Error');
+  //         }
+  //         this.navigationService.navigateToRoot();
+  //       },
+  //       error: (error) => {
+  //         this.conectionsLoadingSubject.next(false);
+  //         this.errorSubject.next(error);
+  //         console.log(
+  //           '🔥 ~ file: socialaccount.service.ts:235 ~ SocialAccountService ~ .subscribe ~ error',
+  //           error
+  //         );
+  //         this.navigationService.navigateToRoot();
+  //       },
+  //     });
+  // }
 
   isUserLoggedIn(): Observable<boolean> {
     return this.fireAuthRepo.getUserAuthObservable().pipe(

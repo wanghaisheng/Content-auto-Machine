@@ -137,21 +137,17 @@ export class FirestoreRepository {
     );
   }
 
-  confirmUserCollection(
+  confirmUserCollectionChild(
     userId: string,
-    collectionPath: string
+    collectionPath: string,
+    childKey: string
   ): Observable<boolean> {
-    const collectionRef = ref(this.database, `${USERS_COL}/${userId}/${collectionPath}`);
+    const collectionRef = ref(this.database, `${USERS_COL}/${userId}/${collectionPath}/${childKey}`);
     return new Observable<boolean>((subject) => {
       onValue(
         collectionRef,
-        (snapshot) => {
-          subject.next(snapshot !== null);
-          subject.complete();
-        },
-        (errorObject) => {
-          subject.error(errorObject.name);
-        }
+        (snapshot) => subject.next(snapshot.exists()),
+        (errorObject) => subject.error(errorObject.name)
       );
     });
   }
