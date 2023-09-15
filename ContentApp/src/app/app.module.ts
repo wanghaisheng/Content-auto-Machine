@@ -32,7 +32,6 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { PanelModule } from 'primeng/panel';
 import { DividerModule } from 'primeng/divider';
 import { TabViewModule } from 'primeng/tabview';
-import { AccounthubComponent } from './views/accounthub/accounthub.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LinkedinRedirectComponent } from './views/redirects/linkedinredirect.component';
 import { FacebookRedirectComponent } from './views/redirects/facebookredirect.component';
@@ -65,6 +64,8 @@ import { SettingsComponent } from './views/settings/settings.component';
 import { provideFirestore } from '@angular/fire/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { TypewriterComponent } from './views/common/typewriter/typewriter.component';
+import { AvatarModule } from 'primeng/avatar';
+import { MenuModule } from 'primeng/menu';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -91,7 +92,6 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     CalendarComponent,
     PageNotFoundComponent,
     HomeComponent,
-    AccounthubComponent,
     LinkedinRedirectComponent,
     FacebookRedirectComponent,
     CreateContentComponent,
@@ -103,6 +103,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     TypewriterComponent
   ],
   imports: [
+    TagModule,
+    MenuModule,
+    AvatarModule,
     SplitButtonModule,
     SkeletonModule,
     BlockUIModule,

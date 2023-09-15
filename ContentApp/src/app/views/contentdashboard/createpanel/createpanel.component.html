@@ -3,7 +3,7 @@
     <span class="header-icon">
       <i class="pi pi-book"></i>
     </span>
-    <input placeholder='Type your title...' class="header-input" type="text" pInputText/>
+    <input [(ngModel)]="title" placeholder='Type your title...' class="header-input" type="text" pInputText/>
   </div>
   <div *ngIf="createMode.includes('youtube')">
     <h3 class="section-header">Youtube Video</h3>
@@ -11,7 +11,7 @@
       <span class="header-icon">
         <i class="pi pi-youtube"></i>
       </span>
-      <input placeholder='Paste your link...' class="header-input" type="text" pInputText/>
+      <input [(ngModel)]="url" placeholder='Paste your link...' class="header-input" type="text" pInputText/>
     </div>
   </div>
   <div *ngIf="createMode.includes('zoom')">

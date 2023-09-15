@@ -5,22 +5,6 @@
  * Copyright (c) 2023 Adrian Mohnacs
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
-
-import {
-  Firestore,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  query,
-  where,
-  Query,
-  addDoc,
-  DocumentSnapshot,
-  DocumentData,
-} from '@angular/fire/firestore';
 import {
   Database,
   onValue,
@@ -34,7 +18,6 @@ import { environment } from '../../../../environments/environment';
 import { FireAuthRepository } from './fireauth.repo';
 import { Injectable, inject } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
-import { sub } from 'date-fns';
 
 /**
  * Collection and Docuemnts Architecture
@@ -42,17 +25,7 @@ import { sub } from 'date-fns';
 export const PURCHASED_USERS_COL = 'purchased_users';
 
 export const USERS_COL = 'users';
-export const PERSONAL_ACCTS_DOC = 'personal_accounts';
-
-export const PostingPlatform = {
-  FACEBOOK: 'facebook',
-  INSTAGRAM: 'instagram',
-  TWITTER: 'twitter',
-  YOUTUBE: 'youtube',
-  MEDIUM: 'medium',
-  TIKTOK: 'tiktok',
-  LINKEDIN: 'linkedin',
-};
+export const PERSONAL_ACCTS_DOC = 'social_accounts';
 
 /**
  * Accounts and Oauth 2.0
@@ -75,7 +48,6 @@ export class FirestoreRepository {
   private database: Database = inject(Database);
 
   constructor(
-    private firestore: Firestore,
     private fireAuth: FireAuthRepository
   ) {
     /** */
@@ -102,10 +74,6 @@ export class FirestoreRepository {
             subject.complete();
           },
           (errorObject) => {
-            console.log(
-              '🔥 ~ file: firebase_core.js:72 ~ FirebaseCore ~ this.db.ref ~ errorObject:',
-              errorObject
-            );
             subject.error(errorObject.name);
           }
         );
@@ -126,10 +94,6 @@ export class FirestoreRepository {
   updateCurrentUserDocument<T>(data: Partial<T>): Observable<T> {
     return new Observable<T>((subject) => {
       if (this.fireAuth.currentSessionUser == null) {
-        console.log(
-          '🔥 ~ file: firestore.repo.ts:98 ~ FirestoreRepository ~ currentSessionUser:',
-          'no user logged in'
-        );
         subject.error('No user is logged in');
         subject.complete();
       } else {
@@ -159,10 +123,6 @@ export class FirestoreRepository {
           subject.complete();
         },
         (errorObject) => {
-          console.log(
-            '🔥 ~ file: firebase_core.js:72 ~ FirebaseCore ~ this.db.ref ~ errorObject:',
-            errorObject
-          );
           subject.error(errorObject.name);
         }
       );
@@ -170,25 +130,33 @@ export class FirestoreRepository {
   }
   
   getUserCollection<T>(
-    collectionPath: string,
-    userId: string = this.fireAuth.currentSessionUser?.uid || ''
+    collectionPath: string
   ): Observable<T[]> {
-    if (userId === '') {
-      return this.fireAuth.getUserAuthObservable().pipe(
-        concatMap((user) => {
-          return this.getSpecificCollectionRef<T>(collectionPath, user.uid);
-        })
-      );
-    } else {
-      return this.getSpecificCollectionRef<T>(collectionPath, userId);
-    }
+    return this.fireAuth.getUserAuthObservable().pipe(
+      concatMap((user) => this.getSpecificCollectionVal<T>(user.uid, collectionPath))
+    );
   }
 
-  private getSpecificCollectionRef<T>(
+  confirmUserCollectionChild(
+    userId: string,
     collectionPath: string,
-    userId: string
+    childKey: string
+  ): Observable<boolean> {
+    const collectionRef = ref(this.database, `${USERS_COL}/${userId}/${collectionPath}/${childKey}`);
+    return new Observable<boolean>((subject) => {
+      onValue(
+        collectionRef,
+        (snapshot) => subject.next(snapshot.exists()),
+        (errorObject) => subject.error(errorObject.name)
+      );
+    });
+  }
+
+  private getSpecificCollectionVal<T>(
+    userId: string,
+    collectionPath: string
   ): Observable<T[]> {
-    const collectionRef = ref(this.database, `${collectionPath}/${userId}/${collectionPath}`);
+    const collectionRef = ref(this.database, `${USERS_COL}/${userId}/${collectionPath}`);
     return new Observable<T[]>((subject) => {
       onValue(
         collectionRef,
@@ -197,10 +165,6 @@ export class FirestoreRepository {
           subject.complete();
         },
         (errorObject) => {
-          console.log(
-            '🔥 ~ file: firebase_core.js:72 ~ FirebaseCore ~ this.db.ref ~ errorObject:',
-            errorObject
-          );
           subject.error(errorObject.name);
         }
       );

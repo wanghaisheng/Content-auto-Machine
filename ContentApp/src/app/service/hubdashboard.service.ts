@@ -101,14 +101,18 @@ export class HubDashboardService {
   createYoutubeContent(
     title: string,
     youtubeUrl: string,
-    aiModel: string
+    aiModel: string,
+    contentType: string
   ) {
+    console.log("🚀 ~ file: hubdashboard.service.ts:107 ~ HubDashboardService ~ youtubeUrl:", youtubeUrl)
     let trimmedUrl = youtubeUrl.split('v=')[1];
+    console.log("🚀 ~ file: hubdashboard.service.ts:108 ~ HubDashboardService ~ trimmedUrl:", trimmedUrl)
 
     this.contentRepo.getContentFromVideo(
       title,
       trimmedUrl, 
-      aiModel
+      aiModel,
+      contentType
     ).subscribe({
       next: (response: Content) => {
         this.contentSubject.next(response);
@@ -167,6 +171,9 @@ export class HubDashboardService {
     this.createLoadingSubject.next(true);
     this.zoomRepo.getZoomMeetings().subscribe({
       next: (response) => {
+        if (response.length === 0) {
+          this.errorSubject.next('No Zoom meetings found');
+        }
         this.createLoadingSubject.next(false);
         this.meetingsSubject.next(response)
       },

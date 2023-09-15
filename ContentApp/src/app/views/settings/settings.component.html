@@ -1,17 +1,157 @@
-<p-tabView styleClass="tabview-custom">
-  <p-tabPanel header="twitter">
-    <ng-template pTemplate="header">
-      <i class="pi pi-twitter"></i>
-      <span>You are now connected!</span>
-    </ng-template>
-    <div class="container">
-      <div class="column" style="padding: 0.5rem;">
-        <p>
-          Thanks for logging in.
+<p-blockUI [target]="paneler" [blocked]="isBlocked">
+  <i class="pi pi-lock" style="font-size: 3rem" fullscreen="false"></i>
+</p-blockUI>
 
-          You will now be able to turn all of those calls into content with the click of a button.
+<h1>Settings</h1>
+<div class="row" style="height: 80vw">
+  <p-menu #menu [model]="menuItems"></p-menu>
+  <p-divider layout="vertical"></p-divider>
+  
+  <p-panel #pnl header="{{ currentView }}" class="container">
+
+    <div *ngIf="currentView == 'Profile'" class="container">
+      <form [formGroup]="profileForm">
+        <div class="column" style="padding: 0.5rem;">
+          <span class="p-float-label">
+            <input type="text" id="username" pInputText formControlName="name"/>
+            <label htmlFor="username">Display Name</label>
+          </span>
+          <span class="p-float-label">
+            <input type="text" id="email" pInputText formControlName="email"/>
+            <label htmlFor="email">Email</label>
+          </span>
+          <p-button label="Update profile picture" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
+          <p-button label="Reset password" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
+          <p-footer>
+            <div class="row" style="justify-content: space-between;">
+              <p-button label="Save" icon="pi pi-plus" (click)="onProfileSaved()" [disabled]="isLoading">
+                <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+              </p-button>
+              <p-button label="Sign Out" styleClass="p-button-danger" (click)="uploadProfilePic()"></p-button>
+            </div>
+          </p-footer>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="currentView == 'Zoom'" class="container">
+      <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
+        <p>
+          Connect our app to your Zoom account and streamline your content efforts. 
+          Turn your old calls and coaching sessions or onboardings into leads.
+          Get sales from your all those recordings you just have sitting around.
         </p>
+        <p-footer>
+          <p-button label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading">
+            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          </p-button>
+        </p-footer>
       </div>
     </div>
-  </p-tabPanel>
-</p-tabView>
+
+
+    <div *ngIf="currentView == 'Facebook'">
+      <p-tag *ngIf="facebookConnected" severity="success" value="Connected"></p-tag>
+      <p-steps 
+      [model]="faceebookAuthMenuItems" 
+      [readonly]="true" 
+      [activeIndex]="facebookAuthMenuItemIndex">
+      </p-steps>
+      <!-- First step conenct -->
+      <div class="container" *ngIf="facebookAuthMenuItemIndex === 0">
+        <div class="column" style="padding: 0.5rem;">
+          <p>
+            To start automating your Facebook and Instagram posts and saving time, simply click the button below to
+            grant
+            our app access to your Facebook account. By doing so, you'll be able to schedule and publish posts
+            seamlessly,
+            without any manual intervention.
+          </p>
+          <p-footer>
+            <button pButton type="button" label="Connect" icon="pi pi-plus" styleClass="p-button-success"
+              [disabled]="isLoading" (click)="onFacebookLogin()">
+              <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" /></button>
+          </p-footer>
+        </div>
+      </div>
+      <!-- Second Step. Facebook Page -->
+      <div class="container" *ngIf="facebookAuthMenuItemIndex == 1">
+        <div class="column">
+          <p>Great. We have your facebook pages for you.  Let's start by picking just one.</p>
+          <p>If you would like to connect an Instagram account as well it is important that it is connected to the Facebook page you will select here.</p>
+          <p-listbox [options]="userFacebookPages" [(ngModel)]="userSelectedFacebookPage" optionLabel="page" [style]="{'width':'100%'}">
+            <ng-template let-page pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                  <h4>{{ page.name }}</h4>
+              </div>
+          </ng-template>
+          </p-listbox>
+          <p-footer>
+            <button pButton type="button" label="Continue" icon="pi pi-plus" styleClass="p-button-success"
+              [disabled]="userSelectedFacebookPage == undefined" (click)="onFacebookPageSelected()">
+              <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" /></button>
+          </p-footer>
+        </div>
+      </div>
+      <!-- Third Step. Instagram Account -->
+        <div class="container" *ngIf="facebookAuthMenuItemIndex == 1">
+          <div class="column">
+            <p>Congrats your facebook is fully authenticated.  Go ahead and close this dialog and proceed with setting your content on autopilot.</p>
+          </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="currentView == 'LinkedIn'" class="container">
+      <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="linkedinConnected" severity="success" value="Connected"></p-tag>
+        <p>
+          Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
+          posting, you can schedule and share valuable content with your connections, establishing thought leadership
+          and boosting your professional brand. Experience the ease of automated LinkedIn posts!
+        </p>
+        <p-footer>
+          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
+            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          </p-button>
+        </p-footer>
+      </div>
+    </div>
+
+
+
+    <div *ngIf="currentView == 'Twitter'" >
+      <div class="column" style="padding: 0.5rem;">
+        <p-tag *ngIf="twitterConnected" severity="success" value="Connected"></p-tag>
+        <p>
+          Grant our app access to your Twitter account and take your tweeting game to the next level. With automated
+          posting, you can schedule and publish tweets effortlessly, ensuring consistent engagement with your followers.
+          Say goodbye to the hassle of manual tweeting and hello to effortless social media management!
+        </p>
+        <p-footer>
+          <p-button label="Connect" icon="pi pi-plus" (click)="onTwitterLogin()" [disabled]="isLoading">
+            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          </p-button>
+        </p-footer>
+      </div>
+    </div>
+
+    
+    <div *ngIf="currentView == 'Email'" class="container">
+      <div class="column" style="padding: 0.5rem;">
+      <!-- <p-tag *ngIf="[emailConnected]" severity="success" value="Connected"></p-tag> -->
+        <p>
+          Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
+          posting, you can schedule and share valuable content with your connections, establishing thought leadership
+          and boosting your professional brand. Experience the ease of automated LinkedIn posts!
+        </p>
+        <p-footer>
+          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
+            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          </p-button>
+        </p-footer>
+      </div>
+    </div>
+  </p-panel>
+</div>

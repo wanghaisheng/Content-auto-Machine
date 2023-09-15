@@ -8,7 +8,7 @@
 
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SocialAuthService } from '../../service/socialauth.service';
+import { SocialAuthService } from '../../service/user/socialauth.service';
 
 @Component({
   selector: 'li-redirects',
@@ -27,7 +27,7 @@ export class LinkedinRedirectComponent {
   ngOnInit(): void {
     this.linkedInToken = this.route.snapshot.queryParams["code"];
     if (this.linkedInToken !== undefined && this.linkedInToken !== '') {
-      this.socialAuthService.getLinkedInAccessToken(this.linkedInToken);
+      // this.socialAuthService.getLinkedInAccessToken(this.linkedInToken);
     } 
   }
 }

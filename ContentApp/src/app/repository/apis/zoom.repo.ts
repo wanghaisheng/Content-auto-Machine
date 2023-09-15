@@ -35,7 +35,6 @@ export class ZoomRepository {
         return from(axios(config))
       }),
       map((response: AxiosResponse<any, any>) => {
-        console.log("🚀 ~ file: zoom.repo.ts:39 ~ ZoomRepository ~ map ~ response:", response)
         const responseData = response.data as ApiResponse<Meeting[]>;
         if (responseData.message !== 'success') {
           throw new Error('🔥 Failed to get success');

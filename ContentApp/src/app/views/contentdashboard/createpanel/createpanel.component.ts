@@ -6,13 +6,14 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SelectItem } from 'primeng/api';
 import { Meeting } from 'src/app/model/source/zoomrecordings.model';
 import { Observable } from 'rxjs';
 import { NgIfContext } from '@angular/common';
+import { MessengerService } from 'src/app/service/messenger.service';
 
 @Component({
   selector: 'app-createpanel',
@@ -40,10 +41,14 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   meetings: Meeting[] | undefined;
   selectedMeeting!:  Meeting;
 
+  title = ''
+  url = ''
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private dashboardService: HubDashboardService
+    private dashboardService: HubDashboardService,
+    private messengerService: MessengerService
   ) { /** */ }
 
   ngOnInit() {
@@ -72,23 +77,26 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   }
 
   submitForContent(model: string = 'gpt-4') {
-    // if (this.formGroup.valid) {
-      if (this.createMode.includes('zoom')) {
-        this.dashboardService.createZoomContent(
-          this.formGroup.value.title,
-          this.selectedMeeting.id,
+    if (this.createMode.includes('zoom')) {
+      this.dashboardService.createZoomContent(
+        this.formGroup.value.title,
+        this.selectedMeeting.id,
+        model,
+        this.createMode
+        )
+    } else if (this.createMode.includes('youtube')) {
+      if (this.formGroup.valid) {
+        this.dashboardService.createYoutubeContent(
+          this.title,
+          this.url, 
           model,
           this.createMode
         )
       } else {
-        this.dashboardService.createYoutubeContent(
-          this.formGroup.value.title,
-          this.formGroup.value.url, 
-          model
-        )
+        this.messengerService.setErrorMessage('Please enter a valid YouTube URL');
       }
-    // } else {
-    //   console.log('Form is invalid');
-    // }
+    } else {
+      this.messengerService.setErrorMessage('Something went wrong. Please try again later.');
+    }
   }
 }

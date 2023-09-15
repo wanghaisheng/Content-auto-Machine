@@ -8,7 +8,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SocialAuthService } from '../../service/socialauth.service';
+import { SocialAuthService } from '../../service/user/socialauth.service';
 
 @Component({
   selector: 'fb-redirects',
@@ -27,7 +27,7 @@ export class FacebookRedirectComponent implements OnInit {
   ngOnInit(): void {
     this.facebookToken = this.route.snapshot.queryParams["code"];
     if (this.facebookToken !== undefined && this.facebookToken !== '') {
-      this.socialAuthService.signInWithFacebook(this.facebookToken);
+      // this.socialAuthService.signInWithFacebook(this.facebookToken);
     } 
   }
 
