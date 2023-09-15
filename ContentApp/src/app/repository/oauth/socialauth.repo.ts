@@ -9,7 +9,7 @@
 import { Injectable } from '@angular/core';
 import { LINKEDIN_CLIENT_ID } from 'appsecrets';
 import axios from 'axios';
-import { Observable, concat, concatMap, from, map } from 'rxjs';
+import { Observable, combineLatest, concat, concatMap, forkJoin, from, map, switchMap } from 'rxjs';
 import { ApiResponse } from 'src/app/model/response/apiresponse.model';
 import { ZoomUser } from 'src/app/model/user/zoomuser';
 import { FireAuthRepository } from '../database/fireauth.repo';
@@ -175,20 +175,27 @@ export class SocialAuthRepository {
   //TODO this is the one we're looking to update to keep others from seeing
   // the authentication key
   getAuthenticatedSocialAccts() {
+    const requests: Observable<{ [key: string]: boolean }>[] = [];
     return this.fireAuthRepo.getUserAuthObservable().pipe(
       map((user) => {
-        let socialAccts: { [key: string]: boolean } = {};
-        Object.values(PostingPlatform).forEach(async (platform) => {
-          console.log("🚀 ~ file: socialauth.repo.ts:182 ~ SocialAuthRepository ~ Object.values ~ platform:", platform)
-          const repper = await this.firestoreRepo.confirmUserCollectionChild(
+        // let socialAccts: { [key: string]: boolean } = {};
+        Object.values(PostingPlatform).forEach((platform) => {
+          const request: Observable<{ [key: string]: boolean }> = this.firestoreRepo.confirmUserCollectionChild(
             user.uid,
             this.SOCIAL_ACCTS_DOC,
             platform
-          ) !== undefined;
-          console.log("🚀 ~ file: socialauth.repo.ts:188 ~ SocialAuthRepository ~ Object.values ~ repper:", repper)
+          ).pipe(
+            map((isAuthenticated) => {
+              return {
+                [platform]: isAuthenticated,
+              };
+            }
+          ));
+          requests.push(request);
         });
-        return socialAccts;
-      })
+        return requests;
+      }),
+      concatMap((requests) => combineLatest(requests)),
     ); 
   }
 }

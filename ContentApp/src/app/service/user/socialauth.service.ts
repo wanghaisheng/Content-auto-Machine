@@ -23,6 +23,7 @@ import {
   Observable,
   Subject,
   switchMap,
+  take,
   tap,
 } from 'rxjs';
 import { FireAuthRepository } from '../../repository/database/fireauth.repo';
@@ -79,7 +80,9 @@ export class SocialAuthService {
   getErrorObservable$ = this.errorSubject.asObservable();
   
   userAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
-  userSocialAccountsObservable$ = this.socialAuthRepo.getAuthenticatedSocialAccts();
+  userSocialAccountsObservable$ = this.socialAuthRepo.getAuthenticatedSocialAccts().pipe(
+    take(1),
+  );
   youtubeAuthObservable$ = this.socialAuthRepo.saveYoutubeAuth();
   facebookPagesObservable$ = this.socialAuthRepo.getFacebookPages();
 

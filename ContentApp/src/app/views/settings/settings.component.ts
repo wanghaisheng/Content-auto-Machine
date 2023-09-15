@@ -170,15 +170,16 @@ export class SettingsComponent implements AfterViewInit{
     });
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
-        console.log("🚀 ~ file: settings.component.ts:171 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
-        // we should only label as connected if a FB page and IG is connected
-        // this.zoomConnected = accounts['zoom'];
-        // this.facebookConnected = accounts['facebook'];
-        // this.linkedinConnected = accounts['linkedin'];
-        // this.mediumConnected = accounts['medium'];
-        // this.youtubeConnected = accounts['youtube'];
-        // this.twitterConnected = accounts['twitter'];
+        accounts.forEach((account) => {
+          this.zoomConnected = account['zoom'];
+          this.facebookConnected = account['facebook'];
+          this.linkedinConnected = account['linkedin'];
+          this.mediumConnected = account['medium'];
+          this.youtubeConnected = account['youtube'];
+          this.twitterConnected = account['twitter'];
+        });
+        
       },
       error: (error) => {
         this.isAccountsLoading = false;
