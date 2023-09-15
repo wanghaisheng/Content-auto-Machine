@@ -1,16 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
 import { MessengerService } from 'src/app/service/messenger.service';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { NavigationService } from 'src/app/service/navigation.service';
-import { SocialAccount } from 'src/app/model/user/socialaccount.model';
 import { FacebookPage } from 'src/app/model/content/facebookpage.model';
 import { Panel } from 'primeng/panel';
 import { Menu } from 'primeng/menu';
 import { PostingPlatform } from 'src/app/constants';
-import { Change } from 'firebase-functions/v1';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
@@ -119,6 +117,7 @@ export class SettingsComponent implements AfterViewInit{
       ],
     },
   ];
+  profileForm: FormGroup;
 
   @ViewChild('pnl', {static: false}) paneler?: ElementRef<Panel>;
   @ViewChild('menu', {static: false}) menu?: Menu;
@@ -128,9 +127,13 @@ export class SettingsComponent implements AfterViewInit{
     private messengerService: MessengerService,
     private navigationService: NavigationService,
     private socialAuthService: SocialAuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private formBuilder: FormBuilder
   ) {
-    /** */
+    this.profileForm = this.formBuilder.group({
+      name: [''],
+      email: [''],
+    });
   }
 
   ngOnInit(): void {
@@ -275,7 +278,7 @@ export class SettingsComponent implements AfterViewInit{
     window.location.href = `https://zoom.us/oauth/authorize?response_type=code&client_id=${params.client_id}&redirect_uri=${params.redirect_uri}`;
   }
 
-  onAccountClick() {
+  onLogoutClick() {
     this.confirmationService.confirm({
       message:
         'You are about to log out of the app.  Are you sure that you want to proceed?',
@@ -285,17 +288,16 @@ export class SettingsComponent implements AfterViewInit{
         this.messengerService.setInfoMessage('You have been logged out.');
         this.navigationService.navigateToLogin();
       },
-      reject: (type: any) => {
-        // switch (type) {
-        //     case ConfirmEventType.REJECT:
-        //         this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-        //         break;
-        //     case ConfirmEventType.CANCEL:
-        //         this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
-        //         break;
-        // }
-      },
+      reject: (type: any) => { /** */ },
     });
+  }
+
+  uploadProfilePic() {
+    throw new Error('Method not implemented.');
+  }
+
+  updatePassword() {
+
   }
 
   onProfileSaved() {

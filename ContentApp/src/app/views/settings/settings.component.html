@@ -10,18 +10,28 @@
   <p-panel #pnl header="{{ currentView }}" class="container">
 
     <div *ngIf="currentView == 'Profile'" class="container">
-      <div class="column" style="padding: 0.5rem;">
-        <p>
-          Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
-          posting, you can schedule and share valuable content with your connections, establishing thought leadership
-          and boosting your professional brand. Experience the ease of automated LinkedIn posts!
-        </p>
-        <p-footer>
-          <p-button label="Save" icon="pi pi-plus" (click)="onProfileSaved()" [disabled]="isLoading">
-            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
-          </p-button>
-        </p-footer>
-      </div>
+      <form [formGroup]="profileForm">
+        <div class="column" style="padding: 0.5rem;">
+          <span class="p-float-label">
+            <input type="text" id="username" pInputText formControlName="name"/>
+            <label htmlFor="username">Display Name</label>
+          </span>
+          <span class="p-float-label">
+            <input type="text" id="email" pInputText formControlName="email"/>
+            <label htmlFor="email">Email</label>
+          </span>
+          <p-button label="Update profile picture" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
+          <p-button label="Reset password" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
+          <p-footer>
+            <div class="row" style="justify-content: space-between;">
+              <p-button label="Save" icon="pi pi-plus" (click)="onProfileSaved()" [disabled]="isLoading">
+                <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+              </p-button>
+              <p-button label="Sign Out" styleClass="p-button-danger" (click)="uploadProfilePic()"></p-button>
+            </div>
+          </p-footer>
+        </div>
+      </form>
     </div>
 
     <div *ngIf="currentView == 'Zoom'" class="container">
