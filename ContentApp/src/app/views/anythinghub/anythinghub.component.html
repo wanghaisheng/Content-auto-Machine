@@ -1,3 +1,8 @@
+<p-card class="container" *ngIf="promptForZoom" [style]="{ 'margin-bottom': '1rem', 'background-color': '#D32F2F'}">
+  <p>You are not authenticated with Zoom. Click to connect your Zoom account to get started turning meetings into your own personal brand.</p>
+  <p-button label="Connect Zoom" (click)="onZoomConnectClick()"></p-button>
+</p-card>
+
 <div *ngFor="let root of generatorsList" class="grid-container">
   <h1>{{ root.header }}</h1>
   <div class="grid">

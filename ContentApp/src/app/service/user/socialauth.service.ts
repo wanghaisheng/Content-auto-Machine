@@ -63,8 +63,6 @@ export class SocialAuthService {
     /** */
   }
 
-  
-  
   private userInstagramLinkSuccess = new Subject<boolean>();
   getInstagramLinkSuccessObservable$ =
   this.userInstagramLinkSuccess.asObservable();

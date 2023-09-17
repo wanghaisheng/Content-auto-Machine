@@ -73,7 +73,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.meetings = meetings;
     })
     this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
-      this.title = contentComplete.title;
+      this.formGroup.patchValue({ 'title': contentComplete.title })
     })
     
     this.contentLoading$ = this.hubDashboardService.creteLoadingObservable$;
@@ -101,8 +101,8 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     } else if (this.createMode.includes('youtube')) {
       if (this.formGroup.valid) {
         this.hubDashboardService.createYoutubeContent(
-          this.title,
-          this.url, 
+          this.formGroup.value.title,
+          this.formGroup.value.url, 
           model,
           this.createMode
         )
