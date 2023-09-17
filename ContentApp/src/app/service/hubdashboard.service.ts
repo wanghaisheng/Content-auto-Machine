@@ -104,9 +104,8 @@ export class HubDashboardService {
     aiModel: string,
     contentType: string
   ) {
-    console.log("🚀 ~ file: hubdashboard.service.ts:107 ~ HubDashboardService ~ youtubeUrl:", youtubeUrl)
+    this.contentLoadingSubject.next(true);
     let trimmedUrl = youtubeUrl.split('v=')[1];
-    console.log("🚀 ~ file: hubdashboard.service.ts:108 ~ HubDashboardService ~ trimmedUrl:", trimmedUrl)
 
     this.contentRepo.getContentFromVideo(
       title,
@@ -115,10 +114,13 @@ export class HubDashboardService {
       contentType
     ).subscribe({
       next: (response: Content) => {
+        console.log("🚀 ~ file: hubdashboard.service.ts:117 ~ HubDashboardService ~ response:", response)
+        this.contentLoadingSubject.next(false);
         this.contentSubject.next(response);
       },
       error: (error: any) => {
         console.log("🔥 ~ file: hubdashboard.service.ts:62 ~ HubDashboardService ~ error:", error)
+        this.contentLoadingSubject.next(false);
         this.errorSubject.next(error);
       }
     })

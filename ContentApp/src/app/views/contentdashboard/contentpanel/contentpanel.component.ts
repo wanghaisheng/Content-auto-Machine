@@ -4,6 +4,7 @@ import { SelectItem } from 'primeng/api';
 import { Observable, tap } from 'rxjs';
 import { Content } from 'src/app/model/content/content.model';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
+import { MessengerService } from 'src/app/service/messenger.service';
 
 @Component({
   selector: 'app-contentpanel',
@@ -38,10 +39,9 @@ export class ContentpanelComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dashboardService: HubDashboardService
-  ) {
-
-  }
+    private hubDashboardService: HubDashboardService,
+    private messengerService: MessengerService
+  ) { /** */ }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -49,13 +49,18 @@ export class ContentpanelComponent implements OnInit {
       control: [''],
       enhance: [''],
     });
-    this.dashboardService.contentLoadingObservable$.subscribe({
+    this.hubDashboardService.contentLoadingObservable$.subscribe({
       next: (loading) => {
         this.contentLoading = loading;
       }
     });
-    this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+    this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
       this.content = contentComplete.content;
     });
+    this.hubDashboardService.errorObservable$.subscribe({
+      next: (error) => {
+        this.messengerService.setErrorMessage(error);
+      }
+    })
   }
 }

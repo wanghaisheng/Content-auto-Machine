@@ -31,6 +31,7 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
         this.panelCreateMode = segment;
       }
     })
+  
   }
 
   ngOnChanges(changes: SimpleChanges): void {
