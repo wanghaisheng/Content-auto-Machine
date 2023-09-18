@@ -55,6 +55,7 @@ export class ContentpanelComponent implements OnInit {
       }
     });
     this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+      console.log("🚀 ~ file: contentpanel.component.ts:58 ~ ContentpanelComponent ~ this.hubDashboardService.contentObservable$.subscribe ~ contentComplete:", contentComplete)
       this.content = contentComplete.content;
     });
     this.hubDashboardService.errorObservable$.subscribe({
