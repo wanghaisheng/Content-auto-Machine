@@ -15,38 +15,37 @@
         <input formControlName="url" placeholder='Paste your link...' class="header-input" type="text" pInputText />
       </div>
     </div>
-    <div *ngIf="createMode.includes('zoom')">
-      <h3 class="section-header">Zoom Recordings</h3>
-      <div class="header">
-        <div *ngIf="(contentLoading$ | async)" class="flex-item">
-          <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
-        </div>
-        <p-dropdown *ngIf="meetings?.length ?? 0 > 0" placeholder='Pick a past call' [(ngModel)]="selectedMeeting"
-          [options]="meetings!" optionLabel="topic">
-          <ng-template let-meeting pTemplate="item">
-            <h3>{{ meeting.topic }}</h3>
-            <div class="flex row" style="align-content: center;">
-              <p>Start: {{ meeting.start_time }}</p>
-              <p>Duration: {{ meeting.duration }} minutes</p>
-            </div>
-          </ng-template>
-        </p-dropdown>
-      </div>
-    </div>
-
-    <div *ngIf="showVideoInfo" class="video-info">
-      <div class="image-container">
-        <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image"
-          width="100"></p-image>
-      </div>
-      <div class="video-details">
-        <h4>Temporary Title</h4>
-        <p>Temporary Description</p>
-      </div>
-    </div>
-    <div class="output-type">
-      <p-splitButton label="Generate New Content" icon="pi pi-plus"
-        (onClick)="submitForContent('ft:gpt-3.5-turbo-0613:personal:adobot:7yg5GA9Q')" [model]="items"></p-splitButton>
-    </div>
   </form>
+  <div *ngIf="createMode.includes('zoom')">
+    <h3 class="section-header">Zoom Recordings</h3>
+    <div class="header">
+      <div *ngIf="(contentLoading$ | async)" class="flex-item">
+        <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
+      </div>
+      <p-dropdown *ngIf="meetings?.length ?? 0 > 0" placeholder='Pick a past call' [(ngModel)]="selectedMeeting"
+        [options]="meetings!" optionLabel="topic">
+        <ng-template let-meeting pTemplate="item">
+          <h3>{{ meeting.topic }}</h3>
+          <div class="flex row" style="align-content: center;">
+            <p>Start: {{ meeting.start_time }}</p>
+            <p>Duration: {{ meeting.duration }} minutes</p>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div *ngIf="showVideoInfo" class="video-info">
+    <div class="image-container">
+      <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="100"></p-image>
+    </div>
+    <div class="video-details">
+      <h4>Temporary Title</h4>
+      <p>Temporary Description</p>
+    </div>
+  </div>
+  <div class="output-type">
+    <p-splitButton label="Generate New Content" icon="pi pi-plus"
+      (onClick)="submitForContent('ft:gpt-3.5-turbo-0613:personal:adobot:7yg5GA9Q')" [model]="items"></p-splitButton>
+  </div>
 </div>

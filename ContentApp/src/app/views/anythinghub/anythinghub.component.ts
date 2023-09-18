@@ -61,7 +61,7 @@ export class AnythinghubComponent implements OnInit, AfterContentInit {
     this.socialAuthService.userSocialAccountsObservable$.subscribe((accounts) => {
       console.log("🚀 ~ file: anythinghub.component.ts:59 ~ AnythinghubComponent ~ this.socialAuthService.userSocialAccountsObservable$.subscribe ~ accounts:", accounts)
       accounts.forEach((account) => {
-        this.promptForZoom = account['zoom'];
+        this.promptForZoom = !account['zoom'];
       });
     });
   }
