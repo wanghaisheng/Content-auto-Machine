@@ -12,6 +12,7 @@ import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
 import { ApiResponse } from '../model/response/apiresponse.model';
 import { FireAuthRepository } from './database/fireauth.repo';
 import { Content } from '../model/content/content.model';
+import { YoutubeInfo } from '../model/source/youtubeinfo.model';
 
 const contentMachineUrl = 'http://localhost:3000/api';
 const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
@@ -22,6 +23,7 @@ const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
 export class ContentRepository {
 
   newlyCreatedPostData: {}[] = [];
+  videoDetailsSubject = new Subject<ApiResponse<YoutubeInfo>>();
 
   constructor(
     private fireAuthRepo: FireAuthRepository
@@ -84,7 +86,18 @@ export class ContentRepository {
     model: string,
     contentType: string
   ): Observable<Content> {
-    return this.fireAuthRepo.getUserAuthObservable().pipe(
+    const metadataConfig: AxiosRequestConfig = {
+      method: 'post',
+      url: `${contentMachineUrlv2}/videos/metadata`,
+      data: {
+        videoId: videoUuid,
+      },
+    };
+    return from(axios(metadataConfig)).pipe(
+      tap((response: AxiosResponse<any, any>) => {
+        this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
+      }),
+      concatMap((response: AxiosResponse<any, any>) => this.fireAuthRepo.getUserAuthObservable()),
       concatMap((user) => {
         const config: AxiosRequestConfig = {
           method: 'post',

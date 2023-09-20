@@ -7,7 +7,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject, concat, concatMap } from 'rxjs';
+import { Observable, Subject, concat, concatMap, map } from 'rxjs';
 import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
@@ -53,6 +53,16 @@ export class HubDashboardService {
 
   private meetingsSubject = new Subject<Meeting[]>();
   meetingsObservable$ = this.meetingsSubject.asObservable();
+
+  videoDetailsObservable$ = this.contentRepo.videoDetailsSubject.asObservable().pipe(
+    map((response) => {
+      if (response.message === 'success') {
+        return response.result;
+      } else {
+        throw new Error(response.message);
+      }
+    })
+  );
 
   constructor(
     private adminRepo: AdminRepository,
