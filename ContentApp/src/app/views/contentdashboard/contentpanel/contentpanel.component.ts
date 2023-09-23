@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
+import { Panel } from 'primeng/panel';
 import { Observable, tap } from 'rxjs';
 import { Content } from 'src/app/model/content/content.model';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
+import { MessengerService } from 'src/app/service/messenger.service';
 
 @Component({
   selector: 'app-contentpanel',
   templateUrl: './contentpanel.component.html',
   styleUrls: ['./contentpanel.component.css']
 })
-export class ContentpanelComponent implements OnInit {
+export class ContentpanelComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('pnl', {static: true}) paneler!: ElementRef<Panel>;
+  
   loadingObservable$!: Observable<boolean>;
 
   formGroup!: FormGroup;
@@ -38,9 +42,11 @@ export class ContentpanelComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dashboardService: HubDashboardService
-  ) {
+    private hubDashboardService: HubDashboardService,
+    private messengerService: MessengerService
+  ) { /** */ }
 
+  ngAfterViewInit(): void {
   }
 
   ngOnInit() {
@@ -49,13 +55,19 @@ export class ContentpanelComponent implements OnInit {
       control: [''],
       enhance: [''],
     });
-    this.dashboardService.contentLoadingObservable$.subscribe({
+    this.hubDashboardService.contentLoadingObservable$.subscribe({
       next: (loading) => {
         this.contentLoading = loading;
       }
     });
-    this.dashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+    this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+      console.log("🚀 ~ file: contentpanel.component.ts:58 ~ ContentpanelComponent ~ this.hubDashboardService.contentObservable$.subscribe ~ contentComplete:", contentComplete)
       this.content = contentComplete.content;
     });
+    this.hubDashboardService.errorObservable$.subscribe({
+      next: (error) => {
+        this.messengerService.setErrorMessage(error);
+      }
+    })
   }
 }

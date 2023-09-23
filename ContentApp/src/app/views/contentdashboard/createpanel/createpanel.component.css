@@ -37,14 +37,13 @@
 }
 
 .image-container {
-  width: 100px;
-  height: 100px;
+  height: 100%;
 }
 
 .image-container p-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  margin: 0.5rem;
+  height: 100%
 }
 
 .video-details {
@@ -73,7 +72,6 @@
 /* Output type section */
 .output-type {
   width: 100%;
-  margin-top: 1rem;
 }
 
 /* Dropdown */

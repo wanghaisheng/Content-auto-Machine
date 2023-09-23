@@ -1,47 +1,88 @@
 <div class="flex-container">
-  <div class="header">
-    <span class="header-icon">
-      <i class="pi pi-book"></i>
-    </span>
-    <input [(ngModel)]="title" placeholder='Type your title...' class="header-input" type="text" pInputText/>
-  </div>
-  <div *ngIf="createMode.includes('youtube')">
-    <h3 class="section-header">Youtube Video</h3>
+  <form [formGroup]="formGroup">
     <div class="header">
       <span class="header-icon">
-        <i class="pi pi-youtube"></i>
+        <i class="pi pi-book"></i>
       </span>
-      <input [(ngModel)]="url" placeholder='Paste your link...' class="header-input" type="text" pInputText/>
+      <input formControlName="title" placeholder='Type your title...' class="header-input" type="text" pInputText />
     </div>
-  </div>
+    <div *ngIf="createMode.includes('youtube')">
+      <h3 class="section-header">Youtube Video</h3>
+      <div class="header">
+        <span class="header-icon">
+          <i class="pi pi-youtube"></i>
+        </span>
+        <input formControlName="url" placeholder='Paste your link...' class="header-input" type="text" pInputText />
+      </div>
+    </div>
+  </form>
   <div *ngIf="createMode.includes('zoom')">
     <h3 class="section-header">Zoom Recordings</h3>
-    <div class="header">
       <div *ngIf="(contentLoading$ | async)" class="flex-item">
         <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
       </div>
-      <p-dropdown *ngIf="meetings?.length ?? 0 > 0" placeholder='Pick a past call' [(ngModel)]="selectedMeeting" [options]="meetings!" optionLabel="topic">
+      <p-dropdown 
+        *ngIf="meetings?.length ?? 0 > 0" 
+        placeholder='Pick a past call' 
+        [(ngModel)]="selectedMeeting"
+        [options]="meetings!" optionLabel="topic"
+        [style]="{ 'width': '100%' }">
         <ng-template let-meeting pTemplate="item">
           <h3>{{ meeting.topic }}</h3>
           <div class="flex row" style="align-content: center;">
-              <p>Start: {{ meeting.start_time }}</p>
-              <p>Duration: {{ meeting.duration }} minutes</p>
+            <p>Start: {{ meeting.start_time }}</p>
+            <p>Duration: {{ meeting.duration }} minutes</p>
           </div>
         </ng-template>
+        <ng-template pTemplate="footer">
+          <p style="padding-left: 6px;">Looking for older meetings? Join our premium members.</p>
+        </ng-template>
       </p-dropdown>
-    </div>
+      <strong *ngIf="meetings?.length == 0 && disabledState">
+        Oops. Something went wrong. Please refresh this page.
+      </strong>
   </div>
 
-  <div *ngIf="showVideoInfo" class="video-info">
+  <div *ngIf="(contentLoading$ | async) && createMode.includes('youtube')">
+    <p-skeleton size="6rem"></p-skeleton>
+    <br/>
+    <div class="flex">
+      <div style="flex: 1">
+          <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+          <br/>
+          <p-skeleton width="75%"></p-skeleton>
+          <br/>
+          <p-skeleton width="75%"></p-skeleton>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showVideoInfo">
     <div class="image-container">
-      <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="100"></p-image>
+      <p-image [src]="detailsThumbnail" alt="Image" width="100%"></p-image>
     </div>
     <div class="video-details">
-      <h4>Temporary Title</h4>
-      <p>Temporary Description</p>
+      <h4>{{ detailsTitle }}</h4>
+      <p>Length: {{ detailsLengthMins }} minutes</p>
+      <p>Views: {{ detailsViewCount }}</p>
     </div>
   </div>
   <div class="output-type">
-    <p-splitButton label="Generate New Content" icon="pi pi-plus" (onClick)="submitForContent()" [model]="items"></p-splitButton>
+    <h3 class="section-header">Your AI</h3>
+    <p-dropdown 
+      [(ngModel)]="selectedItem"
+      [options]="items" optionLabel="name"
+      [style]="{ 'width': '100%', 'margin-bottom': '1rem' }">
+      <ng-template let-item pTemplate="item">
+        <h3>{{ item.name }}</h3>
+        <div class="flex row" style="align-content: center;">
+          <p>{{ item.description }}</p>
+        </div>
+      </ng-template>
+    </p-dropdown>
+    <p-button 
+      [disabled]="disabledState"
+      label="Generate Content" 
+      icon="pi pi-dollar"
+      (onClick)="submitForContent()"></p-button>
   </div>
 </div>

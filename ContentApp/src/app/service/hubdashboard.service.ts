@@ -7,7 +7,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject, concat, concatMap } from 'rxjs';
+import { Observable, Subject, concat, concatMap, map } from 'rxjs';
 import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
@@ -53,6 +53,16 @@ export class HubDashboardService {
 
   private meetingsSubject = new Subject<Meeting[]>();
   meetingsObservable$ = this.meetingsSubject.asObservable();
+
+  videoDetailsObservable$ = this.contentRepo.videoDetailsSubject.asObservable().pipe(
+    map((response) => {
+      if (response.message === 'success') {
+        return response.result;
+      } else {
+        throw new Error(response.message);
+      }
+    })
+  );
 
   constructor(
     private adminRepo: AdminRepository,
@@ -104,9 +114,8 @@ export class HubDashboardService {
     aiModel: string,
     contentType: string
   ) {
-    console.log("🚀 ~ file: hubdashboard.service.ts:107 ~ HubDashboardService ~ youtubeUrl:", youtubeUrl)
+    this.contentLoadingSubject.next(true);
     let trimmedUrl = youtubeUrl.split('v=')[1];
-    console.log("🚀 ~ file: hubdashboard.service.ts:108 ~ HubDashboardService ~ trimmedUrl:", trimmedUrl)
 
     this.contentRepo.getContentFromVideo(
       title,
@@ -115,10 +124,13 @@ export class HubDashboardService {
       contentType
     ).subscribe({
       next: (response: Content) => {
+        console.log("🚀 ~ file: hubdashboard.service.ts:117 ~ HubDashboardService ~ response:", response)
+        this.contentLoadingSubject.next(false);
         this.contentSubject.next(response);
       },
       error: (error: any) => {
         console.log("🔥 ~ file: hubdashboard.service.ts:62 ~ HubDashboardService ~ error:", error)
+        this.contentLoadingSubject.next(false);
         this.errorSubject.next(error);
       }
     })

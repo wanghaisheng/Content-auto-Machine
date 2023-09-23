@@ -13,3 +13,8 @@
   width: calc(50% - 16px); /* 50% width minus margin */
   margin: 8px;
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -9,17 +9,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
-import { SelectItem } from 'primeng/api';
 import { Meeting } from 'src/app/model/source/zoomrecordings.model';
-import { Observable } from 'rxjs';
-import { NgIfContext } from '@angular/common';
+import { Observable, tap } from 'rxjs';
 import { MessengerService } from 'src/app/service/messenger.service';
+import { Content } from 'src/app/model/content/content.model';
 
 @Component({
   selector: 'app-createpanel',
   templateUrl: './createpanel.component.html',
-  styleUrls: ['./createpanel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./createpanel.component.css']
 })
 export class CreatepanelComponent implements OnInit, AfterContentInit {
 
@@ -29,14 +27,14 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   contentLoading$!: Observable<boolean>;
 
   items = [
-    { label: 'Quality', icon: 'pi pi-refresh', command: () => {this.submitForContent(); }},
-    { label: 'Speed', icon: 'pi pi-times', command: () => { this.submitForContent('gpt-3.5turbo'); }},
-    { separator: true },
-    { label: 'Learn how this works', icon: 'pi pi-question-circle', routerLink: ['/setup'] }
+    { name: 'Yoni Brand Engine™', key: 'yoni', description: 'Our secret sauce that no one else has. Tuned to your brand.' },
+    { name: 'General', key: 'gpt-4', description: 'Your typical AI generated text. Gets the job done and uses less credits.' },
+    { name: 'Speed', key: 'gpt-3.5-turbo', description: 'For those in a hurry. No need to use this if you want to grow your business.'}
 ];
 
   formGroup!: FormGroup;
   showVideoInfo: boolean = false;
+  disabledState = false;
 
   meetings: Meeting[] | undefined;
   selectedMeeting!:  Meeting;
@@ -44,10 +42,18 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   title = ''
   url = ''
 
+  detailsTitle = ''
+  detailsDescription = ''
+  detailsThumbnail = ''
+  detailsLengthMins = ''
+  detailsViewCount = ''
+
+  selectedItem = this.items[0];
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private dashboardService: HubDashboardService,
+    private hubDashboardService: HubDashboardService,
     private messengerService: MessengerService
   ) { /** */ }
 
@@ -55,20 +61,39 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     this.formGroup = this.formBuilder.group({
       title: [''],
       url: ['', Validators.pattern(/https?:\/\/.*/)],
-      meetingId: []
+      meetingId: [],
+      selectedModel: [this.items[0]]
     });
 
-    this.dashboardService.meetingsObservable$.subscribe((meetings) => {
+    this.hubDashboardService.meetingsObservable$.subscribe((meetings) => {
       this.meetings = meetings;
     })
-    
-    this.contentLoading$ = this.dashboardService.creteLoadingObservable$;
+    this.hubDashboardService.errorObservable$.subscribe((error) => {
+      this.disabledState = false;
+    });
+    this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+      this.formGroup.patchValue({ 'title': contentComplete.title })
+    })
+    this.hubDashboardService.videoDetailsObservable$.subscribe((videoDetails) => {
+      this.showVideoInfo = true;
+
+      this.detailsTitle = videoDetails.title;
+      this.detailsDescription = videoDetails.description;
+      this.detailsLengthMins = (videoDetails.lengthSeconds / 60).toFixed(2).replace('.', ':');
+      this.detailsViewCount = videoDetails.viewCount.toLocaleString();
+
+      const thumbnails = videoDetails.thumbnails;
+      if (thumbnails.length > 0) {
+        this.detailsThumbnail = thumbnails[thumbnails.length - 1].url;
+      }
+    });
+    this.contentLoading$ = this.hubDashboardService.creteLoadingObservable$;
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     if (this.createMode.includes('zoom')) {
-      this.dashboardService.getZoomMeetings();
+      this.hubDashboardService.getZoomMeetings();
     } 
   } 
 
@@ -76,20 +101,25 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  submitForContent(model: string = 'gpt-4') {
+  submitForContent() {
+    this.disabledState = true;
+    if (this.selectedItem === undefined) {
+      this.messengerService.setErrorMessage('Please pick your AI');
+      return;
+    }
     if (this.createMode.includes('zoom')) {
-      this.dashboardService.createZoomContent(
+      this.hubDashboardService.createZoomContent(
         this.formGroup.value.title,
         this.selectedMeeting.id,
-        model,
+        this.selectedItem?.key ?? '',
         this.createMode
         )
     } else if (this.createMode.includes('youtube')) {
       if (this.formGroup.valid) {
-        this.dashboardService.createYoutubeContent(
-          this.title,
-          this.url, 
-          model,
+        this.hubDashboardService.createYoutubeContent(
+          this.formGroup.value.title,
+          this.formGroup.value.url, 
+          this.selectedItem?.key ?? '',
           this.createMode
         )
       } else {
