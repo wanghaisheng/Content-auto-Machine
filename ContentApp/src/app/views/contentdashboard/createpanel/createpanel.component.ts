@@ -69,7 +69,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.meetings = meetings;
     })
     this.hubDashboardService.errorObservable$.subscribe((error) => {
-      this.disabledState = true;
+      this.disabledState = false;
     });
     this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
       this.formGroup.patchValue({ 'title': contentComplete.title })
@@ -102,6 +102,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   }
 
   submitForContent() {
+    this.disabledState = true;
     if (this.selectedItem === undefined) {
       this.messengerService.setErrorMessage('Please pick your AI');
       return;

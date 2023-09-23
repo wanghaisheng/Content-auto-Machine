@@ -34,6 +34,9 @@
             <p>Duration: {{ meeting.duration }} minutes</p>
           </div>
         </ng-template>
+        <ng-template pTemplate="footer">
+          <p style="padding-left: 6px;">Looking for older meetings? Join our premium members.</p>
+        </ng-template>
       </p-dropdown>
       <strong *ngIf="meetings?.length == 0 && disabledState">
         Oops. Something went wrong. Please refresh this page.

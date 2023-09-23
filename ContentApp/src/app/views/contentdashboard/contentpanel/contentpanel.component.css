@@ -2,3 +2,8 @@
   display: flex;
   flex-direction: row;
 }
+
+div.p-panel-content.ng-tns-c2252341775-3 {
+  background-color: rgb(26, 182, 209);
+  height: 80vh;
+}

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
+import { Panel } from 'primeng/panel';
 import { Observable, tap } from 'rxjs';
 import { Content } from 'src/app/model/content/content.model';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
@@ -11,8 +12,10 @@ import { MessengerService } from 'src/app/service/messenger.service';
   templateUrl: './contentpanel.component.html',
   styleUrls: ['./contentpanel.component.css']
 })
-export class ContentpanelComponent implements OnInit {
+export class ContentpanelComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('pnl', {static: true}) paneler!: ElementRef<Panel>;
+  
   loadingObservable$!: Observable<boolean>;
 
   formGroup!: FormGroup;
@@ -42,6 +45,9 @@ export class ContentpanelComponent implements OnInit {
     private hubDashboardService: HubDashboardService,
     private messengerService: MessengerService
   ) { /** */ }
+
+  ngAfterViewInit(): void {
+  }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
