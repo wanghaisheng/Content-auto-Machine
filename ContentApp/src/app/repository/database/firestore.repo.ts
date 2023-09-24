@@ -45,6 +45,7 @@ export const PAGE = 'page';
   providedIn: 'root',
 })
 export class FirestoreRepository {
+
   private database: Database = inject(Database);
 
   constructor(

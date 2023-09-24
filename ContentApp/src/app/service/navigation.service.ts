@@ -45,6 +45,10 @@ export class NavigationService implements OnInit {
     this.router.navigate(['settings']);
   }
 
+  navigateToLibrary() {
+    this.router.navigate(['library']);
+  }
+
   // navigateToExtractDetails(id: string = '') {
   //   if (id === '') {
   //     this.router.navigate(['maker/copycat/details']);

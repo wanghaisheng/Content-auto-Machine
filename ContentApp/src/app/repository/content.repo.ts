@@ -13,6 +13,7 @@ import { ApiResponse } from '../model/response/apiresponse.model';
 import { FireAuthRepository } from './database/fireauth.repo';
 import { Content } from '../model/content/content.model';
 import { YoutubeInfo } from '../model/source/youtubeinfo.model';
+import { FirestoreRepository } from './database/firestore.repo';
 
 const contentMachineUrl = 'http://localhost:3000/api';
 const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
@@ -26,12 +27,13 @@ export class ContentRepository {
   videoDetailsSubject = new Subject<ApiResponse<YoutubeInfo>>();
 
   constructor(
-    private fireAuthRepo: FireAuthRepository
+    private fireAuthRepo: FireAuthRepository,
+    private firestoreRepo: FirestoreRepository
   ) {
     /** */
   }
 
-  getAllContent(userUuid: string): Observable<any> {
+  getScheduledContent(userUuid: string): Observable<any> {
     return from(axios.get(`${contentMachineUrl}/posts/${userUuid}`)).pipe(
       tap((response: AxiosResponse<any, any>) => {
         console.log('Response:', response.data);
@@ -134,5 +136,8 @@ export class ContentRepository {
     //     }
     //   })
     // );
+  }
+  fetchAllUserContent(): Observable<Content[]> {
+    return this.firestoreRepo.getUserCollection<Content>('content');
   }
 }

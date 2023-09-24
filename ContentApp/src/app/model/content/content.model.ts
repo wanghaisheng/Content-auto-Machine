@@ -7,5 +7,7 @@
  */
 export interface Content {
   title: string,
-  content: string
+  content: string,
+  contentType: string,
+  id?: string,
 }

@@ -66,6 +66,8 @@ import { getFirestore } from 'firebase/firestore';
 import { TypewriterComponent } from './views/common/typewriter/typewriter.component';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
+import { TermsComponent } from './views/terms/terms.component';
+import { LibraryComponent } from './views/library/library.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -100,7 +102,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     CreatepanelComponent,
     ContentpanelComponent,
     SettingsComponent,
-    TypewriterComponent
+    TypewriterComponent,
+    TermsComponent,
+    LibraryComponent
   ],
   imports: [
     TagModule,

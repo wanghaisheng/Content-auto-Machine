@@ -149,6 +149,10 @@ export class AppComponent implements OnInit {
     this.navigationService.navigateToRoot();
   }
 
+  onFolderClick() {
+    this.navigationService.navigateToLibrary();
+  }
+
   onSettingsClick() {
     this.navigationService.navigateToSettings();
   }
