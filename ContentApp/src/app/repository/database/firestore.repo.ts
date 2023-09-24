@@ -54,6 +54,26 @@ export class FirestoreRepository {
     /** */
   }
 
+  getUserDocument<T>(dataKey: string) {
+    return this.fireAuth.getUserAuthObservable().pipe(
+      concatMap((user) => {
+        const userDocRef = ref(this.database, `${USERS_COL}/${user.uid}`);
+        return new Observable<T>((subject) => {
+          onValue(
+            userDocRef,
+            (snapshot) => {
+              subject.next(snapshot.val()[dataKey] as T);
+              subject.complete();
+            },
+            (errorObject) => {
+              subject.error(errorObject.name);
+            }
+          );
+        });
+      }
+    ));
+  }
+
   getDocumentAsUser<T>(
     collectionPath: string,
     documentKey: string
@@ -101,6 +121,24 @@ export class FirestoreRepository {
         const userDocRef = ref(
           this.database,
           `${USERS_COL}/${this.fireAuth.currentSessionUser.uid}`
+        );
+        update(userDocRef, this.sanitizeObject(data)).then(() => {
+          subject.next(data as T);
+          subject.complete();
+        });
+      }
+    });
+  }
+
+  updateCurrentUserKeyDocument<T>(dataKey: string, data: Partial<T>): Observable<T> {
+    return new Observable<T>((subject) => {
+      if (this.fireAuth.currentSessionUser == null) {
+        subject.error('No user is logged in');
+        subject.complete();
+      } else {
+        const userDocRef = ref(
+          this.database,
+          `${USERS_COL}/${this.fireAuth.currentSessionUser.uid}/${dataKey}`
         );
         update(userDocRef, this.sanitizeObject(data)).then(() => {
           subject.next(data as T);

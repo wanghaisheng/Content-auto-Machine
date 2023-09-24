@@ -6,29 +6,61 @@
 <div class="row" style="height: 80vw">
   <p-menu #menu [model]="menuItems"></p-menu>
   <p-divider layout="vertical"></p-divider>
-  
+
   <p-panel #pnl header="{{ currentView }}" class="container">
 
     <div *ngIf="currentView == 'Profile'" class="container">
       <div class="row" style="justify-content: space-between;">
-        <p>If you need assistance with anything our team will be happy to help. Please reach out to us at hello@yoniai.ai</p>
+        <p>If you need assistance with anything our team will be happy to help. Please reach out to us at
+          hello@yoniai.ai</p>
         <!-- <p-button label="Reset password" styleClass="p-button-secondary" (click)="resetPassword()"></p-button> -->
         <p-button label="Sign Out" styleClass="p-button-danger" (click)="onLogoutClick()"></p-button>
       </div>
+    </div>
+
+    <div *ngIf="currentView == 'Your AI'" class="container">
+      <form [formGroup]="aiForm">
+        <h3>Tell us about yourself and your business</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="persona" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br />
+        <h3>Who is your ideal audience?</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="audience" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br />
+        <h3>What style of content do you most resonate with?</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="style" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br />
+        <h3>What are your core values as a business/individual?</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="values" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br />
+        <h3>How would you like to be perceived by your audience?</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="voice" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br />
+        <h3>What are you mainly known for by people who follow, believe or buy from you?</h3>
+        <textarea [style]="{ 'width': '100%' }" formControlName="character" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+        <br/>
+      </form>
+      <p-footer>
+        <p-button label="Save" icon="pi pi-plus" (click)="onSaveAI()" [disabled]="isLoading" [style]="{ 'margin-top':'1rem' }" [loading]="isLoading"></p-button>
+      </p-footer>
     </div>
 
     <div *ngIf="currentView == 'Zoom'" class="container">
       <div class="column" style="padding: 0.5rem;">
         <p-tag *ngIf="zoomConnected" severity="success" value="Connected"></p-tag>
         <p>
-          Connect our app to your Zoom account and streamline your content efforts. 
+          Connect our app to your Zoom account and streamline your content efforts.
           Turn your old calls and coaching sessions or onboardings into leads.
           Get sales from your all those recordings you just have sitting around.
         </p>
         <p-footer>
-          <p-button *ngIf="!zoomConnected" label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading"></p-button>
-          <p-button *ngIf="zoomConnected" label="Reconnect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading">
-            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          <p-button *ngIf="!zoomConnected" 
+            label="Connect" 
+            icon="pi pi-plus" (click)="onZoomLogin()"
+            [disabled]="isLoading"
+            [loading]="isLoading"></p-button>
+          <p-button *ngIf="zoomConnected" label="Reconnect" icon="pi pi-plus" (click)="onZoomLogin()"
+            [disabled]="isLoading"
+            [loading]="isLoading">
           </p-button>
         </p-footer>
       </div>
@@ -37,10 +69,7 @@
 
     <div *ngIf="currentView == 'Facebook'">
       <p-tag *ngIf="facebookConnected" severity="success" value="Connected"></p-tag>
-      <p-steps 
-      [model]="faceebookAuthMenuItems" 
-      [readonly]="true" 
-      [activeIndex]="facebookAuthMenuItemIndex">
+      <p-steps [model]="faceebookAuthMenuItems" [readonly]="true" [activeIndex]="facebookAuthMenuItemIndex">
       </p-steps>
       <!-- First step conenct -->
       <div class="container" *ngIf="facebookAuthMenuItemIndex === 0">
@@ -53,36 +82,50 @@
             without any manual intervention.
           </p>
           <p-footer>
-            <button pButton type="button" label="Connect" icon="pi pi-plus" styleClass="p-button-success"
-              [disabled]="isLoading" (click)="onFacebookLogin()">
-              <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" /></button>
+            <p-button 
+              label="Connect" 
+              icon="pi pi-plus" 
+              styleClass="p-button-success"
+              [disabled]="isLoading" 
+              (click)="onFacebookLogin()" 
+              [loading]="isLoading">
+            </p-button>
           </p-footer>
         </div>
       </div>
       <!-- Second Step. Facebook Page -->
       <div class="container" *ngIf="facebookAuthMenuItemIndex == 1">
         <div class="column">
-          <p>Great. We have your facebook pages for you.  Let's start by picking just one.</p>
-          <p>If you would like to connect an Instagram account as well it is important that it is connected to the Facebook page you will select here.</p>
-          <p-listbox [options]="userFacebookPages" [(ngModel)]="userSelectedFacebookPage" optionLabel="page" [style]="{'width':'100%'}">
+          <p>Great. We have your facebook pages for you. Let's start by picking just one.</p>
+          <p>If you would like to connect an Instagram account as well it is important that it is connected to the
+            Facebook page you will select here.</p>
+          <p-listbox [options]="userFacebookPages" [(ngModel)]="userSelectedFacebookPage" optionLabel="page"
+            [style]="{'width':'100%'}">
             <ng-template let-page pTemplate="item">
               <div class="flex align-items-center gap-2">
-                  <h4>{{ page.name }}</h4>
+                <h4>{{ page.name }}</h4>
               </div>
-          </ng-template>
+            </ng-template>
           </p-listbox>
           <p-footer>
-            <button pButton type="button" label="Continue" icon="pi pi-plus" styleClass="p-button-success"
-              [disabled]="userSelectedFacebookPage == undefined" (click)="onFacebookPageSelected()">
-              <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" /></button>
+            <p-button
+              type="button" 
+              label="Continue" 
+              icon="pi pi-plus" 
+              styleClass="p-button-success"
+              [disabled]="userSelectedFacebookPage == undefined" 
+              (click)="onFacebookPageSelected()"
+              [loading]="isLoading">
+            </p-button>
           </p-footer>
         </div>
       </div>
       <!-- Third Step. Instagram Account -->
-        <div class="container" *ngIf="facebookAuthMenuItemIndex == 1">
-          <div class="column">
-            <p>Congrats your facebook is fully authenticated.  Go ahead and close this dialog and proceed with setting your content on autopilot.</p>
-          </div>
+      <div class="container" *ngIf="facebookAuthMenuItemIndex == 1">
+        <div class="column">
+          <p>Congrats your facebook is fully authenticated. Go ahead and close this dialog and proceed with setting your
+            content on autopilot.</p>
+        </div>
       </div>
     </div>
 
@@ -96,8 +139,12 @@
           and boosting your professional brand. Experience the ease of automated LinkedIn posts!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
-            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          <p-button 
+            label="Connect" 
+            icon="pi pi-plus" 
+            (click)="onLinkedinLogin()" 
+            [disabled]="isLoading"
+            [loading]="isLoading">
           </p-button>
         </p-footer>
       </div>
@@ -105,7 +152,7 @@
 
 
 
-    <div *ngIf="currentView == 'Twitter'" >
+    <div *ngIf="currentView == 'Twitter'">
       <div class="column" style="padding: 0.5rem;">
         <p-tag *ngIf="twitterConnected" severity="success" value="Connected"></p-tag>
         <p>
@@ -114,25 +161,33 @@
           Say goodbye to the hassle of manual tweeting and hello to effortless social media management!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onTwitterLogin()" [disabled]="isLoading">
-            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          <p-button 
+            label="Connect" 
+            icon="pi pi-plus" 
+            (click)="onTwitterLogin()" 
+            [disabled]="isLoading"
+            [loading]="isLoading">
           </p-button>
         </p-footer>
       </div>
     </div>
 
-    
+
     <div *ngIf="currentView == 'Email'" class="container">
       <div class="column" style="padding: 0.5rem;">
-      <!-- <p-tag *ngIf="[emailConnected]" severity="success" value="Connected"></p-tag> -->
+        <!-- <p-tag *ngIf="[emailConnected]" severity="success" value="Connected"></p-tag> -->
         <p>
           Connect our app to your LinkedIn account and streamline your professional networking efforts. With automated
           posting, you can schedule and share valuable content with your connections, establishing thought leadership
           and boosting your professional brand. Experience the ease of automated LinkedIn posts!
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onLinkedinLogin()" [disabled]="isLoading">
-            <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
+          <p-button 
+            label="Connect" 
+            icon="pi pi-plus" 
+            (click)="onLinkedinLogin()" 
+            [disabled]="isLoading"
+            [loading]="isLoading">
           </p-button>
         </p-footer>
       </div>
