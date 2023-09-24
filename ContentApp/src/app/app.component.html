@@ -13,11 +13,23 @@
   </ng-template>
   <ng-template pTemplate="end">
     <div class="horizontal-container">
-    <p-button 
-      icon="pi pi-folder"
-      styleClass="p-button-rounded p-button-outlined"
-      [style]="{'margin-right': '0.5rem'}"
+      <p-button 
+      icon="pi pi-android"
+      label="Your AI"
+      styleClass="p-button-link"
       (click)="onFolderClick()"
+      ></p-button>
+    <p-button 
+      label="Library"
+      icon="pi pi-youtube"
+      styleClass="p-button-link"
+      (click)="onFolderClick()"
+      ></p-button>
+    <p-button 
+      label="Settings"
+      icon="pi pi-cog"
+      styleClass="p-button-link"
+      (click)="onSettingsClick()"
       ></p-button>
     <p-avatar
       *ngIf="avatarUrl !== ''" 
@@ -25,7 +37,6 @@
       styleClass="mr-2" 
       size="large" 
       shape="circle"
-      (click)="onSettingsClick()"
     ></p-avatar>
     <p-avatar
       *ngIf="avatarUrl == ''" 
@@ -33,7 +44,6 @@
       styleClass="mr-2" 
       size="large" 
       shape="circle"
-      (click)="onSettingsClick()"
     ></p-avatar>
     </div>
   </ng-template>

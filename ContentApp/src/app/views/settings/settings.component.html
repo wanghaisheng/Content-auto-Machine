@@ -10,28 +10,11 @@
   <p-panel #pnl header="{{ currentView }}" class="container">
 
     <div *ngIf="currentView == 'Profile'" class="container">
-      <form [formGroup]="profileForm">
-        <div class="column" style="padding: 0.5rem;">
-          <span class="p-float-label">
-            <input type="text" id="username" pInputText formControlName="name"/>
-            <label htmlFor="username">Display Name</label>
-          </span>
-          <span class="p-float-label">
-            <input type="text" id="email" pInputText formControlName="email"/>
-            <label htmlFor="email">Email</label>
-          </span>
-          <p-button label="Update profile picture" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
-          <p-button label="Reset password" styleClass="p-button-secondary" (click)="uploadProfilePic()"></p-button>
-          <p-footer>
-            <div class="row" style="justify-content: space-between;">
-              <p-button label="Save" icon="pi pi-plus" (click)="onProfileSaved()" [disabled]="isLoading">
-                <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
-              </p-button>
-              <p-button label="Sign Out" styleClass="p-button-danger" (click)="uploadProfilePic()"></p-button>
-            </div>
-          </p-footer>
-        </div>
-      </form>
+      <div class="row" style="justify-content: space-between;">
+        <p>If you need assistance with anything our team will be happy to help. Please reach out to us at hello@yoniai.ai</p>
+        <!-- <p-button label="Reset password" styleClass="p-button-secondary" (click)="resetPassword()"></p-button> -->
+        <p-button label="Sign Out" styleClass="p-button-danger" (click)="onLogoutClick()"></p-button>
+      </div>
     </div>
 
     <div *ngIf="currentView == 'Zoom'" class="container">
@@ -43,7 +26,8 @@
           Get sales from your all those recordings you just have sitting around.
         </p>
         <p-footer>
-          <p-button label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading">
+          <p-button *ngIf="!zoomConnected" label="Connect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading"></p-button>
+          <p-button *ngIf="zoomConnected" label="Reconnect" icon="pi pi-plus" (click)="onZoomLogin()" [disabled]="isLoading">
             <p-progressSpinner *ngIf="isLoading" alt="loading" styleClass="w-2rem h-2rem" />
           </p-button>
         </p-footer>

@@ -14,7 +14,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit{
   
@@ -60,15 +59,7 @@ export class SettingsComponent implements AfterViewInit{
             this.isBlocked = false;
             this.currentView = 'Profile';
           },
-        },
-        {
-          label: 'Your AI',
-          icon: 'pi pi-android',
-          command: () => {
-            this.isBlocked = false;
-            this.currentView = 'Your AI';
-          },
-        },
+        }
       ],
     },
     {
@@ -173,6 +164,7 @@ export class SettingsComponent implements AfterViewInit{
     });
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
+        console.log("🚀 ~ file: settings.component.ts:176 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
         accounts.forEach((account) => {
           this.zoomConnected = account['zoom'];
@@ -292,15 +284,7 @@ export class SettingsComponent implements AfterViewInit{
     });
   }
 
-  uploadProfilePic() {
-    throw new Error('Method not implemented.');
-  }
-
-  updatePassword() {
-
-  }
-
-  onProfileSaved() {
+  resetPassword() {
 
   }
 }
