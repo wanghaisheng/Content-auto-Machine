@@ -25,6 +25,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+
   loggedInObserver$?: Observable<boolean>;
 
   breadcrumbData: Subject<MenuItem[]> = new Subject<MenuItem[]>();
@@ -155,5 +156,9 @@ export class AppComponent implements OnInit {
 
   onSettingsClick() {
     this.navigationService.navigateToSettings();
+  }
+
+  onTermsClick(type: string) {
+    this.navigationService.navigateToTerms(type);
   }
 }

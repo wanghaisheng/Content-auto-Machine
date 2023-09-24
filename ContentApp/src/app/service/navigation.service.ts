@@ -41,6 +41,10 @@ export class NavigationService implements OnInit {
     this.router.navigate(['dashboard', type]);
   }
 
+  navigateToTerms(type: string) {
+    this.router.navigate(['terms', type]);
+  }
+
   navigateToSettings() {
     this.router.navigate(['settings']);
   }
