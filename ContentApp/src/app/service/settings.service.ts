@@ -41,7 +41,7 @@ export class SettingsService {
     character: string,
   ) {
     this.loadingSubject.next(true);
-    return this.firestoreRepo.updateCurrentUserKeyDocument<Persona>(
+    return this.firestoreRepo.updateCurrentUserDocumentObj<Persona>(
       PERSONA_KEY,
       {
         persona: persona,
@@ -72,16 +72,14 @@ export class SettingsService {
 
   getPersonaSettings() {
     this.loadingSubject.next(true);
-    this.firestoreRepo.getUserDocument<Persona>(
+    this.firestoreRepo.getDocumentAsUser<Persona>(
       PERSONA_KEY
     ).subscribe({
       next: (response) => {
         if (response !== undefined) {
           this.loadingSubject.next(false);
           this.personaSubject.next(response);
-        } else {
-          this.errorSubject.next('Error getting persona settings');
-        }
+        } 
       },
       error: (error) => {
         this.loadingSubject.next(false);

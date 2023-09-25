@@ -8,6 +8,7 @@
 
 import { Injectable } from '@angular/core';
 import {
+  getAdditionalUserInfo,
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
@@ -108,11 +109,9 @@ export class SocialAuthService {
           const user = result.user;
           const sessionUser = {
             ...user,
-            google_credentials: credential,
+            google_credentials: credential
           };
           subscriber.next(sessionUser);
-          // IdP data available using getAdditionalUserInfo(result)
-          // ...
         })
         .catch((error) => {
           // Handle Errors here.
@@ -123,7 +122,7 @@ export class SocialAuthService {
           // The AuthCredential type that was used.
           const credential = GoogleAuthProvider.credentialFromError(error);
 
-          subscriber.error(credential);
+          subscriber.error(errorMessage);
           // ...
         });
     });
@@ -339,9 +338,9 @@ export class SocialAuthService {
   // }
 
   isUserLoggedIn(): Observable<boolean> {
-    return this.fireAuthRepo.getUserAuthObservable().pipe(
+    return this.fireAuthRepo.user$.pipe(
       map((user) => {
-        return user !== undefined;
+        return user !== undefined && user !== null ? true : false;
       })
     );
   }

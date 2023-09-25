@@ -210,4 +210,16 @@ export class HubDashboardService {
       })
     )
   }
+
+  getOnboardingStatus(): Observable<boolean> {
+    return this.adminRepo.getCompleteCurrentUser().pipe(
+      map((response) => {
+        return response['isFirstTimeUser'] ?? false;
+      })
+    );
+  }
+
+  updateOnboardingStatus(hasCompleted: boolean) {
+    this.adminRepo.updateOnboardingStatus(hasCompleted);
+  }
 }

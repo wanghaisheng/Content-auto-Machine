@@ -8,13 +8,14 @@
 
 import { Injectable } from '@angular/core';
 import { NavigationService } from '../navigation.service';
-import { Observable, Subject, catchError, map, of } from 'rxjs';
+import { Observable, Subject, catchError, concatMap, map, of } from 'rxjs';
 import { FirebaseUser } from '../../model/user/user.model';
 import { FireAuthRepository } from '../../repository/database/fireauth.repo';
 import { User } from '@angular/fire/auth';
 import { FirestoreRepository, PURCHASED_USERS_COL, USERS_COL } from 'src/app/repository/database/firestore.repo';
 import { DocumentReference } from '@angular/fire/firestore';
 import { SocialAuthService } from './socialauth.service';
+import { PurchasedUser } from 'src/app/model/user/purchasedUser.model';
 
 @Injectable({
   providedIn: 'root',
@@ -35,36 +36,16 @@ export class SessionService {
     });
   }
 
-  checkForAuthLoginRedirect() {
-    if (this.fireAuthRepo.currentSessionUser !== null) {
-      this.navigationService.navigateToRoot();
-      return;
-    }
-
-    this.fireAuthRepo.getUserAuthObservable().subscribe({
-      next: (user) => {
-        if (user !== null) {
-          // this.navService.navigateToList();
-        }
-      },
-      error: (error) => {
-        console.log('🔥' + error);
-        this.errorSubject.next(error);
-      },
-    });
-  }
-
   checkForAuthLogoutRedirect() {
-    if (this.fireAuthRepo.currentSessionUser === null) {
-      console.log(
-        '🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:',
-        this.fireAuthRepo.currentSessionUser
-      );
-      // this.navService.navigateToLander();
-      return;
-    } else {
-      // this.navService.navigateToList();
-    }
+    this.fireAuthRepo.getUserAuthObservable().subscribe({
+      next: (user) =>{
+        if (user === null) {
+          this.navigationService.navigateToLogin();
+        } else {
+          this.navigationService.navigateToRoot();
+        }
+      }
+    });
   }
 
   verifyEmailWithGoogle() {
@@ -84,7 +65,7 @@ export class SessionService {
   }
 
   verifyPurchaseEmail(email: string): Observable<boolean> {
-    return this.firestoreRepo.getUserInfoAsDocument(PURCHASED_USERS_COL, email).pipe(
+    return this.firestoreRepo.getDocument(PURCHASED_USERS_COL, email).pipe(
       map((doc) => {
         if (doc !== undefined && doc !== null) {
           console.log("🚀 ~ file: session.service.ts:89 ~ SessionService ~ map ~ doc:", doc)
@@ -111,18 +92,32 @@ export class SessionService {
     return this.fireAuthRepo.getUserAuthObservable();
   }
 
-  verifyEmail(authUser: User) {
+  verifyEmail(authUser: any) {
+    console.log("🚀 ~ file: session.service.ts:109 ~ SessionService ~ verifyEmail ~ authUser:", authUser)
     const email = authUser.email;
-    // const isFirstTimeUser = signinSuccessData.authResult.additionalUserInfo?.isNewUser;
 
     if (email !== undefined && email !== '') {
-      this.firestoreRepo.getUserInfoAsDocument(PURCHASED_USERS_COL, email ?? '').subscribe({
-        next: (userExists) => {
-          if (userExists) {
+      this.firestoreRepo.getDocument<PurchasedUser>(PURCHASED_USERS_COL, email ?? '').subscribe({
+        next: (user) => {
+          if (user !== undefined && user !== null) {
+            console.log("🚀 ~ file: session.service.ts:144 ~ SessionService ~ setUserData ~ user:", user)
+            const userData: FirebaseUser = {
+              uid: authUser.uid ?? '',
+              email: authUser.email ?? '',
+              displayName: authUser.displayName ?? '',
+              photoURL: authUser.photoURL ?? '',
+              emailVerified: authUser.emailVerified ?? '',
+              lastLogin: authUser.reloadUserInfo.lastLoginAt,
+              creationTime: authUser.reloadUserInfo.createdAt,
+              lastRefreshAt: authUser.reloadUserInfo.lastRefreshAt,
+              idToken: authUser.google_credentials.idToken,
+              isFirstTimeUser: true,
+            };
+
             this.setUserData({
-              ...authUser,
-              // isVirgin: isFirstTimeUser,
+              ...userData
             });
+
             this.navigationService.navigateToRoot();
           } else {
             this.fireAuthRepo.signOut();
@@ -148,30 +143,19 @@ export class SessionService {
    * sign up with username/password and sign in with social auth
    * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service
    */
-  async setUserData(user: any) {
-    const userData = {
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-      lastLogin: user.reloadUserInfo.lastLoginAt,
-      creationTime: user.reloadUserInfo.createdAt,
-      lastRefreshAt: user.reloadUserInfo.lastRefreshAt,
-      idToken: user.google_credentials.idToken,
-    };
-
+  async setUserData(user: FirebaseUser) {
     // Check if the user document exists
-    this.firestoreRepo.getUserInfoAsDocument(USERS_COL, user.uid).subscribe((doc) => {
+    this.firestoreRepo.getDocument(USERS_COL, user.uid ?? '').subscribe((doc) => {
       if (doc !== undefined && doc !== null) {
         console.log("🚀 ~ Updating user")
         // User exists, update the existing user data
         // userData.isVirgin = false;
-        this.firestoreRepo.updateCurrentUserDocument(userData);
+        this.firestoreRepo.updateCurrentUserDocument(user);
       } else {
         console.log("🚀 ~ Creating new user")
         console.log(user)
         // User doesn't exist, create a new user document
-        this.firestoreRepo.createUserDocument(USERS_COL, userData, user.uid);
+        this.firestoreRepo.createUserDocument(USERS_COL, user, user.uid);
       }
     });
   }

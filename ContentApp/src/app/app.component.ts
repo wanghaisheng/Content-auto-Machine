@@ -16,7 +16,7 @@ import {
   MessageService,
 } from 'primeng/api';
 import { NavigationEnd, Router } from '@angular/router';
-import { Observable, Subject, filter } from 'rxjs';
+import { Observable, Subject, filter, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -111,7 +111,7 @@ export class AppComponent implements OnInit {
     });
     this.messengerService.infoMessageObservable$.subscribe((message) => {
       this.messageService.add({
-        severity: 'info',
+        severity: 'success',
         summary: 'Confirmed',
         detail: message,
       });
@@ -123,7 +123,7 @@ export class AppComponent implements OnInit {
     url: string = '',
     breadcrumbs: any[] = []
   ): any[] {
-    const label = route.routeConfig ? route.routeConfig.data!['breadcrumb'] : '';
+    const label = route.routeConfig?.data?.['breadcrumb'] ?? '';
     const path = route.routeConfig ? route.routeConfig.path : '';
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {

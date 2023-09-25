@@ -11,7 +11,7 @@
       <img src="../assets/images/yoni_logo.png" height="50" class="mr-2" />
     </div>
   </ng-template>
-  <ng-template pTemplate="end">
+  <ng-template  pTemplate="end">
     <div class="horizontal-container">
       <p-button 
       icon="pi pi-android"
@@ -31,7 +31,7 @@
       styleClass="p-button-link"
       (click)="onSettingsClick()"
       ></p-button>
-    <p-avatar
+    <!-- <p-avatar
       *ngIf="avatarUrl !== ''" 
       [image]="avatarUrl" 
       styleClass="mr-2" 
@@ -44,7 +44,7 @@
       styleClass="mr-2" 
       size="large" 
       shape="circle"
-    ></p-avatar>
+    ></p-avatar> -->
     </div>
   </ng-template>
 </p-menubar>

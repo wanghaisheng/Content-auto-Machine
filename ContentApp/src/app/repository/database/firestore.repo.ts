@@ -54,7 +54,7 @@ export class FirestoreRepository {
     /** */
   }
 
-  getUserDocument<T>(dataKey: string) {
+  getDocumentAsUser<T>(dataKey: string) {
     return this.fireAuth.getUserAuthObservable().pipe(
       concatMap((user) => {
         const userDocRef = ref(this.database, `${USERS_COL}/${user.uid}`);
@@ -74,7 +74,7 @@ export class FirestoreRepository {
     ));
   }
 
-  getDocumentAsUser<T>(
+  getCollectionDocumentAsUser<T>(
     collectionPath: string,
     documentKey: string
   ): Observable<T> {
@@ -130,7 +130,7 @@ export class FirestoreRepository {
     });
   }
 
-  updateCurrentUserKeyDocument<T>(dataKey: string, data: Partial<T>): Observable<T> {
+  updateCurrentUserDocumentObj<T>(dataKey: string, data: Partial<T>): Observable<T> {
     return new Observable<T>((subject) => {
       if (this.fireAuth.currentSessionUser == null) {
         subject.error('No user is logged in');
@@ -148,13 +148,33 @@ export class FirestoreRepository {
     });
   }
 
-  getUserInfoAsDocument(
+  getCurrentUserAsDocument<T>(): Observable<T> {
+    return this.fireAuth.getUserAuthObservable().pipe(
+      concatMap((user) => {
+        const userDocRef = ref(this.database, `${USERS_COL}/${user.uid}`);
+        return new Observable<T>((subject) => {
+          onValue(
+            userDocRef,
+            (snapshot) => {
+              subject.next(snapshot.val() as T);
+              subject.complete();
+            },
+            (errorObject) => {
+              subject.error(errorObject.name);
+            }
+          );
+        });
+      }
+    ));
+  }
+
+  getDocument<T>(
     collectionPath: string,
     documentKey: string
-  ): Observable<any> {
+  ): Observable<T> {
     const newKey = documentKey.replace(/\./g, '_');
     const userDocRef = ref(this.database, `${collectionPath}/${newKey}`);
-    return new Observable<any>((subject) => {
+    return new Observable<T>((subject) => {
       onValue(
         userDocRef,
         (snapshot) => {

@@ -11,6 +11,9 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
 import { ApiResponse } from '../model/response/apiresponse.model';
 import { Generators } from '../model/admin/generators.model';
+import { FireAuthRepository } from './database/fireauth.repo';
+import { FirestoreRepository } from './database/firestore.repo';
+import { FirebaseUser } from '../model/user/user.model';
 
 const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
 
@@ -18,6 +21,11 @@ const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
   providedIn: 'root',
 })
 export class AdminRepository {
+
+  constructor(
+    private fireAuthRepo: FireAuthRepository,
+    private fireStoreRepo: FirestoreRepository
+  ) { /** */ }
 
   getGenerators(): Observable<Generators> {
     const config: AxiosRequestConfig = {
@@ -38,5 +46,22 @@ export class AdminRepository {
         }
       })
     );
+  }
+
+  getCompleteCurrentUser() {
+    return this.fireStoreRepo.getCurrentUserAsDocument<FirebaseUser>();
+  }
+
+  updateOnboardingStatus(hasCompleted: boolean) {
+    this.fireStoreRepo.updateCurrentUserDocument({
+      isFirstTimeUser: hasCompleted,
+    }).subscribe({
+      next: (response) => {
+        console.log('🚀 ~ file: admin.repo.ts:76 ~ AdminRepository ~ next ~ response', response);
+      },
+      error: (error) => {
+        console.log('🔥 ' + error);
+      },
+    });
   }
 }

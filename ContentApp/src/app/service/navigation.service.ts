@@ -17,7 +17,6 @@ export class NavigationService implements OnInit {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private fireAuthRepo: FireAuthRepository
   ) {
     /** */

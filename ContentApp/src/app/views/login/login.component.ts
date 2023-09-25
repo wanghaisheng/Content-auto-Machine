@@ -14,7 +14,7 @@ import { SessionService } from '../../service/user/session.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, AfterContentInit {
+export class LoginComponent implements OnInit {
 
   errorMessage = '';
   hasError = false;
@@ -38,23 +38,8 @@ export class LoginComponent implements OnInit, AfterContentInit {
     });
   }
 
-  ngAfterContentInit(): void {
-    // this.sessionService.checkForAuthLoginRedirect();
-  }
-
   onSubmit() {
-    // if (this.loginForm.valid) {
-    //   // Perform login actions. Call to service for API interaction
-    // }
     this.sessionService.verifyEmailWithGoogle();
-  }
-
-  get f() {
-    return this.loginForm.controls;
-  }
-
-  goToHome() {
-    this.sessionService.checkForAuthLoginRedirect();
   }
 
   uiShownCallback() {
