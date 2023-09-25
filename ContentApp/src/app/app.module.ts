@@ -68,6 +68,7 @@ import { MenuModule } from 'primeng/menu';
 import { TermsComponent } from './views/terms/terms.component';
 import { LibraryComponent } from './views/library/library.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { PersonaComponent } from './views/common/persona/persona.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -104,7 +105,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     SettingsComponent,
     TypewriterComponent,
     TermsComponent,
-    LibraryComponent
+    LibraryComponent,
+    PersonaComponent
   ],
   imports: [
     NgxExtendedPdfViewerModule,

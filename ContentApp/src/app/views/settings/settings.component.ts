@@ -118,7 +118,6 @@ export class SettingsComponent implements AfterViewInit{
   ];
 
   profileForm: FormGroup;
-  aiForm: FormGroup;
 
   @ViewChild('pnl', {static: false}) paneler?: ElementRef<Panel>;
   @ViewChild('menu', {static: false}) menu?: Menu;
@@ -129,20 +128,11 @@ export class SettingsComponent implements AfterViewInit{
     private navigationService: NavigationService,
     private socialAuthService: SocialAuthService,
     private messageService: MessageService,
-    private formBuilder: FormBuilder,
-    private settingsService: SettingsService,
+    private formBuilder: FormBuilder
   ) {
     this.profileForm = this.formBuilder.group({
       name: [''],
       email: [''],
-    });
-    this.aiForm = this.formBuilder.group({
-      persona: [''],
-      audience: [''],
-      style: [''],
-      values: [''],
-      voice: [''],
-      character: [''],
     });
   }
 
@@ -236,38 +226,6 @@ export class SettingsComponent implements AfterViewInit{
     this.socialAuthService.getMediumAuthObservable$.subscribe((isConnected) => {
       this.mediumConnected = isConnected;
     });
-    this.settingsService.errorObservable$.subscribe({
-      next: (error) => {
-        this.messageService.add({
-          severity: 'danger',
-          summary: 'Opps! Sorry about that.',
-          detail: `${error}`,
-        });
-      }
-    });
-    this.settingsService.loadingObservable$.subscribe({
-      next: (isLoading) => {
-        this.isLoading = isLoading;
-      }
-    });
-    this.settingsService.personaObservable$.subscribe({
-      next: (persona) => {
-        if (persona !== undefined) {
-          this.aiForm.patchValue({
-            persona: persona.persona,
-            audience: persona.audience,
-            style: persona.style,
-            values: persona.values,
-            voice: persona.voice,
-            character: persona.character,
-          });
-        } else {
-          this.messengerService.setErrorMessage('There was an error saving your AI persona.');
-        }
-      }
-    });
-    // KICKOFF COMMANDS
-    this.settingsService.getPersonaSettings();
   }
 
   onFacebookLogin() {
@@ -333,22 +291,5 @@ export class SettingsComponent implements AfterViewInit{
       },
       reject: (type: any) => { /** */ },
     });
-  }
-
-  onSaveAI() {
-    this.settingsService.storePersonaSettings(
-      this.aiForm.value.persona,
-      this.aiForm.value.audience,
-      this.aiForm.value.style,
-      this.aiForm.value.values,
-      this.aiForm.value.voice, 
-      this.aiForm.value.character,
-    ).subscribe({
-      next:(response) => {
-        if (response !== undefined) {
-          this.messengerService.setInfoMessage('AI Persona settings saved!');
-        }
-      }
-    })
   }
 }
