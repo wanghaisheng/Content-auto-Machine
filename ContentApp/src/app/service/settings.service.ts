@@ -71,7 +71,6 @@ export class SettingsService {
   }
 
   getPersonaSettings() {
-    this.loadingSubject.next(true);
     this.firestoreRepo.getDocumentAsUser<Persona>(
       PERSONA_KEY
     ).subscribe({

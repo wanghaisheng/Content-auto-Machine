@@ -45,7 +45,6 @@ export class AnythinghubComponent implements OnInit {
   ngOnInit(): void {
     this.hubDashboardService.getOnboardingStatus().subscribe({
       next: (showOnboarding) => {
-        console.log("🚀 ~ file: anythinghub.component.ts:48 ~ AnythinghubComponent ~ this.hubDashboardService.getOnboardingStatus ~ showOnboarding:", showOnboarding)
         this.promptOnboarding = showOnboarding;
       }
     });
@@ -66,7 +65,6 @@ export class AnythinghubComponent implements OnInit {
     this.hubDashboardService.getHubGenerators();
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: ((accounts) => {
-        console.log("🚀 ~ file: anythinghub.component.ts:69 ~ AnythinghubComponent ~ ngOnInit ~ accounts:", accounts)
         accounts.forEach((account) => {
           this.promptForZoom = !account['zoom'];
         });

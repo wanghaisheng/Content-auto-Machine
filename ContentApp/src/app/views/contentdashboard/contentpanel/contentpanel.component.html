@@ -15,9 +15,9 @@
     </form>
   </ng-template>
 
-  <p-scrollPanel *ngIf="content != '' && contentLoading == false" [style]="{ width: '100%', height: '100%' }">'
-    <app-typewriter style="height: 100%" textToShow="{{ content }}"></app-typewriter>
-  </p-scrollPanel>
+  <p *ngIf="content != '' && contentLoading == false" [style]="{ width: '100%', height: '100%' }">'
+     <app-typewriter style="height: 100%" textToShow="{{ content }}"></app-typewriter> 
+  </p>
 
   <strong style="height: 1000px;" *ngIf="content == '' && contentLoading == false">
     <app-typewriter

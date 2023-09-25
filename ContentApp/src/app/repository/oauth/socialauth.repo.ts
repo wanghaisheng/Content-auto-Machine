@@ -175,8 +175,6 @@ export class SocialAuthRepository {
     const requests: Observable<{ [key: string]: boolean }>[] = [];
     return this.fireAuthRepo.getUserAuthObservable().pipe(
       map((user) => {
-        console.log("🚀 ~ file: socialauth.repo.ts:178 ~ SocialAuthRepository ~ map ~ user:", user)
-        // let socialAccts: { [key: string]: boolean } = {};
         Object.values(PostingPlatform).forEach((platform) => {
           const request: Observable<{ [key: string]: boolean }> = this.firestoreRepo.confirmUserCollectionChild(
             user.uid,

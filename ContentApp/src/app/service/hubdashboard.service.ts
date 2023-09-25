@@ -97,6 +97,7 @@ export class HubDashboardService {
       contentType
     ).subscribe({
       next: (response: Content) => {
+        console.log("🚀 ~ file: hubdashboard.service.ts:100 ~ HubDashboardService ~ response:", response)
         this.contentLoadingSubject.next(false);
         this.contentSubject.next(response);
       },

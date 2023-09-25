@@ -173,7 +173,6 @@ export class SettingsComponent implements AfterViewInit{
     });
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
-        console.log("🚀 ~ file: settings.component.ts:176 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
         accounts.forEach((account) => {
           this.zoomConnected = account['zoom'];

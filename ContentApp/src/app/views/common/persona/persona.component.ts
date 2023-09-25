@@ -16,8 +16,7 @@ export class PersonaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private messengerService: MessengerService,
-    private settingsService: SettingsService,
-    private changeDetectorRef: ChangeDetectorRef
+    private settingsService: SettingsService
   ) {
     this.aiForm = this.fb.group({
       persona: [''],
@@ -36,8 +35,8 @@ export class PersonaComponent implements OnInit {
       }
     });
     this.settingsService.loadingObservable$.subscribe({
-      next: (isLoading) => {
-        this.isLoading = isLoading;
+      next: (loadingState) => {
+        this.isLoading = loadingState;
       }
     });
     this.settingsService.personaObservable$.subscribe({

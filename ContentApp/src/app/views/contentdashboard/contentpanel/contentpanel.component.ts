@@ -61,6 +61,7 @@ export class ContentpanelComponent implements OnInit, AfterViewInit {
       }
     });
     this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
+      console.log("🚀 ~ file: contentpanel.component.ts:64 ~ ContentpanelComponent ~ this.hubDashboardService.contentObservable$.subscribe ~ contentComplete:", contentComplete)
       this.content = contentComplete.content;
     });
     this.hubDashboardService.errorObservable$.subscribe({
