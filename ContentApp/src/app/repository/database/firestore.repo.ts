@@ -45,6 +45,7 @@ export const PAGE = 'page';
   providedIn: 'root',
 })
 export class FirestoreRepository {
+
   private database: Database = inject(Database);
 
   constructor(
@@ -53,7 +54,27 @@ export class FirestoreRepository {
     /** */
   }
 
-  getDocumentAsUser<T>(
+  getDocumentAsUser<T>(dataKey: string) {
+    return this.fireAuth.getUserAuthObservable().pipe(
+      concatMap((user) => {
+        const userDocRef = ref(this.database, `${USERS_COL}/${user.uid}`);
+        return new Observable<T>((subject) => {
+          onValue(
+            userDocRef,
+            (snapshot) => {
+              subject.next(snapshot.val()[dataKey] as T);
+              subject.complete();
+            },
+            (errorObject) => {
+              subject.error(errorObject.name);
+            }
+          );
+        });
+      }
+    ));
+  }
+
+  getCollectionDocumentAsUser<T>(
     collectionPath: string,
     documentKey: string
   ): Observable<T> {
@@ -109,13 +130,51 @@ export class FirestoreRepository {
     });
   }
 
-  getUserInfoAsDocument(
+  updateCurrentUserDocumentObj<T>(dataKey: string, data: Partial<T>): Observable<T> {
+    return new Observable<T>((subject) => {
+      if (this.fireAuth.currentSessionUser == null) {
+        subject.error('No user is logged in');
+        subject.complete();
+      } else {
+        const userDocRef = ref(
+          this.database,
+          `${USERS_COL}/${this.fireAuth.currentSessionUser.uid}/${dataKey}`
+        );
+        update(userDocRef, this.sanitizeObject(data)).then(() => {
+          subject.next(data as T);
+          subject.complete();
+        });
+      }
+    });
+  }
+
+  getCurrentUserAsDocument<T>(): Observable<T> {
+    return this.fireAuth.getUserAuthObservable().pipe(
+      concatMap((user) => {
+        const userDocRef = ref(this.database, `${USERS_COL}/${user.uid}`);
+        return new Observable<T>((subject) => {
+          onValue(
+            userDocRef,
+            (snapshot) => {
+              subject.next(snapshot.val() as T);
+              subject.complete();
+            },
+            (errorObject) => {
+              subject.error(errorObject.name);
+            }
+          );
+        });
+      }
+    ));
+  }
+
+  getDocument<T>(
     collectionPath: string,
     documentKey: string
-  ): Observable<any> {
+  ): Observable<T> {
     const newKey = documentKey.replace(/\./g, '_');
     const userDocRef = ref(this.database, `${collectionPath}/${newKey}`);
-    return new Observable<any>((subject) => {
+    return new Observable<T>((subject) => {
       onValue(
         userDocRef,
         (snapshot) => {

@@ -19,11 +19,8 @@ import { SocialAccount } from 'src/app/model/user/socialaccount.model';
 import { FacebookRepository } from '../apis/facebook.repo';
 import { FacebookPage } from 'src/app/model/content/facebookpage.model';
 import {
-  HANDLE,
   PLATFORM,
   SCOPE,
-  USER_ID,
-  USERS_COL,
   PAGE
 } from '../../repository/database/firestore.repo';
 import { YoutubeAuthRepository } from './youtubeauth.repo';
@@ -137,7 +134,7 @@ export class SocialAuthRepository {
 
   getFacebookPages(): Observable<FacebookPage[]> {
     return this.firestoreRepo
-      .getDocumentAsUser<SocialAccount>(
+      .getCollectionDocumentAsUser<SocialAccount>(
         this.SOCIAL_ACCTS_DOC,
         PostingPlatform.FACEBOOK
       )
@@ -178,6 +175,7 @@ export class SocialAuthRepository {
     const requests: Observable<{ [key: string]: boolean }>[] = [];
     return this.fireAuthRepo.getUserAuthObservable().pipe(
       map((user) => {
+        console.log("🚀 ~ file: socialauth.repo.ts:178 ~ SocialAuthRepository ~ map ~ user:", user)
         // let socialAccts: { [key: string]: boolean } = {};
         Object.values(PostingPlatform).forEach((platform) => {
           const request: Observable<{ [key: string]: boolean }> = this.firestoreRepo.confirmUserCollectionChild(

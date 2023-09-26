@@ -1,15 +1,37 @@
-<p-card class="container" *ngIf="promptForZoom" [style]="{ 'margin-bottom': '1rem', 'background-color': '#D32F2F'}">
-  <p>You are not authenticated with Zoom. Click to connect your Zoom account to get started turning meetings into your own personal brand.</p>
-  <p-button label="Connect Zoom" (click)="onZoomConnectClick()"></p-button>
-</p-card>
+<p-accordion  *ngIf="promptForZoom" [style]="{ 'margin-bottom': '1rem', 'background-color': '#D32F2F', 'border-radius': '10px'}">
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center">
+          <i class="pi pi-exclamation-circle mr-2" style="margin-right: 8px"></i>
+          <span class="vertical-align-middle">Turn Calls & Meetings Into Content</span>
+      </div>
+  </ng-template>
+    <p>You are not authenticated with Zoom. Click to connect your Zoom account to get started turning meetings into your own personal brand.</p>
+    <p-button label="Connect Zoom" (click)="onZoomConnectClick()"></p-button>
+  </p-accordionTab>
+</p-accordion>
+<p-accordion  *ngIf="promptOnboarding" [style]="{ 'margin-bottom': '1rem', 'background-color': '#D32F2F', 'border-radius': '10px'}">
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center">
+          <i class="pi pi-exclamation-circle mr-2" style="margin-right: 8px"></i>
+          <span class="vertical-align-middle">Auto Post That Sounds Just Like You</span>
+      </div>
+  </ng-template>
+    <p>Tell us a little about who you are and you business and we'll train our AI to speak in your individual style about your unique business</p>
+    <p-button label="Personalize Your AI" (click)="onSettingsClick()"></p-button>
+  </p-accordionTab>
+</p-accordion>
 
 <div *ngFor="let root of generatorsList" class="grid-container">
   <h1>{{ root.header }}</h1>
   <div class="grid">
-    <p-card (click)="itemClick(item.type)" *ngFor="let item of root.items" class="split-card" header="{{ item.title }}" [style]="{ background: '#1f2937', margin: '8px' }">
+    <p-card 
+      *ngFor="let item of root.items"
+      (click)="itemClick(item.type)"  
+      class="split-card" header="{{ item.title }}" 
+      [style]="{ background: '#1f2937', margin: '8px' }">
       <p class="m-0">{{ item.description }}</p>
     </p-card>
   </div>
 </div>
-
-

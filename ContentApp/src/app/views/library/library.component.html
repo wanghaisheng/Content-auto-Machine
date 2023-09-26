@@ -1,0 +1,16 @@
+
+<div *ngIf="( contentLoader$ | async )" class="flex">
+  <div style="flex: 1">
+    <p-skeleton width="100%" height='8rem'styleClass="mb-2"></p-skeleton>
+    <br />
+    <p-skeleton width="100%" height='8rem'styleClass="mb-2"></p-skeleton>
+    <br />
+    <p-skeleton width="100%" height='8rem'styleClass="mb-2"></p-skeleton>
+    <br />
+  </div>
+</div>
+<p-accordion *ngIf="contents.length > 0" [activeIndex]="0">
+  <p-accordionTab *ngFor="let item of contents" header="{{ item.title }}">
+      <p>{{ item.content }}</p>
+  </p-accordionTab>
+</p-accordion>

@@ -7,7 +7,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject, concat, concatMap, map } from 'rxjs';
+import { Observable, Subject, catchError, concat, concatMap, map, tap } from 'rxjs';
 import { ContentRepository } from '../repository/content.repo';
 import { Content } from '../model/content/content.model';
 import { AdminRepository } from '../repository/admin.repo';
@@ -67,7 +67,7 @@ export class HubDashboardService {
   constructor(
     private adminRepo: AdminRepository,
     private contentRepo: ContentRepository,
-    private zoomRepo: ZoomRepository
+    private zoomRepo: ZoomRepository,
   ) {
     /** */
   }
@@ -194,5 +194,32 @@ export class HubDashboardService {
         this.errorSubject.next(error.message)
       }
     })
+  }
+
+  getContents(): Observable<Content[]> {
+    this.contentLoadingSubject.next(true);
+    return this.contentRepo.fetchAllUserContent().pipe(
+      map((response) => {
+        this.contentLoadingSubject.next(false);
+        return Object.values(response)
+      }),
+      catchError((error) => {
+        this.contentLoadingSubject.next(false);
+        this.errorSubject.next(error.message);
+        return [];
+      })
+    )
+  }
+
+  getOnboardingStatus(): Observable<boolean> {
+    return this.adminRepo.getCompleteCurrentUser().pipe(
+      map((response) => {
+        return response['isFirstTimeUser'] ?? false;
+      })
+    );
+  }
+
+  updateOnboardingStatus(hasCompleted: boolean) {
+    this.adminRepo.updateOnboardingStatus(hasCompleted);
   }
 }

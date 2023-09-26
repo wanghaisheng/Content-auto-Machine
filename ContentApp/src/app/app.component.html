@@ -1,31 +1,42 @@
-<!-- Scripts -->
+<!-- scripts -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/platform.js?onload=onGoogleLibraryLoad" async defer></script>
 <html lang="en">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<!-- menu bar -->
+<!-- scripts -->
+<!-- navbar -->
 <p-menubar *ngIf="( loggedInObserver$ | async )">
   <ng-template pTemplate="start">
     <div class="horizontal-container">
       <img src="../assets/images/yoni_logo.png" height="50" class="mr-2" />
     </div>
   </ng-template>
-  <ng-template pTemplate="end">
+  <ng-template  pTemplate="end">
     <div class="horizontal-container">
-    <p-button 
-      icon="pi pi-folder"
-      styleClass="p-button-rounded p-button-outlined"
-      [style]="{'margin-right': '0.5rem'}"
+      <p-button 
+      icon="pi pi-android"
+      label="Your AI"
+      styleClass="p-button-link"
       (click)="onSettingsClick()"
       ></p-button>
-    <p-avatar
+    <p-button 
+      label="Library"
+      icon="pi pi-youtube"
+      styleClass="p-button-link"
+      (click)="onFolderClick()"
+      ></p-button>
+    <p-button 
+      label="Settings"
+      icon="pi pi-cog"
+      styleClass="p-button-link"
+      (click)="onSettingsClick()"
+      ></p-button>
+    <!-- <p-avatar
       *ngIf="avatarUrl !== ''" 
       [image]="avatarUrl" 
       styleClass="mr-2" 
       size="large" 
       shape="circle"
-      (click)="onSettingsClick()"
     ></p-avatar>
     <p-avatar
       *ngIf="avatarUrl == ''" 
@@ -33,8 +44,7 @@
       styleClass="mr-2" 
       size="large" 
       shape="circle"
-      (click)="onSettingsClick()"
-    ></p-avatar>
+    ></p-avatar> -->
     </div>
   </ng-template>
 </p-menubar>
@@ -45,73 +55,22 @@
   [home]="home"
   [style]="{ 'background-color': 'transparent', 'border': 'none' }"
 ></p-breadcrumb>
-<!-- NAVBAR -->
-
+<!-- navbar -->
 <!-- MAIN -->
 <router-outlet></router-outlet>
 <!-- MAIN -->
-
+<!-- footer -->
+<footer>
+  <div class="footer-links">
+    <a (click)="onTermsClick('terms')">Terms</a>
+    <p> | </p>
+    <a (click)="onTermsClick('privacy')">Privacy</a>
+    <p> | </p>
+    <a href="#">Contact Us</a>
+    <br/>
+  </div>
+  <p class="footer-links">© 2021 Flight Deprived, LLC. - All Rights Reserved</p>
+</footer>
+<!-- footer-->
 <p-toast></p-toast>
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/platform.js?onload=onGoogleLibraryLoad" async defer></script>
-<html lang="en">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Begin Dashboard Code -->
-  <!-- SIDEBAR -->
-  <!-- <section id="sidebar" [ngClass]="status ? 'hide' : ''">
-    <a href="#" class="brand">
-      <i class='bx bxs-smile'></i>
-      <span class="text">Content Machine</span>
-    </a>
-   This is where we put our content list of upcoming 
-    <ul class="side-menu top">
-      <li class="active">
-        <a href="#">
-          <i class='bx bxs-dashboard' ></i>
-          <span class="text">Calendar</span>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <i class='bx bxs-doughnut-chart' ></i>
-          <span class="text">Analytics</span>
-        </a>
-      </li>
-      <li>
-    </ul>
-    <ul class="side-menu">
-      <li>
-        <a href="#">
-          <i class='bx bxs-cog' ></i>
-          <span class="text">Settings</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="logout">
-          <i class='bx bxs-log-out-circle' ></i>
-          <span class="text">Logout</span>
-        </a>
-      </li>
-    </ul>
-  </section>
-  
-  <section id="content">
-    <nav>
-      <i (click)="addToggle()" class='bx bx-menu' ></i>
-      <a href="#" class="nav-link">Categories</a>
-      <form action="#">
-        <div class="form-input">
-          <input type="search" placeholder="Search...">
-          <button type="button" class="search-btn"><i class='bx bx-search' ></i></button>
-        </div>
-      </form>
-      <a href="#" class="notification">
-        <i class='bx bxs-bell' ></i>
-        <span class="num">8</span>
-      </a>
-      <a href="#" class="profile">
-        <img src="https://secure.gravatar.com/avatar/d09eaad01aea86c51b4f892b4f8abf6f?s=100&d=wavatar&r=g">
-      </a>
-    </nav> -->

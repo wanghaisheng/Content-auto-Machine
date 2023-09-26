@@ -16,7 +16,7 @@ import {
   MessageService,
 } from 'primeng/api';
 import { NavigationEnd, Router } from '@angular/router';
-import { Observable, Subject, filter } from 'rxjs';
+import { Observable, Subject, filter, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -25,6 +25,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+
   loggedInObserver$?: Observable<boolean>;
 
   breadcrumbData: Subject<MenuItem[]> = new Subject<MenuItem[]>();
@@ -110,7 +111,7 @@ export class AppComponent implements OnInit {
     });
     this.messengerService.infoMessageObservable$.subscribe((message) => {
       this.messageService.add({
-        severity: 'info',
+        severity: 'success',
         summary: 'Confirmed',
         detail: message,
       });
@@ -122,7 +123,7 @@ export class AppComponent implements OnInit {
     url: string = '',
     breadcrumbs: any[] = []
   ): any[] {
-    const label = route.routeConfig ? route.routeConfig.data!['breadcrumb'] : '';
+    const label = route.routeConfig?.data?.['breadcrumb'] ?? '';
     const path = route.routeConfig ? route.routeConfig.path : '';
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {
@@ -149,7 +150,15 @@ export class AppComponent implements OnInit {
     this.navigationService.navigateToRoot();
   }
 
+  onFolderClick() {
+    this.navigationService.navigateToLibrary();
+  }
+
   onSettingsClick() {
     this.navigationService.navigateToSettings();
+  }
+
+  onTermsClick(type: string) {
+    this.navigationService.navigateToTerms(type);
   }
 }

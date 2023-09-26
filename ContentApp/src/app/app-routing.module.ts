@@ -15,6 +15,8 @@ import { AnythinghubComponent } from './views/anythinghub/anythinghub.component'
 import { ContentDashboardComponent } from './views/contentdashboard/contentdashboard.component';
 import { ZoomRedirectComponent } from './views/redirects/zoomredirect.component';
 import { SettingsComponent } from './views/settings/settings.component';
+import { TermsComponent } from './views/terms/terms.component';
+import { LibraryComponent } from './views/library/library.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -35,6 +37,16 @@ const routes: Routes = [
     path: 'settings',
     component: SettingsComponent,
     data: { breadcrumb: 'Settings' }
+  },
+  {
+    path: 'terms/:type',
+    component: TermsComponent,
+    data: { breadcrumb: 'Privacy & Terms' }
+  },
+  {
+    path: 'library',
+    component: LibraryComponent,
+    data: { breadcrumb: 'Library' }
   },
   { path: '**', component: PageNotFoundComponent }
 ];

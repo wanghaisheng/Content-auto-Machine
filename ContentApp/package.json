@@ -31,6 +31,7 @@
     "gapi": "^0.0.3",
     "hammerjs": "^2.0.8",
     "ngx-autosize": "^2.0.4",
+    "ngx-extended-pdf-viewer": "^18.0.1",
     "primeicons": "^6.0.1",
     "primeng": "15.4.1",
     "rxjs": "^7.8.1",

@@ -17,7 +17,6 @@ export class NavigationService implements OnInit {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private fireAuthRepo: FireAuthRepository
   ) {
     /** */
@@ -41,8 +40,16 @@ export class NavigationService implements OnInit {
     this.router.navigate(['dashboard', type]);
   }
 
+  navigateToTerms(type: string) {
+    this.router.navigate(['terms', type]);
+  }
+
   navigateToSettings() {
     this.router.navigate(['settings']);
+  }
+
+  navigateToLibrary() {
+    this.router.navigate(['library']);
   }
 
   // navigateToExtractDetails(id: string = '') {

@@ -68,6 +68,9 @@ dependencies:
   ngx-autosize:
     specifier: ^2.0.4
     version: 2.0.4(@angular/common@16.0.0)(@angular/core@16.0.0)
+  ngx-extended-pdf-viewer:
+    specifier: ^18.0.1
+    version: 18.0.1(@angular/common@16.0.0)(@angular/core@16.0.0)
   primeicons:
     specifier: ^6.0.1
     version: 6.0.1
@@ -6026,6 +6029,10 @@ packages:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
     dev: true
 
+  /lodash.deburr@4.1.0:
+    resolution: {integrity: sha512-m/M1U1f3ddMCs6Hq2tAsYThTBDaAKFDX3dwDo97GEYzamXi9SqUpjWi/Rrj/gf3X2n8ktwgZrlP1z6E3v/IExQ==}
+    dev: false
+
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
@@ -6471,6 +6478,18 @@ packages:
     dependencies:
       '@angular/common': 16.0.0(@angular/core@16.0.0)(rxjs@7.8.1)
       '@angular/core': 16.0.0(rxjs@7.8.1)(zone.js@0.13.0)
+      tslib: 2.5.0
+    dev: false
+
+  /ngx-extended-pdf-viewer@18.0.1(@angular/common@16.0.0)(@angular/core@16.0.0):
+    resolution: {integrity: sha512-5wzoLjOY1AVYXDnjWkzKT8CXycXb9DmypBxmJtHcvnE5oWM3ec4V1+XKIalI85K2NO3dfb8AzMSlH3rqqlumoA==}
+    peerDependencies:
+      '@angular/common': '>=12.0.0 <17.0.0'
+      '@angular/core': '>=12.0.0 <17.0.0'
+    dependencies:
+      '@angular/common': 16.0.0(@angular/core@16.0.0)(rxjs@7.8.1)
+      '@angular/core': 16.0.0(rxjs@7.8.1)(zone.js@0.13.0)
+      lodash.deburr: 4.1.0
       tslib: 2.5.0
     dev: false
 

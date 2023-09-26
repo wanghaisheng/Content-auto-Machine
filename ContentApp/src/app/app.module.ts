@@ -5,7 +5,6 @@
  * Copyright (c) 2023 Adrian Mohnacs
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
-
 import { NgModule, Type } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -66,6 +65,10 @@ import { getFirestore } from 'firebase/firestore';
 import { TypewriterComponent } from './views/common/typewriter/typewriter.component';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
+import { TermsComponent } from './views/terms/terms.component';
+import { LibraryComponent } from './views/library/library.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { PersonaComponent } from './views/common/persona/persona.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -100,9 +103,13 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     CreatepanelComponent,
     ContentpanelComponent,
     SettingsComponent,
-    TypewriterComponent
+    TypewriterComponent,
+    TermsComponent,
+    LibraryComponent,
+    PersonaComponent
   ],
   imports: [
+    NgxExtendedPdfViewerModule,
     TagModule,
     MenuModule,
     AvatarModule,

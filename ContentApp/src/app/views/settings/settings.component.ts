@@ -7,14 +7,13 @@ import { NavigationService } from 'src/app/service/navigation.service';
 import { FacebookPage } from 'src/app/model/content/facebookpage.model';
 import { Panel } from 'primeng/panel';
 import { Menu } from 'primeng/menu';
-import { PostingPlatform } from 'src/app/constants';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SettingsService } from 'src/app/service/settings.service';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements AfterViewInit{
   
@@ -48,28 +47,28 @@ export class SettingsComponent implements AfterViewInit{
   userFacebookPages: FacebookPage[] = [];
   userSelectedFacebookPage: FacebookPage | undefined = undefined;
 
-  currentView = 'Profile';
+  currentView = 'Your AI';
   menuItems: MenuItem[] = [
     {
       label: 'Personal',
       items: [
-        {
-          label: 'Profile',
-          icon: 'pi pi-user',
-          command: () => {
-            this.isBlocked = false;
-            this.currentView = 'Profile';
-          },
-        },
         {
           label: 'Your AI',
           icon: 'pi pi-android',
           command: () => {
             this.isBlocked = false;
             this.currentView = 'Your AI';
-          },
+          }
         },
-      ],
+        {
+          label: 'Profile',
+          icon: 'pi pi-user',
+          command: () => {
+            this.isBlocked = false;
+            this.currentView = 'Profile';
+          }
+        }
+      ]
     },
     {
       label: 'Social Accounts',
@@ -117,6 +116,7 @@ export class SettingsComponent implements AfterViewInit{
       ],
     },
   ];
+
   profileForm: FormGroup;
 
   @ViewChild('pnl', {static: false}) paneler?: ElementRef<Panel>;
@@ -173,6 +173,7 @@ export class SettingsComponent implements AfterViewInit{
     });
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
+        console.log("🚀 ~ file: settings.component.ts:176 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
         accounts.forEach((account) => {
           this.zoomConnected = account['zoom'];
@@ -290,17 +291,5 @@ export class SettingsComponent implements AfterViewInit{
       },
       reject: (type: any) => { /** */ },
     });
-  }
-
-  uploadProfilePic() {
-    throw new Error('Method not implemented.');
-  }
-
-  updatePassword() {
-
-  }
-
-  onProfileSaved() {
-
   }
 }

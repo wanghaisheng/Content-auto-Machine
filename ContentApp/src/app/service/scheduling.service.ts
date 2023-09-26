@@ -91,7 +91,7 @@ export class SchedulingService {
 
   getAllEvents() {
     this.fireAuthRepo.getUserAuthObservable().pipe(
-      concatMap((user) => this.contentRepo.getAllContent(user.uid)),
+      concatMap((user) => this.contentRepo.getScheduledContent(user.uid)),
     ).subscribe({
       next: (postResponse: {}[]) => { this.calendarCompleteSubject.next(this.postsToEvents(postResponse)); },
       error: (error) => { this.errorSubject.next(error); }
