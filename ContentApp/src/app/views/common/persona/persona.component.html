@@ -4,24 +4,30 @@
 <form [formGroup]="aiForm">
   <div *ngIf="activeIndex == 0">
     <h3>Tell us about yourself and your business</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="persona" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="persona" rows="5" cols="30" pInputTextarea
+    placeholder="Helps us tailor the AI to understand your business dynamics so we can promote your message. e.g., I'm Jonny, founder of Yoni AI, where we make viral content marketing accessible to everyone."></textarea>
     <br />
     <h3>What are your core values as a business/individual?</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="values" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="values" rows="5" cols="30" pInputTextarea
+    placeholder="Guides the AI in aligning your content with your values. e.g., Constant Improvement, Community, & Education"></textarea>
   </div>
   <div *ngIf="activeIndex == 1">
     <h3>Who is your ideal audience?</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="audience" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="audience" rows="5" cols="30" pInputTextarea
+    placeholder="Sharpens the AI's focus on who it's talking to. e.g., Driven entrepreneuers looking to do more and help more by growing their audience online."></textarea>
     <br />
     <h3>What are you mainly known for by people who follow or buy from you?</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="context" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="context" rows="5" cols="30" pInputTextarea
+    placeholder="This helps the AI highlight your USPs. e.g., Yoni is the first product on the market that makes content specifically in your voice."></textarea>
   </div>
   <div *ngIf="activeIndex == 2">
     <h3>What style of content do you most resonate with?</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="style" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="style" rows="5" cols="30" pInputTextarea
+    placeholder="Sets the tone and style for the AI-generated content. e.g., Straight-forward AI-focused marketing education backed by a world class community"></textarea>
     <br />
     <h3>How would you like to be perceived by your audience?</h3>
-    <textarea [style]="{ 'width': '100%' }" formControlName="voice" rows="5" cols="30" pInputTextarea></textarea>
+    <textarea [style]="{ 'width': '100%' }" formControlName="voice" rows="5" cols="30" pInputTextarea
+    placeholder="Assists the AI in shaping your brand image. e.g., As a trailblazer in AI automated marketing"></textarea>
   </div>
 </form>
 <p-footer *ngIf="activeIndex < 2">

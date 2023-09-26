@@ -90,7 +90,6 @@ export class AnythinghubComponent implements OnInit {
   }
 
   onSettingsClick() {
-    this.hubDashboardService.updateOnboardingStatus(false);
     this.navigationService.navigateToSettings();
   }
 }

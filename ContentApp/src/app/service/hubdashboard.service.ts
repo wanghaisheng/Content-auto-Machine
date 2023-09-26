@@ -223,8 +223,4 @@ export class HubDashboardService {
       })
     );
   }
-
-  updateOnboardingStatus(hasCompleted: boolean) {
-    this.adminRepo.updateOnboardingStatus(hasCompleted);
-  }
 }
