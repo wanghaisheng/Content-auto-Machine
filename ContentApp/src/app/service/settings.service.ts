@@ -38,7 +38,7 @@ export class SettingsService {
     style: string,
     values: string,
     voice: string,
-    character: string,
+    context: string,
   ) {
     this.loadingSubject.next(true);
     return this.firestoreRepo.updateCurrentUserDocumentObj<Persona>(
@@ -49,7 +49,7 @@ export class SettingsService {
         style: style,
         values: values,
         voice: voice,
-        character: character
+        context: context
       },
     ).pipe(
       map((response) => {

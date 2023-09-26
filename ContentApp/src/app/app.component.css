@@ -38,6 +38,9 @@
   color: #fff; /* Text color */
   padding: 20px 0; /* Add padding to the top and bottom of the footer */
   text-align: center; /* Center-align the text */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 /* Style the anchor links within the footer */
