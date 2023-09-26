@@ -3,19 +3,13 @@
   flex-direction: row;
 }
 
-.view {
-  flex: 1;
-  padding: 20px;
-  border: 1px solid gray;
-  background-color: lightgray;
-  margin: 10px;
+.col-6 {
+  flex-basis: calc(66.66667%);
+  max-width: calc(66.66667%);
+  margin: 1rem;
 }
 
-:host {
-  display: block;
-  height: 100%;
-}
-
-.full-height {
-  height: 100vh;
+.col-4 {
+  flex-basis: calc(33.33333%);
+  max-width: calc(33.33333%);
 }

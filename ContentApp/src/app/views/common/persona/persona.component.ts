@@ -21,10 +21,6 @@ export class PersonaComponent implements OnInit {
     this.aiForm = this.fb.group({
       persona: [''],
       audience: [''],
-      style: [''],
-      values: [''],
-      voice: [''],
-      character: [''],
     });
   }
 
@@ -45,10 +41,6 @@ export class PersonaComponent implements OnInit {
           this.aiForm.patchValue({
             persona: persona.persona,
             audience: persona.audience,
-            style: persona.style,
-            values: persona.values,
-            voice: persona.voice,
-            character: persona.character,
           });
         } else {
           this.messengerService.setErrorMessage('There was an error saving your AI persona.');

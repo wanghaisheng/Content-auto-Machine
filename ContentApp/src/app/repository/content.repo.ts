@@ -25,6 +25,7 @@ export class ContentRepository {
 
   newlyCreatedPostData: {}[] = [];
   videoDetailsSubject = new Subject<ApiResponse<YoutubeInfo>>();
+  videoDurationErrorSubject = new Subject<boolean>();
 
   constructor(
     private fireAuthRepo: FireAuthRepository,
@@ -97,7 +98,11 @@ export class ContentRepository {
     };
     return from(axios(metadataConfig)).pipe(
       tap((response: AxiosResponse<any, any>) => {
-        this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
+        if (response.data.message !== 'video duration error') {
+          this.videoDurationErrorSubject.next(true);
+        } else {
+          this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
+        }
       }),
       concatMap((response: AxiosResponse<any, any>) => this.fireAuthRepo.getUserAuthObservable()),
       concatMap((user) => {

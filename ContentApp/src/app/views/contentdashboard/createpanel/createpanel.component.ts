@@ -72,7 +72,8 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.disabledState = false;
     });
     this.hubDashboardService.contentObservable$.subscribe((contentComplete: Content) => {
-      this.formGroup.patchValue({ 'title': contentComplete.title })
+      this.disabledState = false;
+      this.formGroup.patchValue({ 'title': contentComplete.title.replace(/"/g, '') })
     })
     this.hubDashboardService.videoDetailsObservable$.subscribe((videoDetails) => {
       this.showVideoInfo = true;
@@ -107,6 +108,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.messengerService.setErrorMessage('Please pick your AI');
       return;
     }
+    this.formGroup.patchValue({ 'title': '' })
     if (this.createMode.includes('zoom')) {
       this.hubDashboardService.createZoomContent(
         this.formGroup.value.title,

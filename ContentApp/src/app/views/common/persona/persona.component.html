@@ -5,15 +5,6 @@
   <h3>Who is your ideal audience?</h3>
   <textarea [style]="{ 'width': '100%' }" formControlName="audience" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
   <br />
-  <h3>Paste ONE social media post whose style you would like to emulate</h3>
-  <textarea [style]="{ 'width': '100%' }" formControlName="style" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
-  <br />
-  <h3>What are your core values as a business/individual?</h3>
-  <textarea [style]="{ 'width': '100%' }" formControlName="values" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
-  <br />
-  <h3>How would you like to be perceived by your audience?</h3>
-  <textarea [style]="{ 'width': '100%' }" formControlName="voice" rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
-  <br />
 </form>
 <p-footer>
   <p-button label="Save" icon="pi pi-plus" (click)="onSaveAI()" [disabled]="isLoading" [style]="{ 'margin-top':'1rem' }" [loading]="isLoading"></p-button>

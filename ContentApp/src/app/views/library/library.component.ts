@@ -23,8 +23,7 @@ export class LibraryComponent {
   ngOnInit() {
     this.hubDashboardService.getContents().subscribe({
       next: (contents) => {
-        console.log("🚀 ~ file: library.component.ts:26 ~ LibraryComponent ~ this.hubDashboardService.getContents ~ contents:", contents)
-        this.contents = contents;
+        this.contents = contents.reverse();
       }
     });
   }

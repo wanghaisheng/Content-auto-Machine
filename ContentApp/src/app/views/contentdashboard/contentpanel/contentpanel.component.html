@@ -1,4 +1,4 @@
-<p-panel #pnl [style]="{ 'height': '100vh' }">
+<p-panel #pnl [style]="{ 'height': '100vh' }" class="container">
   <ng-template pTemplate="header">
     <form [formGroup]="formGroup" class="row">
       <span class="flex-item p-input-icon-left row">
@@ -15,9 +15,7 @@
     </form>
   </ng-template>
 
-  <p *ngIf="content != '' && contentLoading == false" [style]="{ width: '100%', height: '100%' }">'
-     <app-typewriter style="height: 100%" textToShow="{{ content }}"></app-typewriter> 
-  </p>
+  <app-typewriter class="wrapped-paragraph" *ngIf="content != '' && contentLoading == false" style="height: 100%; width: 75%" textToShow="{{ content }}"></app-typewriter> 
 
   <strong style="height: 1000px;" *ngIf="content == '' && contentLoading == false">
     <app-typewriter
