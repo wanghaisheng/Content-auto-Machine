@@ -79,11 +79,11 @@ export class PersonaComponent implements OnInit {
   onSaveAI() {
     this.settingsService.storePersonaSettings(
       this.aiForm.value.persona,
-      this.aiForm.value.voice, 
       this.aiForm.value.audience,
-      this.aiForm.value.context,
       this.aiForm.value.style,
       this.aiForm.value.values,
+      this.aiForm.value.voice, 
+      this.aiForm.value.context,
     ).subscribe({
       next:(response) => {
         if (response !== undefined) {

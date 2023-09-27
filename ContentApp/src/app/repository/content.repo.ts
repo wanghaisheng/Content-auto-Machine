@@ -8,7 +8,7 @@
 
 import { Injectable } from '@angular/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
+import { Observable, Subject, catchError, concatMap, from, map, of, tap } from 'rxjs';
 import { ApiResponse } from '../model/response/apiresponse.model';
 import { FireAuthRepository } from './database/fireauth.repo';
 import { Content } from '../model/content/content.model';
@@ -25,7 +25,6 @@ export class ContentRepository {
 
   newlyCreatedPostData: {}[] = [];
   videoDetailsSubject = new Subject<ApiResponse<YoutubeInfo>>();
-  videoDurationErrorSubject = new Subject<boolean>();
 
   constructor(
     private fireAuthRepo: FireAuthRepository,
@@ -98,11 +97,7 @@ export class ContentRepository {
     };
     return from(axios(metadataConfig)).pipe(
       tap((response: AxiosResponse<any, any>) => {
-        if (response.data.message !== 'video duration error') {
-          this.videoDurationErrorSubject.next(true);
-        } else {
-          this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
-        }
+        this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
       }),
       concatMap((response: AxiosResponse<any, any>) => this.fireAuthRepo.getUserAuthObservable()),
       concatMap((user) => {
@@ -127,20 +122,7 @@ export class ContentRepository {
           return responseData.result;
         }
       })
-    )
-    // return from(axios(config)).pipe(
-    //   tap((response: AxiosResponse<any, any>) => {
-    //     console.log('Response:', response.data);
-    //   }),
-    //   map((response: AxiosResponse<any, any>) => {
-    //     const responseData = response.data as ApiResponse<Content>;
-    //     if (responseData.message !== 'success') {
-    //       throw new Error('🔥 Failed to get content from video');
-    //     } else {
-    //       return responseData.result;
-    //     }
-    //   })
-    // );
+    );
   }
   fetchAllUserContent(): Observable<Content[]> {
     return this.firestoreRepo.getUserCollection<Content>('content');

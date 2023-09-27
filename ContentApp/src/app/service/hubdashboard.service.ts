@@ -69,13 +69,13 @@ export class HubDashboardService {
     private contentRepo: ContentRepository,
     private zoomRepo: ZoomRepository,
   ) {
-    this.contentRepo.videoDurationErrorSubject.asObservable().subscribe({
-      next: (response) => {
-        if (response) {
-          this.errorSubject.next('Video too long, please select a video under 20 minutes');
-        }
-      }
-    });
+    // this.contentRepo.videoDurationErrorSubject.asObservable().subscribe({
+    //   next: (response) => {
+    //     if (response) {
+    //       this.errorSubject.next('Video too long, please select a video under 20 minutes');
+    //     }
+    //   }
+    // });
   }
 
   getHubGenerators() {
@@ -134,7 +134,7 @@ export class HubDashboardService {
         this.contentSubject.next(response);
       },
       error: (error: any) => {
-        console.log("🔥 ~ file: hubdashboard.service.ts:62 ~ HubDashboardService ~ error:", error)
+        console.log("🚀 ~ file: hubdashboard.service.ts:137 ~ HubDashboardService ~ error:", error)
         this.contentLoadingSubject.next(false);
         this.errorSubject.next(error);
       }

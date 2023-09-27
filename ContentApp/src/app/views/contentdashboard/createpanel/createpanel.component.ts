@@ -27,7 +27,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   contentLoading$!: Observable<boolean>;
 
   items = [
-    { name: 'Yoni Brand Engine™', key: 'yoni', description: 'Our secret sauce that no one else has. Tuned to your brand.' },
+    { name: '🔐 Yoni Brand Engine™', key: 'yoni', description: 'Our secret sauce that no one else has. Tuned to your brand.' },
     { name: 'General', key: 'gpt-4', description: 'Your typical AI generated text. Gets the job done and uses less credits.' },
     { name: 'Speed', key: 'gpt-3.5-turbo', description: 'For those in a hurry. No need to use this if you want to grow your business.'}
 ];
@@ -103,12 +103,18 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
   }
 
   submitForContent() {
-    this.disabledState = true;
     if (this.selectedItem === undefined) {
       this.messengerService.setErrorMessage('Please pick your AI');
       return;
     }
+    if (this.selectedItem.key === 'yoni') {
+      this.messengerService.setErrorMessage('Brand Engine only available for premium members.');
+      return;
+    }
+
     this.formGroup.patchValue({ 'title': '' })
+    this.disabledState = true;
+
     if (this.createMode.includes('zoom')) {
       this.hubDashboardService.createZoomContent(
         this.formGroup.value.title,

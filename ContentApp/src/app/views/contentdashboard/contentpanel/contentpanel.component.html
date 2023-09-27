@@ -3,13 +3,9 @@
     <form [formGroup]="formGroup" class="row">
       <span class="flex-item p-input-icon-left row">
         <i class="pi pi-bolt"></i>
-        <input style="width: 350px" placeholder='Type to enhance then press Enter ⏎' class="flex-item" type="text"
+        <input [style]="{ 'width': '55vw' }" placeholder='Type to enhance then press Enter ⏎' class="flex-item" type="text"
           pInputText formControlName="enhance" pTooltip="Press Enter ⏎ to Apply" tooltipPosition="left" />
       </span>
-      <p-dropdown placeholder='Sounds like...' formControlName="influencer" [options]="influencerOptions"
-        optionLabel="label"></p-dropdown>
-      <p-dropdown placeholder='Include a...' formControlName="control" [options]="controlOptions"
-        optionLabel="label"></p-dropdown>
       <p-button icon="pi pi-question-circle" styleClass="p-button-rounded p-button-danger p-button-text"
         pTooltip="Learn how our AI works" tooltipPosition="bottom"></p-button>
     </form>

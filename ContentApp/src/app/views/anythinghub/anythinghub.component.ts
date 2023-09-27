@@ -6,10 +6,10 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { AfterContentInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnInit, QueryList, SecurityContext, ViewChildren } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
-import { Card } from 'primeng/card';
-import { Generators } from 'src/app/model/admin/generators.model'
+import * as RecordRTC from 'recordrtc';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { MessengerService } from 'src/app/service/messenger.service';
 import { NavigationService } from 'src/app/service/navigation.service';
@@ -22,8 +22,16 @@ import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 })
 export class AnythinghubComponent implements OnInit {
 
+  // Declare Record OBJ
+  record: RecordRTC.StereoAudioRecorder | undefined;
+  
+  // URL of Blob
+  url: string = '';
+  
+  recording = false;
   promptForZoom: boolean = false;
   promptOnboarding: boolean = false;
+  showVoiceDialog = false;
 
   generatorsList: {
     header: string;
@@ -35,11 +43,13 @@ export class AnythinghubComponent implements OnInit {
     }[]
   }[] = [];
 
+
   constructor(
     private navigationService: NavigationService,
     private hubDashboardService: HubDashboardService,
     private socialAuthService: SocialAuthService,
-    private messengerService: MessengerService
+    private messengerService: MessengerService,
+    private domSanitizer: DomSanitizer
   ) { /** */ }
 
   ngOnInit(): void {
@@ -75,6 +85,8 @@ export class AnythinghubComponent implements OnInit {
   itemClick(generator_type: string) {
     if (generator_type.includes('zoom') && this.promptForZoom) {
       this.messengerService.setErrorMessage('Please connect your Zoom account to use this feature.');
+    } else if (generator_type.includes('voice')) {
+      this.showVoiceDialog = true;
     } else {
       this.navigationService.navigateToDashboard(generator_type)
     }
@@ -91,5 +103,64 @@ export class AnythinghubComponent implements OnInit {
 
   onSettingsClick() {
     this.navigationService.navigateToSettings();
+  }
+
+  sanitize(url: string): SafeUrl {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  /**
+   * Start recording.
+   */
+  initiateRecording() {
+    this.recording = true;
+    const mediaConstraints: MediaStreamConstraints = {
+      video: false,
+      audio: true
+    };
+    navigator.mediaDevices.getUserMedia(mediaConstraints).then(
+      (stream) => this.successCallback(stream),
+      (error) => this.errorCallback(error)
+    );
+  }
+
+  /**
+   * Will be called automatically.
+   */
+  successCallback(stream: MediaStream) {
+    const options: RecordRTC.Options = {
+      type: "audio",
+      numberOfAudioChannels: 1,
+      sampleRate: 16000,
+    };
+    // Start Actual Recording
+    this.record = new RecordRTC.StereoAudioRecorder(stream, options);
+    this.record.record();
+  }
+
+  /**
+   * Stop recording.
+   */
+  stopRecording() {
+    this.recording = false;
+    this.record?.stop(this.processRecording.bind(this));
+  }
+
+  /**
+   * Process recording: Do whatever you want with the blob.
+   */
+  processRecording(blob: Blob) {
+    const safeUrl = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+    this.url = this.domSanitizer.sanitize(SecurityContext.URL, safeUrl) ?? '';
+    console.log("blob", blob);
+    console.log("url", this.url);
+    //TODO
+  }
+
+  /**
+   * Process Error.
+   */
+  errorCallback(error: any) {
+    this.messengerService.setErrorMessage('Can not record audio in your browser');
   }
 }
