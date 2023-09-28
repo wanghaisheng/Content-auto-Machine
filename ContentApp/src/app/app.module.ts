@@ -70,7 +70,9 @@ import { LibraryComponent } from './views/library/library.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PersonaComponent } from './views/common/persona/persona.component';
 import { RippleModule } from 'primeng/ripple';
-import { ImprovepanelComponent } from './views/contentdashboard/improvepanel/improvepanel.component';
+import { FacebookpostComponent } from './views/mimics/facebookpost/facebookpost.component';
+import { LinkedinpostComponent } from './views/mimics/linkedinpost/linkedinpost.component';
+import { TwitternpostComponent } from './views/mimics/twitternpost/twitternpost.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -109,7 +111,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     TermsComponent,
     LibraryComponent,
     PersonaComponent,
-    ImprovepanelComponent
+    FacebookpostComponent,
+    LinkedinpostComponent,
+    TwitternpostComponent
   ],
   imports: [
     RippleModule,

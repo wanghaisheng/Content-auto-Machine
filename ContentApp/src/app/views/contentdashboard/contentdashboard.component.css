@@ -3,8 +3,14 @@
   flex-direction: row;
 }
 
-.col-3 {
-  flex-basis: calc(33.33333%);
-  max-width: calc(33.33333%);
+.col-4 {
+  flex-basis: calc(40%);
+  max-width: calc(40%);
+  margin: 0.5rem;
+}
+
+.col-6 {
+  flex-basis: calc(60%);
+  max-width: calc(60%);
   margin: 0.5rem;
 }

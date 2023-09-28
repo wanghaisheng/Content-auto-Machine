@@ -39,6 +39,7 @@ export class ContentpanelComponent implements OnInit, AfterViewInit {
     { label: 'Make it more conversational', value: 'belfort' },
     { label: 'Make it more human', value: 'belfort' }
   ];
+promptSubmit: any;
 
   constructor(
     private formBuilder: FormBuilder,

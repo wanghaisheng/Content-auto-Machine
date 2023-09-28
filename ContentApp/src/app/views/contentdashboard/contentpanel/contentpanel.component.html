@@ -1,10 +1,17 @@
-<div #pnl [style]="{ 'height': '100vh' }" class="container">
-  <app-typewriter class="wrapped-paragraph" *ngIf="content != '' && contentLoading == false" style="height: 100%; width: 75%" textToShow="{{ content }}"></app-typewriter> 
+<p-card #pnl *ngIf="content !== '' && contentLoading == false" class="container">
+  <form [(ngModel)]="promptSubmit" class="row">
+    <input [style]="{ 'width': '28vw', 'flex': '1'}" placeholder='Type to enhance then press Enter ⏎' style="width: 100%; flex: 1;" class="flex-item" type="text"
+      pInputText formControlName="enhance" pTooltip="Press Enter ⏎ to Apply" tooltipPosition="left" />
+  </form>
+</p-card>
+<app-typewriter class="wrapped-paragraph" *ngIf="content != '' && contentLoading == false" style="height: 100%; width: 75%" textToShow="{{ content }}"></app-typewriter> 
 
-  <strong style="height: 1000px;" *ngIf="content == '' && contentLoading == false">
+  <h3 *ngIf="content == '' && contentLoading == false">
     <app-typewriter
-      textToShow="👈 To get started, just go to the left and drop in a youtube link then click submit."></app-typewriter>
-  </strong>
+      textToShow="To get started, just go to the left and drop in a youtube link then click submit."></app-typewriter>
+  </h3>
+
+  <app-twitternpost></app-twitternpost>
 
   <div *ngIf="contentLoading" class="border-round border-1 surface-border p-4 surface-card"
     style="width: 70v2; height: 100vh">
@@ -67,4 +74,3 @@
       </div>
     </div>
   </div>
-</div>

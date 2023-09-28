@@ -20,7 +20,7 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
  
   panelCreateMode = '';
   title = '';
-showImprovements: any;
+  showImprovements = true;
 
   constructor(
     private route: ActivatedRoute

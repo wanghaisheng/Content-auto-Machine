@@ -1,0 +1,39 @@
+<p-card [style]="{ 'border-radius': '10px' }">
+  <ng-template pTemplate="header">
+    <div class="container-row">
+      <div class="row">
+        <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <div class="col" style="margin-left: 1rem">
+          <strong style="margin: 0; padding: 0; line-height: 1;">{{ title }}</strong>
+          <p style="margin: 0; padding: 0; line-height: 1;">{{ subtitle }}</p>
+          <p style="margin: 0; padding: 0; line-height: 1;">{{ subtitle }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <p-button label="Follow" icon="pi pi-plus" styleClass="p-button-info p-button-text"></p-button>
+        <i class="pi pi-ellipsis-h" style="margin: 0.5rem;"></i>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template pTemplate="footer">
+    <div class="container-row" style="align-items: baseline;">
+      <div style="flex-direction: row; display: flex;">
+        <i class="pi pi-heart-fill mr-2" style="margin: 1rem; color: red"></i>
+        <p>58</p>
+      </div>
+      <p>17 comments</p>
+    </div>
+    <p-divider></p-divider>
+    <div class="footer-links">
+      <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="medium" shape="circle"></p-avatar>
+        <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="medium" shape="circle"></p-avatar>
+      <p-button label="Like" icon="pi pi-thumbs-up" styleClass=" p-button-secondary p-button-text"></p-button>
+      <p-button label="Comment" icon="pi pi-comment" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="Repost" icon="pi pi-spinner" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="Share" icon="pi pi-share-alt" styleClass="p-button-secondary p-button-text"></p-button>
+    </div>
+    <p-divider></p-divider>
+  </ng-template>
+</p-card>

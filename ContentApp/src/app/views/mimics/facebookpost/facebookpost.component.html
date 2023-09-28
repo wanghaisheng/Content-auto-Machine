@@ -1,0 +1,32 @@
+<p-card  [style]="{ 'border-radius': '12px' }">
+  <ng-template pTemplate="header">
+    <div class="container-row">
+      <div class="row">
+        <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <div class="col" style="margin-left: 1rem">
+          <strong>{{ title }}</strong>
+          <p>{{ subtitle }}</p>
+        </div>
+      </div>
+      <i class="pi pi-ellipsis-h mr-2" style="margin: 1rem;"></i>
+    </div>
+  </ng-template>
+  
+  <ng-template pTemplate="footer">
+    <div class="container-row" style="align-items: baseline;">
+      <div style="flex-direction: row; display: flex;">
+        <i class="pi pi-heart-fill mr-2" style="margin: 1rem; color: red"></i>
+        <p>58</p>
+      </div>
+      <p>17 comments    7 shares</p>
+    </div>
+    <p-divider></p-divider>
+    <div class="footer-links">
+      <p-button label="Like" icon="pi pi-thumbs-up" styleClass=" p-button-secondary p-button-text"></p-button>
+      <p-button label="Comment" icon="pi pi-comment" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="Share" icon="pi pi-share-alt" styleClass="p-button-secondary p-button-text"></p-button>
+    </div>
+    <p-divider></p-divider>
+  </ng-template>
+</p-card>

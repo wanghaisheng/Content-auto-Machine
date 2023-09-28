@@ -1,0 +1,26 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="container-row">
+      <div class="row">
+        <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <div class="col" style="margin-left: 1rem">
+          <strong style="margin: 0; padding: 0; line-height: 1;">{{ title }}</strong>
+        </div>
+      </div>
+      <div class="row">
+        <i class="pi pi-ellipsis-h" style="margin: 0.5rem;"></i>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template pTemplate="footer">
+    <div class="footer-links">
+      <p-button label="109" icon="pi pi-comment" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="642" icon="pi pi-spinner" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="8,360" icon="pi pi-heart" styleClass=" p-button-secondary p-button-text"></p-button>
+      <p-button label="4.3M" icon="pi pi-chart-bar" styleClass="p-button-secondary p-button-text"></p-button>
+      <p-button label="4.3M" icon="pi pi-sign-in" styleClass="p-button-secondary p-button-text"></p-button>
+    </div>
+  </ng-template>
+</p-card>
