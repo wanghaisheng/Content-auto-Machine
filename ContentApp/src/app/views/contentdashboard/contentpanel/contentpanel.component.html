@@ -1,16 +1,4 @@
-<p-panel #pnl [style]="{ 'height': '100vh' }" class="container">
-  <ng-template pTemplate="header">
-    <form [formGroup]="formGroup" class="row">
-      <span class="flex-item p-input-icon-left row">
-        <i class="pi pi-bolt"></i>
-        <input [style]="{ 'width': '55vw' }" placeholder='Type to enhance then press Enter ⏎' class="flex-item" type="text"
-          pInputText formControlName="enhance" pTooltip="Press Enter ⏎ to Apply" tooltipPosition="left" />
-      </span>
-      <p-button icon="pi pi-question-circle" styleClass="p-button-rounded p-button-danger p-button-text"
-        pTooltip="Learn how our AI works" tooltipPosition="bottom"></p-button>
-    </form>
-  </ng-template>
-
+<div #pnl [style]="{ 'height': '100vh' }" class="container">
   <app-typewriter class="wrapped-paragraph" *ngIf="content != '' && contentLoading == false" style="height: 100%; width: 75%" textToShow="{{ content }}"></app-typewriter> 
 
   <strong style="height: 1000px;" *ngIf="content == '' && contentLoading == false">
@@ -79,4 +67,4 @@
       </div>
     </div>
   </div>
-</p-panel>
+</div>

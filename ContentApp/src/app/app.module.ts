@@ -70,6 +70,7 @@ import { LibraryComponent } from './views/library/library.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PersonaComponent } from './views/common/persona/persona.component';
 import { RippleModule } from 'primeng/ripple';
+import { ImprovepanelComponent } from './views/contentdashboard/improvepanel/improvepanel.component';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -107,7 +108,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     TypewriterComponent,
     TermsComponent,
     LibraryComponent,
-    PersonaComponent
+    PersonaComponent,
+    ImprovepanelComponent
   ],
   imports: [
     RippleModule,
