@@ -8,7 +8,7 @@
 
 import { Injectable } from '@angular/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Observable, Subject, concatMap, from, map, of, tap } from 'rxjs';
+import { Observable, Subject, catchError, concatMap, from, map, of, tap } from 'rxjs';
 import { ApiResponse } from '../model/response/apiresponse.model';
 import { FireAuthRepository } from './database/fireauth.repo';
 import { Content } from '../model/content/content.model';
@@ -122,20 +122,7 @@ export class ContentRepository {
           return responseData.result;
         }
       })
-    )
-    // return from(axios(config)).pipe(
-    //   tap((response: AxiosResponse<any, any>) => {
-    //     console.log('Response:', response.data);
-    //   }),
-    //   map((response: AxiosResponse<any, any>) => {
-    //     const responseData = response.data as ApiResponse<Content>;
-    //     if (responseData.message !== 'success') {
-    //       throw new Error('🔥 Failed to get content from video');
-    //     } else {
-    //       return responseData.result;
-    //     }
-    //   })
-    // );
+    );
   }
   fetchAllUserContent(): Observable<Content[]> {
     return this.firestoreRepo.getUserCollection<Content>('content');

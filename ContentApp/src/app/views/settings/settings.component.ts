@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
 import { MessengerService } from 'src/app/service/messenger.service';
@@ -15,7 +15,7 @@ import { SettingsService } from 'src/app/service/settings.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
 })
-export class SettingsComponent implements AfterViewInit{
+export class SettingsComponent implements OnInit, AfterViewInit {
   
   @Input() parentFocusedConnection = 0;
 
@@ -173,7 +173,6 @@ export class SettingsComponent implements AfterViewInit{
     });
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: (accounts) => {
-        console.log("🚀 ~ file: settings.component.ts:176 ~ SettingsComponent ~ setupObservers ~ accounts:", accounts)
         this.isAccountsLoading = false;
         accounts.forEach((account) => {
           this.zoomConnected = account['zoom'];
@@ -183,7 +182,6 @@ export class SettingsComponent implements AfterViewInit{
           this.youtubeConnected = account['youtube'];
           this.twitterConnected = account['twitter'];
         });
-        
       },
       error: (error) => {
         this.isAccountsLoading = false;

@@ -128,7 +128,7 @@ export class AppComponent implements OnInit {
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {
       return breadcrumbs;
-    }
+    } 
 
     // Don't include empty labels
     const nextUrl = `${url}${path}/`;

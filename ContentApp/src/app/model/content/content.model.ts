@@ -9,5 +9,9 @@ export interface Content {
   title: string,
   content: string,
   contentType: string,
-  id?: string,
+  id: string,
+  created: string,
+  sourceTitle: string,
+  sourceUrl: string,
+  sourceThumbnail: string,
 }

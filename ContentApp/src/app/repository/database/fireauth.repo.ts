@@ -30,7 +30,6 @@ export class FireAuthRepository {
     this.user$ = user(this.fireAuth);
     
     this.user$.subscribe((user: any) => {
-      console.log("🚀 ~ file: fireauth.repo.ts:33 ~ FireAuthRepository ~ this.user$.subscribe ~ user:", user)
       if (user) {
         // Only our initial user is set for the session variable
         if (user.providerData[0].providerId == 'google.com') {
@@ -47,7 +46,6 @@ export class FireAuthRepository {
   }
 
   getUserAuthObservable(): Observable<FirebaseUser> {
-    console.log("🚀 ~ file: fireauth.repo.ts:50 ~ FireAuthRepository ~ getUserAuthObservable ~ currentSessionUser:", this.currentSessionUser)
     if (this.currentSessionUser !== null && this.currentSessionUser !== undefined) {
       return new Observable((subject) => {
         subject.next(this.currentSessionUser);

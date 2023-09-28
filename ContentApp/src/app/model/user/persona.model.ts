@@ -4,5 +4,5 @@ export interface Persona {
   style: string;
   values: string;
   voice: string;
-  character: string;
+  context: string;
 }

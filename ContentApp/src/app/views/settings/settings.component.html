@@ -4,7 +4,7 @@
 
 <h1>Settings</h1>
 <div class="row" style="height: 80vw">
-  <p-menu #menu [model]="menuItems"></p-menu>
+  <p-menu #menu [model]="menuItems" ></p-menu>
   <p-divider layout="vertical"></p-divider>
 
   <p-panel #pnl header="{{ currentView }}" class="container">
@@ -43,7 +43,6 @@
         </p-footer>
       </div>
     </div>
-
 
     <div *ngIf="currentView == 'Facebook'">
       <p-tag *ngIf="facebookConnected" severity="success" value="Connected"></p-tag>

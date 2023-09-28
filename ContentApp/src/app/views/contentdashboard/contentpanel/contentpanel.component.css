@@ -7,3 +7,21 @@ div.p-panel-content.ng-tns-c2252341775-3 {
   background-color: rgb(26, 182, 209);
   height: 80vh;
 }
+
+.container {
+  max-width: 400px; /* Adjust this width to your desired maximum width */
+  margin: 0 auto; /* Center the container on the page if needed */
+}
+
+.wrapped-paragraph {
+  word-wrap: break-word; /* This property ensures that long words will break and wrap */
+  width: 75vw;
+}
+
+pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}

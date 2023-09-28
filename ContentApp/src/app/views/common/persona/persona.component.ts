@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
 import { MessengerService } from 'src/app/service/messenger.service';
 import { SettingsService } from 'src/app/service/settings.service';
 
@@ -11,21 +12,37 @@ import { SettingsService } from 'src/app/service/settings.service';
 export class PersonaComponent implements OnInit {
 
   aiForm: FormGroup;
+
+  activeIndex: number = 0;
   isLoading = false;
+
+  items: MenuItem[] = [
+    {
+        label: 'Who are you?',
+        // command: (event: any) => this.messageService.add({severity:'info', summary:'First Step', detail: event.item.label})
+    },
+    {
+        label: 'Who do you help?',
+        // command: (event: any) => this.messageService.add({severity:'info', summary:'Second Step', detail: event.item.label})
+    },
+    {
+        label: 'How do you serve?',
+        // command: (event: any) => this.messageService.add({severity:'info', summary:'Third Step', detail: event.item.label})
+    }
+  ];
 
   constructor(
     private fb: FormBuilder,
     private messengerService: MessengerService,
-    private settingsService: SettingsService,
-    private changeDetectorRef: ChangeDetectorRef
+    private settingsService: SettingsService
   ) {
     this.aiForm = this.fb.group({
       persona: [''],
-      audience: [''],
-      style: [''],
       values: [''],
-      voice: [''],
-      character: [''],
+      audience: [''],
+      context: [''],
+      style: [''],
+      voice: ['']
     });
   }
 
@@ -36,8 +53,8 @@ export class PersonaComponent implements OnInit {
       }
     });
     this.settingsService.loadingObservable$.subscribe({
-      next: (isLoading) => {
-        this.isLoading = isLoading;
+      next: (loadingState) => {
+        this.isLoading = loadingState;
       }
     });
     this.settingsService.personaObservable$.subscribe({
@@ -45,11 +62,11 @@ export class PersonaComponent implements OnInit {
         if (persona !== undefined) {
           this.aiForm.patchValue({
             persona: persona.persona,
-            audience: persona.audience,
-            style: persona.style,
             values: persona.values,
-            voice: persona.voice,
-            character: persona.character,
+            audience: persona.audience,
+            context: persona.context,
+            style: persona.style,
+            voice: persona.voice
           });
         } else {
           this.messengerService.setErrorMessage('There was an error saving your AI persona.');
@@ -66,13 +83,21 @@ export class PersonaComponent implements OnInit {
       this.aiForm.value.style,
       this.aiForm.value.values,
       this.aiForm.value.voice, 
-      this.aiForm.value.character,
+      this.aiForm.value.context,
     ).subscribe({
       next:(response) => {
         if (response !== undefined) {
-          this.messengerService.setInfoMessage('AI Persona settings saved!');
+          if (this.activeIndex < 2) {
+            this.activeIndex++;
+          } else if (this.activeIndex === 2) { 
+            this.messengerService.setInfoMessage('AI Persona settings saved!');
+          }
         }
       }
     })
+  }
+
+  onActiveIndexChange(event: number) {
+    this.activeIndex = event;
   }
 }

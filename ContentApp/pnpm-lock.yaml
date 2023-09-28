@@ -38,6 +38,9 @@ dependencies:
   '@types/gapi':
     specifier: ^0.0.44
     version: 0.0.44
+  '@types/recordrtc':
+    specifier: ^5.6.11
+    version: 5.6.11
   angular-calendar:
     specifier: ^0.31.0
     version: 0.31.0(@angular/core@16.0.0)
@@ -77,6 +80,9 @@ dependencies:
   primeng:
     specifier: 15.4.1
     version: 15.4.1(@angular/common@16.0.0)(@angular/core@16.0.0)(@angular/forms@16.0.0)(rxjs@7.8.1)(zone.js@0.13.0)
+  recordrtc:
+    specifier: ^5.6.2
+    version: 5.6.2
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
@@ -3032,6 +3038,10 @@ packages:
 
   /@types/range-parser@1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
+
+  /@types/recordrtc@5.6.11:
+    resolution: {integrity: sha512-X4XD5nltz0cjmyzsPNegQReOPF+C5ARTfSPAPhqnKV7SsfRta/M4FBJ5AtSInCaEveL71FLLSVQE9mg8Uuo++w==}
+    dev: false
 
   /@types/retry@0.12.0:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
@@ -7291,6 +7301,10 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+
+  /recordrtc@5.6.2:
+    resolution: {integrity: sha512-1QNKKNtl7+KcwD1lyOgP3ZlbiJ1d0HtXnypUy7yq49xEERxk31PHvE9RCciDrulPCY7WJ+oz0R9hpNxgsIurGQ==}
+    dev: false
 
   /reflect-metadata@0.1.13:
     resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}

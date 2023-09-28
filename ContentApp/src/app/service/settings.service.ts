@@ -8,7 +8,8 @@
 import { Injectable } from "@angular/core";
 import { FirestoreRepository } from "../repository/database/firestore.repo";
 import { Persona } from "../model/user/persona.model";
-import { Subject, catchError, map } from "rxjs";
+import { Subject, catchError, map, tap } from "rxjs";
+import { AdminRepository } from "../repository/admin.repo";
 
 const PERSONA_KEY = 'persona'
 
@@ -28,6 +29,7 @@ export class SettingsService {
 
   constructor(
     private firestoreRepo: FirestoreRepository,
+    private adminRepo: AdminRepository
   ) {
     /** */
   }
@@ -38,7 +40,7 @@ export class SettingsService {
     style: string,
     values: string,
     voice: string,
-    character: string,
+    context: string,
   ) {
     this.loadingSubject.next(true);
     return this.firestoreRepo.updateCurrentUserDocumentObj<Persona>(
@@ -49,29 +51,24 @@ export class SettingsService {
         style: style,
         values: values,
         voice: voice,
-        character: character
+        context: context
       },
     ).pipe(
+      tap((response) => this.adminRepo.updateOnboardingStatus(false)),
       map((response) => {
-        if (response !== undefined) {
-          this.loadingSubject.next(false);
-          this.personaSubject.next(response);
-          return response
-        } else {
-          this.errorSubject.next('Error saving persona settings');
-          return response
-        }
-      },
+        this.loadingSubject.next(false);
+        this.personaSubject.next(response);
+        return response
+      }),
       catchError((error) => {
         this.loadingSubject.next(false);
         this.errorSubject.next(error);
         return error;
       })
-    ));
+    );
   }
 
   getPersonaSettings() {
-    this.loadingSubject.next(true);
     this.firestoreRepo.getDocumentAsUser<Persona>(
       PERSONA_KEY
     ).subscribe({
@@ -86,5 +83,9 @@ export class SettingsService {
         this.errorSubject.next(error);
       }
     });
+  }
+
+  updateOnboardingStatus(hasCompleted: boolean) {
+    this.adminRepo.updateOnboardingStatus(hasCompleted);
   }
 }
