@@ -121,6 +121,16 @@ export class HubDashboardService {
   ) {
     this.contentLoadingSubject.next(true);
     let trimmedUrl = youtubeUrl.split('v=')[1];
+    this.contentSubject.next({
+      title:'',
+      content:'',
+      contentType:'',
+      id:'',
+      created:'',
+      sourceTitle:'',
+      sourceUrl:'',
+      sourceThumbnail:'',
+    } as Content);
 
     this.contentRepo.getContentFromVideo(
       title,

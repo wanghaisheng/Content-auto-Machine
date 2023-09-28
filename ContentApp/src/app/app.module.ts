@@ -69,6 +69,7 @@ import { TermsComponent } from './views/terms/terms.component';
 import { LibraryComponent } from './views/library/library.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PersonaComponent } from './views/common/persona/persona.component';
+import { RippleModule } from 'primeng/ripple';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -109,6 +110,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     PersonaComponent
   ],
   imports: [
+    RippleModule,
     NgxExtendedPdfViewerModule,
     TagModule,
     MenuModule,

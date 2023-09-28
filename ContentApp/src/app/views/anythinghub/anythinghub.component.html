@@ -33,7 +33,7 @@
       *ngFor="let item of root.items"
       (click)="itemClick(item.type)"  
       class="split-card" header="{{ item.title }}" 
-      [style]="{ background: '#1f2937', margin: '8px' }">
+      [style]="{ margin: '8px' }">
       <p class="m-0">{{ item.description }}</p>
     </p-card>
   </div>
