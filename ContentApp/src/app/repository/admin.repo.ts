@@ -57,7 +57,6 @@ export class AdminRepository {
       isFirstTimeUser: hasCompleted,
     }).subscribe({
       next: (response) => {
-        console.log('🚀 ~ file: admin.repo.ts:76 ~ AdminRepository ~ next ~ response', response);
       },
       error: (error) => {
         console.log('🔥 ' + error);

@@ -1,11 +1,5 @@
-
-<h2>{{ title }}</h2>
 <div class="row full-height">
-  <app-createpanel 
-    class="col-4"
-    [createMode]="panelCreateMode"
-  ></app-createpanel>
-  <p-divider layout="vertical"></p-divider>
-  <app-contentpanel
-    class="col-6"></app-contentpanel>
+  <app-createpanel class="col-4" [createMode]="panelCreateMode"></app-createpanel>
+  <p-divider layout="vertical" [style]="{ 'height': '100vh' }"></p-divider>
+  <app-contentpanel class="col-6" [mediaMode]="panelMediaMode"></app-contentpanel>
 </div>

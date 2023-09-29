@@ -1,0 +1,28 @@
+.container-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+}
+
+.footer {
+  background-color: #333; /* Background color for the footer */
+  color: #fff; /* Text color */
+  padding: 20px 0; /* Add padding to the top and bottom of the footer */
+  text-align: center; /* Center-align the text */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Style the anchor links within the footer */
+.footer-links {
+  display: flex; /* Use flexbox to center-align the links */
+  justify-content: space-between; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}

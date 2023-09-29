@@ -24,11 +24,6 @@
   width: 100%;
 }
 
-/* Section header */
-.section-header {
-  margin-top: 1rem;
-}
-
 /* Video info section */
 .video-info {
   display: flex;

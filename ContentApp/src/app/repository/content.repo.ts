@@ -96,8 +96,9 @@ export class ContentRepository {
       },
     };
     return from(axios(metadataConfig)).pipe(
-      tap((response: AxiosResponse<any, any>) => {
+      map((response: AxiosResponse<any, any>) => {
         this.videoDetailsSubject.next(response.data as ApiResponse<YoutubeInfo>);
+        return response.data;
       }),
       concatMap((response: AxiosResponse<any, any>) => this.fireAuthRepo.getUserAuthObservable()),
       concatMap((user) => {

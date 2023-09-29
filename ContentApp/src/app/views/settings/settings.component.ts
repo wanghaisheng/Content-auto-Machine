@@ -117,10 +117,12 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     },
   ];
 
-  profileForm: FormGroup;
-
   @ViewChild('pnl', {static: false}) paneler?: ElementRef<Panel>;
   @ViewChild('menu', {static: false}) menu?: Menu;
+
+  avatarUrl = '';
+  avatarName = '';
+  avatarEmail = '';
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -128,12 +130,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     private navigationService: NavigationService,
     private socialAuthService: SocialAuthService,
     private messageService: MessageService,
-    private formBuilder: FormBuilder
   ) {
-    this.profileForm = this.formBuilder.group({
-      name: [''],
-      email: [''],
-    });
   }
 
   ngOnInit(): void {
@@ -224,6 +221,14 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.socialAuthService.getMediumAuthObservable$.subscribe((isConnected) => {
       this.mediumConnected = isConnected;
     });
+    this.socialAuthService.userAccountObservable$.subscribe((user) => {
+      this.avatarName = user.displayName ?? '';
+      this.avatarUrl = user.photoURL ?? '';
+      this.avatarEmail = user.email ?? '';
+    });
+    // Kickoffs
+    this.socialAuthService.getUserAccount();
+    this.socialAuthService.getAuthenticatedSocialAccounts();
   }
 
   onFacebookLogin() {

@@ -6,9 +6,10 @@
  * All rights reserved. Unauthorized copying or reproduction of this file is prohibited.
  */
 
-import { AfterContentInit, Component, ElementRef, OnInit, QueryList, SecurityContext, ViewChildren } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, QueryList, SecurityContext, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ZOOM_CLIENT_ID } from 'appsecrets';
+import { ToggleButton } from 'primeng/togglebutton';
 import * as RecordRTC from 'recordrtc';
 import { HubDashboardService } from 'src/app/service/hubdashboard.service';
 import { MessengerService } from 'src/app/service/messenger.service';
@@ -20,8 +21,10 @@ import { SocialAuthService } from 'src/app/service/user/socialauth.service';
   templateUrl: './anythinghub.component.html',
   styleUrls: ['./anythinghub.component.css']
 })
-export class AnythinghubComponent implements OnInit {
+export class AnythinghubComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('toggleButton', {static: false}) toggleButton!: ToggleButton;
+  
   // Declare Record OBJ
   record: RecordRTC.StereoAudioRecorder | undefined;
   
@@ -31,7 +34,9 @@ export class AnythinghubComponent implements OnInit {
   recording = false;
   promptForZoom: boolean = false;
   promptOnboarding: boolean = false;
+  
   showVoiceDialog = false;
+  tempGeneratorType = '';
 
   generatorsList: {
     header: string;
@@ -42,7 +47,6 @@ export class AnythinghubComponent implements OnInit {
       prompt: string;
     }[]
   }[] = [];
-
 
   constructor(
     private navigationService: NavigationService,
@@ -71,8 +75,6 @@ export class AnythinghubComponent implements OnInit {
     this.hubDashboardService.errorObservable$.subscribe((error: string) => {
       console.log(error);
     });
-    //Kickoff
-    this.hubDashboardService.getHubGenerators();
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: ((accounts) => {
         accounts.forEach((account) => {
@@ -80,12 +82,33 @@ export class AnythinghubComponent implements OnInit {
         });
       })
     });
+    //Kickoff
+    this.hubDashboardService.getHubGenerators();
+    this.socialAuthService.getAuthenticatedSocialAccounts();
+  }
+
+  ngAfterViewInit(): void {
+    this.toggleButton.onChange.subscribe({
+      next: async (event: any) => {
+        if (!event.checked) {
+          this.messengerService.setInfoMessage('We got it! Creating your content...');
+          await new Promise((resolve) =>
+            setTimeout(
+              resolve,
+              1000
+            )
+          );
+          this.navigationService.navigateToDashboard(this.tempGeneratorType);
+        }
+      }
+    });
   }
   
   itemClick(generator_type: string) {
     if (generator_type.includes('zoom') && this.promptForZoom) {
       this.messengerService.setErrorMessage('Please connect your Zoom account to use this feature.');
     } else if (generator_type.includes('voice')) {
+      this.tempGeneratorType = generator_type;
       this.showVoiceDialog = true;
     } else {
       this.navigationService.navigateToDashboard(generator_type)

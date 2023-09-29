@@ -1,13 +1,7 @@
 <div class="flex-container">
   <form [formGroup]="formGroup">
-    <div class="header">
-      <span class="header-icon">
-        <i class="pi pi-book"></i>
-      </span>
-      <input formControlName="title" placeholder='Type your title...' class="header-input" type="text" pInputText />
-    </div>
     <div *ngIf="createMode.includes('youtube')">
-      <h3 class="section-header">Youtube Video</h3>
+      <h3>Video Link</h3>
       <div class="header">
         <span class="header-icon">
           <i class="pi pi-youtube"></i>
@@ -17,7 +11,7 @@
     </div>
   </form>
   <div *ngIf="createMode.includes('zoom')">
-    <h3 class="section-header">Zoom Recordings</h3>
+    <h3>Recordings</h3>
       <div *ngIf="(contentLoading$ | async)" class="flex-item">
         <p-skeleton width="200px" height="2rem" styleClass="mb-2"></p-skeleton>
       </div>
@@ -29,9 +23,9 @@
         [style]="{ 'width': '100%' }">
         <ng-template let-meeting pTemplate="item">
           <h3>{{ meeting.topic }}</h3>
-          <div class="flex row" style="align-content: center;">
-            <p>Start: {{ meeting.start_time }}</p>
-            <p>Duration: {{ meeting.duration }} minutes</p>
+          <div class="flex" style="align-content: center;">
+            <p>{{ meeting.start_time }}</p>
+            <p>{{ meeting.duration }} minutes</p>
           </div>
         </ng-template>
         <ng-template pTemplate="footer">
@@ -67,7 +61,7 @@
     </div>
   </div>
   <div class="output-type">
-    <h3 class="section-header">Your AI</h3>
+    <h3>Your AI</h3>
     <p-dropdown 
       [(ngModel)]="selectedItem"
       [options]="items" optionLabel="name"

@@ -8,33 +8,24 @@
 
 import { Injectable } from '@angular/core';
 import {
-  getAdditionalUserInfo,
   getAuth,
   GoogleAuthProvider,
-  signInWithCredential,
   signInWithPopup,
   TwitterAuthProvider,
 } from 'firebase/auth';
 import {
-  catchError,
-  concat,
-  concatMap,
-  from,
   map,
   Observable,
   Subject,
-  switchMap,
   take,
-  tap,
 } from 'rxjs';
 import { FireAuthRepository } from '../../repository/database/fireauth.repo';
 import { YoutubeAuthRepository } from '../../repository/oauth/youtubeauth.repo';
 import { SocialAuthRepository as SocialAuthRepository } from '../../repository/oauth/socialauth.repo';
 import { NavigationService } from '../navigation.service';
 import { FacebookPage } from '../../model/content/facebookpage.model';
-import { PostingPlatform } from 'src/app/constants';
 import { FacebookRepository } from 'src/app/repository/apis/facebook.repo';
-import { error } from 'firebase-functions/logger';
+import { FirebaseUser } from 'src/app/model/user/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -67,7 +58,13 @@ export class SocialAuthService {
   private userInstagramLinkSuccess = new Subject<boolean>();
   getInstagramLinkSuccessObservable$ =
   this.userInstagramLinkSuccess.asObservable();
+
+  private userAccountSubject = new Subject<FirebaseUser>();
+  userAccountObservable$ = this.userAccountSubject.asObservable();
   
+  private userSocialAccountSubject = new Subject<{ [key: string]: boolean }[]>();
+  userSocialAccountsObservable$ = this.userSocialAccountSubject.asObservable();
+
   getMediumAuthObservable$ = this.mediumAuthSubject.asObservable();
   getTwitterAuthObservable$ = this.twitterAuthSubject.asObservable();
   getFacebookAuthObservable$ = this.facebookAuthSubject.asObservable();
@@ -78,10 +75,7 @@ export class SocialAuthService {
   this.conectionsLoadingSubject.asObservable();
   getErrorObservable$ = this.errorSubject.asObservable();
   
-  userAccountObservable$ = this.fireAuthRepo.getUserAuthObservable();
-  userSocialAccountsObservable$ = this.socialAuthRepo.getAuthenticatedSocialAccts().pipe(
-    take(1),
-  );
+
   youtubeAuthObservable$ = this.socialAuthRepo.saveYoutubeAuth();
   facebookPagesObservable$ = this.socialAuthRepo.getFacebookPages();
 
@@ -343,5 +337,34 @@ export class SocialAuthService {
         return user !== undefined && user !== null ? true : false;
       })
     );
+  }
+
+  getUserAccount() {
+    this.fireAuthRepo.getUserAuthObservable().subscribe({
+      next: (user) => {
+        if (user) {
+          this.userAccountSubject.next(user);
+        }
+      },
+      error: (error) => {
+        console.log("🚀 ~ file: socialauth.service.ts:350 ~ SocialAuthService ~ this.fireAuthRepo.getUserAuthObservable ~ error:", error)
+        this.errorSubject.next(error);
+      },
+    });
+  }
+
+  getAuthenticatedSocialAccounts() {
+    this.socialAuthRepo.getAuthenticatedSocialAccts().pipe(
+      take(1),
+    ).subscribe({
+      next: (socialAccts) => {
+        if (socialAccts) {
+          this.userSocialAccountSubject.next(socialAccts);
+        }
+      },
+      error: (error) => {
+        this.errorSubject.next(error);
+      },
+    });
   }
 }

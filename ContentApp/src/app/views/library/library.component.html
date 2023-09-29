@@ -12,9 +12,6 @@
 
 <p-accordion *ngIf="contents.length > 0">
   <p-accordionTab *ngFor="let item of contents" header="{{ item.title }}">
-    <div class="row">
-      <p-button label="Preview" styleClass="p-button-link"></p-button>
-      <pre>{{ item.content }}</pre>
-    </div>
+    <p-button label="Preview" styleClass="p-button-link"></p-button>
   </p-accordionTab>
 </p-accordion>
