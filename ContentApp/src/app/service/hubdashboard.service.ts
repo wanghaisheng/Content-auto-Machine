@@ -95,10 +95,21 @@ export class HubDashboardService {
   createZoomContent(
     title: string,
     zoomMeetingId: number,
+    zoomDuration: number,
     aiModel: string,
     contentType: string
   ) {
     this.contentLoadingSubject.next(true);
+    this.contentSubject.next({
+      title:'',
+      content: `Sit tight while we download, transcribe, and generate content from your video.\n\nEstimated time to completion: ${(zoomDuration / 3).toFixed(2)} minutes.`,
+      contentType:'',
+      id:'',
+      created:'',
+      sourceTitle:'',
+      sourceUrl:'',
+      sourceThumbnail:'',
+    });
     this.zoomRepo.getContentFromMeeting(
       title,
       zoomMeetingId,
