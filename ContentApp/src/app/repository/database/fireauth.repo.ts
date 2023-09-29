@@ -47,6 +47,7 @@ export class FireAuthRepository {
 
   getUserAuthObservable(): Observable<FirebaseUser> {
     if (this.currentSessionUser !== null && this.currentSessionUser !== undefined) {
+      console.log("🚀 ~ file: fireauth.repo.ts:55 ~ FireAuthRepository ~ getUserAuthObservable ~ userSubject:", this.currentSessionUser)
       return new Observable((subject) => {
         subject.next(this.currentSessionUser);
       });

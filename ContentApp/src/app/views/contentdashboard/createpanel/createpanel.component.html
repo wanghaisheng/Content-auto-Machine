@@ -23,9 +23,9 @@
         [style]="{ 'width': '100%' }">
         <ng-template let-meeting pTemplate="item">
           <h3>{{ meeting.topic }}</h3>
-          <div class="flex row" style="align-content: center;">
-            <p>Start: {{ meeting.start_time }}</p>
-            <p>Duration: {{ meeting.duration }} minutes</p>
+          <div class="flex" style="align-content: center;">
+            <p>{{ meeting.start_time }}</p>
+            <p>{{ meeting.duration }} minutes</p>
           </div>
         </ng-template>
         <ng-template pTemplate="footer">

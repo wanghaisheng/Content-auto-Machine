@@ -67,7 +67,12 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     });
 
     this.hubDashboardService.meetingsObservable$.subscribe((meetings) => {
-      this.meetings = meetings;
+      this.meetings = meetings.map((meeting) => {
+        return {
+          ...meeting,
+          start_time: new Date(meeting.start_time).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }),
+        }
+      });
     })
     this.hubDashboardService.errorObservable$.subscribe((error) => {
       this.disabledState = false;
@@ -110,6 +115,10 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
     }
     if (this.selectedItem.key === 'yoni') {
       this.messengerService.setErrorMessage('Brand Engine only available for premium members.');
+      return;
+    }
+    if (this.formGroup.value.url === '') {
+      this.messengerService.setErrorMessage('Please enter a url');
       return;
     }
 

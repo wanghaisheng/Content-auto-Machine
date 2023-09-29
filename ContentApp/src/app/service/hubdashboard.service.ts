@@ -15,6 +15,7 @@ import { Generators } from '../model/admin/generators.model';
 import { ZoomRepository } from '../repository/apis/zoom.repo';
 import { Meeting } from '../model/source/zoomrecordings.model';
 
+const MAX_VIDEO_LENGTH = 1200;
 @Injectable({
   providedIn: 'root',
 })
@@ -56,10 +57,12 @@ export class HubDashboardService {
 
   videoDetailsObservable$ = this.contentRepo.videoDetailsSubject.asObservable().pipe(
     map((response) => {
-      if (response.message === 'success') {
-        return response.result;
+      if (response.message !== 'success') {
+        throw new Error('Failed to get video data');
+      } else if (response.result.lengthSeconds > MAX_VIDEO_LENGTH) {
+        throw new Error('Video is too long. Premium members can upload videos up to 2 hours long.');
       } else {
-        throw new Error(response.message);
+        return response.result;
       }
     })
   );

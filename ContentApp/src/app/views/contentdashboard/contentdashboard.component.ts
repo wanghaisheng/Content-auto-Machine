@@ -20,7 +20,6 @@ export class ContentDashboardComponent implements OnInit {
  
   panelCreateMode = '';
   panelMediaMode = '';
-  title = '';
 
   constructor(
     private route: ActivatedRoute
@@ -32,19 +31,8 @@ export class ContentDashboardComponent implements OnInit {
         const segment = segments[segments.length - 1].path;
         const splitSegments = segment.split('_');
 
-        splitSegments.forEach((word, index) => {
-          if (index == 0) {
-            this.title += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
-          } else if (index == 2) {
-            this.title += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
-          } else {
-            this.title += word + ' ';
-          }
-        });
-
         this.panelCreateMode = segment;
         this.panelMediaMode = splitSegments[2];
-        console.log("🚀 ~ file: contentdashboard.component.ts:47 ~ ContentDashboardComponent ~ this.route.url.subscribe ~ panelMediaMode:", this.panelMediaMode)
       }
     })
   

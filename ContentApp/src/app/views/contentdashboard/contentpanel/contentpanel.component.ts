@@ -13,7 +13,7 @@ import { SocialAuthService } from 'src/app/service/user/socialauth.service';
   templateUrl: './contentpanel.component.html',
   styleUrls: ['./contentpanel.component.css']
 })
-export class ContentpanelComponent implements OnInit, AfterViewInit, OnChanges {
+export class ContentpanelComponent implements OnInit {
 
   @Input() mediaMode: string = '';
 
@@ -53,24 +53,27 @@ export class ContentpanelComponent implements OnInit, AfterViewInit, OnChanges {
     this.hubDashboardService.errorObservable$.subscribe({
       next: (error) => {
         this.messengerService.setErrorMessage(error);
+        this.content = 'To get started, just go to the left and drop in a youtube link then click submit.';
       }
     });
-
+    this.hubDashboardService.videoDetailsObservable$.subscribe({
+      next: (videoDetails) => {
+        let waitTime = '';
+        try {
+          waitTime = (videoDetails.lengthSeconds / 60 / 2).toFixed(2);
+        } catch (error) {
+          console.log("🚀 ~ file: contentpanel.component.ts:63 ~ ContentpanelComponent ~ ngOnInit ~ error:", error)
+        }
+        this.content = `Sit tight while we download, transcribe, and generate content from your video.\n\nEstimated time to completion: ${waitTime} minutes.`;
+      }
+    });
     this.socialAuthService.userAccountObservable$.subscribe((user) => {
       if (user) {
         this.avatarName = user.displayName ?? '';
         this.avatarUrl = user.photoURL ?? '';
       }
     });
+    // Kick off
     this.socialAuthService.getUserAccount();
-  }
-
-  ngAfterViewInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['mediaMode'] && changes['mediaMode'].currentValue) {
-    console.log("🚀 ~ file: contentpanel.component.ts:76 ~ ContentpanelComponent ~ ngOnChanges ~ changes['mediaMode'].currentValue:", changes['mediaMode'].currentValue)
-    }
   }
 }

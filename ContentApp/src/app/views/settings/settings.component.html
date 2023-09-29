@@ -10,6 +10,14 @@
   <p-panel #pnl header="{{ currentView }}" class="container">
 
     <div *ngIf="currentView == 'Profile'" class="container">
+      <div class="row">
+        <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+        <div class="col" style="margin-left: 1rem">
+          <strong style="margin: 0; padding: 0; line-height: 1;">{{ avatarName }}</strong>
+          <p>{{ avatarEmail }}</p>
+        </div>
+      </div>
       <div class="row" style="justify-content: space-between;">
         <p>If you need assistance with anything our team will be happy to help. Please reach out to us at
           hello@yoniai.ai</p>

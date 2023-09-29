@@ -71,8 +71,6 @@ export class AnythinghubComponent implements OnInit {
     this.hubDashboardService.errorObservable$.subscribe((error: string) => {
       console.log(error);
     });
-    //Kickoff
-    this.hubDashboardService.getHubGenerators();
     this.socialAuthService.userSocialAccountsObservable$.subscribe({
       next: ((accounts) => {
         accounts.forEach((account) => {
@@ -80,6 +78,9 @@ export class AnythinghubComponent implements OnInit {
         });
       })
     });
+    //Kickoff
+    this.hubDashboardService.getHubGenerators();
+    this.socialAuthService.getAuthenticatedSocialAccounts();
   }
   
   itemClick(generator_type: string) {

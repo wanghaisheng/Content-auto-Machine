@@ -16,7 +16,7 @@ import {
   MessageService,
 } from 'primeng/api';
 import { NavigationEnd, Router } from '@angular/router';
-import { Observable, Subject, filter, tap } from 'rxjs';
+import { Observable, Subject, filter, firstValueFrom, from, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -65,9 +65,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.loggedInObserver$ = this.socialAuthService.isUserLoggedIn();
     // Subscribe to route changes
+    // this.route.url.subscribe((segments) => {
+    //   if (segments.length > 0) {
+    //     const segment = segments[segments.length - 1].path;
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe(async () => {
         // Get the current route snapshot
         let route = this.activatedRoute.root;
         while (route.firstChild) {
@@ -75,7 +78,7 @@ export class AppComponent implements OnInit {
         }
 
         // Build breadcrumb data based on child route hierarchy
-        const breadcrumbData = this.buildBreadcrumb(
+        const breadcrumbData = await this.buildBreadcrumb(
           route = route
         );
         this.items = breadcrumbData;
@@ -118,31 +121,73 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private buildBreadcrumb(
+  private async buildBreadcrumb(
     route: ActivatedRoute,
     url: string = '',
     breadcrumbs: any[] = []
-  ): any[] {
+  ): Promise<MenuItem[]> {
     const label = route.routeConfig?.data?.['breadcrumb'] ?? '';
+    console.log("🚀 ~ file: app.component.ts:127 ~ AppComponent ~ label:", label)
+
     const path = route.routeConfig ? route.routeConfig.path : '';
+    console.log("🚀 ~ file: app.component.ts:129 ~ AppComponent ~ path:", path)
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {
       return breadcrumbs;
     } 
 
     // Don't include empty labels
-    const nextUrl = `${url}${path}/`;
-    const breadcrumb = {
-      label,
-      url: nextUrl,
-    };
+    let nextUrl = `${url}${path}/`;
+    console.log("🚀 ~ file: app.component.ts:136 ~ AppComponent ~ nextUrl:", nextUrl)
 
-    const newBreadcrumbs = breadcrumb.label
+    let newBreadcrumbs;
+    if (label == 'Dashboard') {
+      const segment = await firstValueFrom(route.url);
+      const leafSegment = segment[segment.length - 1].path;
+      const splitSegments = leafSegment.split('_');
+
+      let typeTitle = '';
+      nextUrl = nextUrl.replace(':type', leafSegment)
+
+      splitSegments.forEach((word, index) => {
+        if (index == 0) {
+          typeTitle += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
+        } else if (index == 2) {
+          typeTitle += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
+        } else {
+          typeTitle += word + ' ';
+        }
+      });
+
+      const dashboardCrumb = {
+        label,
+        url: nextUrl,
+      };
+      const typeCrumb = {
+        label: typeTitle,
+        url: nextUrl,
+      };
+  
+      newBreadcrumbs = dashboardCrumb.label
+      ? [...breadcrumbs, dashboardCrumb, typeCrumb]
+      : [...breadcrumbs];
+      console.log("🚀 ~ file: app.component.ts:143 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
+    } else {
+      const breadcrumb = {
+        label,
+        url: nextUrl,
+      };
+      console.log("🚀 ~ file: app.component.ts:140 ~ AppComponent ~ breadcrumb:", breadcrumb)
+  
+      newBreadcrumbs = breadcrumb.label
       ? [...breadcrumbs, breadcrumb]
       : [...breadcrumbs];
+      console.log("🚀 ~ file: app.component.ts:143 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
+    }
     if (route.firstChild) {
       return this.buildBreadcrumb(route.firstChild, nextUrl, newBreadcrumbs);
     }
+    console.log("🚀 ~ file: app.component.ts:150 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
     return newBreadcrumbs;
   }
 
