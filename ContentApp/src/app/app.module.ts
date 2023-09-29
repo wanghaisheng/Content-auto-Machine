@@ -73,6 +73,7 @@ import { RippleModule } from 'primeng/ripple';
 import { FacebookpostComponent } from './views/mimics/facebookpost/facebookpost.component';
 import { LinkedinpostComponent } from './views/mimics/linkedinpost/linkedinpost.component';
 import { TwitternpostComponent } from './views/mimics/twitternpost/twitternpost.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -116,6 +117,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     TwitternpostComponent
   ],
   imports: [
+    ToggleButtonModule,
     RippleModule,
     NgxExtendedPdfViewerModule,
     TagModule,

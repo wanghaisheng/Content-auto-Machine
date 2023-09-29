@@ -127,20 +127,15 @@ export class AppComponent implements OnInit {
     breadcrumbs: any[] = []
   ): Promise<MenuItem[]> {
     const label = route.routeConfig?.data?.['breadcrumb'] ?? '';
-    console.log("🚀 ~ file: app.component.ts:127 ~ AppComponent ~ label:", label)
-
     const path = route.routeConfig ? route.routeConfig.path : '';
-    console.log("🚀 ~ file: app.component.ts:129 ~ AppComponent ~ path:", path)
 
     if (label === 'login' || label === 'facebook-callback' || label === 'linkedin-callback' || label === 'zoom-callback' || label === 'Homebase') {
       return breadcrumbs;
     } 
 
-    // Don't include empty labels
     let nextUrl = `${url}${path}/`;
-    console.log("🚀 ~ file: app.component.ts:136 ~ AppComponent ~ nextUrl:", nextUrl)
-
     let newBreadcrumbs;
+
     if (label == 'Dashboard') {
       const segment = await firstValueFrom(route.url);
       const leafSegment = segment[segment.length - 1].path;

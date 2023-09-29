@@ -39,12 +39,19 @@
   </div>
 </div>
 
-<p-dialog header="Just press record" [(visible)]="showVoiceDialog" [style]="{ width: '50vw' }">
-  <div style="text-align:center;margin-top: 200px;" >
-    <button (click)="initiateRecording()" class="btn btn-primary" *ngIf="!recording" style="cursor: pointer;background-color: green;color: white;font-size: 40px;"> Start Recording </button>
-    <button (click)="stopRecording()" class="btn btn-danger" *ngIf="recording" style="cursor: pointer;background-color: red;color: white;font-size: 40px;"> Stop Recording </button>
-    <audio controls="" *ngIf="url">
-    <source [src]="sanitize(url)" type="audio/wav">
-    </audio>
+<p-dialog header="Voice to Viral Content" [(visible)]="showVoiceDialog" [style]="{ width: '50vw' }">
+  <div style="text-align:center;margin-top: 1rem;" >
+    <p-toggleButton #toggleButton
+      [(ngModel)]="recording" 
+      onLabel="Stop" 
+      offLabel="Record" 
+      styleClass="p-button-rounded p-button-lg"
+      label="Large">
+    </p-toggleButton>
+      <!-- <button (click)="initiateRecording()" class="btn btn-primary" *ngIf="!recording" style="cursor: pointer;background-color: green;color: white;font-size: 40px;"> Start Recording </button>
+      <button (click)="stopRecording()" class="btn btn-danger" *ngIf="recording" style="cursor: pointer;background-color: red;color: white;font-size: 40px;"> Stop Recording </button>
+      <audio controls="" *ngIf="url">
+      <source [src]="sanitize(url)" type="audio/wav">
+      </audio> -->
     </div>
 </p-dialog>

@@ -16,8 +16,6 @@ import { SocialAuthService } from 'src/app/service/user/socialauth.service';
 export class ContentpanelComponent implements OnInit {
 
   @Input() mediaMode: string = '';
-
-  @ViewChild('pnl', {static: true}) paneler!: ElementRef<Panel>;
   
   loadingObservable$!: Observable<boolean>;
 
