@@ -16,11 +16,11 @@ import { HubDashboardService } from 'src/app/service/hubdashboard.service';
   templateUrl: './contentdashboard.component.html',
   styleUrls: ['./contentdashboard.component.css']
 })
-export class ContentDashboardComponent implements OnInit, OnChanges {
+export class ContentDashboardComponent implements OnInit {
  
   panelCreateMode = '';
+  panelMediaMode = '';
   title = '';
-  showImprovements = true;
 
   constructor(
     private route: ActivatedRoute
@@ -30,8 +30,9 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
     this.route.url.subscribe((segments) => {
       if (segments.length > 0) {
         const segment = segments[segments.length - 1].path;
-        this.panelCreateMode = segment;
-        segment.split('_').forEach((word, index) => {
+        const splitSegments = segment.split('_');
+
+        splitSegments.forEach((word, index) => {
           if (index == 0) {
             this.title += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
           } else if (index == 2) {
@@ -40,12 +41,12 @@ export class ContentDashboardComponent implements OnInit, OnChanges {
             this.title += word + ' ';
           }
         });
+
+        this.panelCreateMode = segment;
+        this.panelMediaMode = splitSegments[2];
+        console.log("🚀 ~ file: contentdashboard.component.ts:47 ~ ContentDashboardComponent ~ this.route.url.subscribe ~ panelMediaMode:", this.panelMediaMode)
       }
     })
   
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-      /** */
   }
 }

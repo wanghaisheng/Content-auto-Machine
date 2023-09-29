@@ -22,6 +22,7 @@ import { Content } from 'src/app/model/content/content.model';
 export class CreatepanelComponent implements OnInit, AfterContentInit {
 
   @Input() createMode: string = '';
+
   mode: string = ''
 
   contentLoading$!: Observable<boolean>;

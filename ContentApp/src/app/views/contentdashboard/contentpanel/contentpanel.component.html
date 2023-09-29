@@ -1,76 +1,88 @@
-<p-card #pnl *ngIf="content !== '' && contentLoading == false" class="container">
+<!-- <p-card #pnl *ngIf="content !== '' && contentLoading == false" class="container">
   <form [(ngModel)]="promptSubmit" class="row">
-    <input [style]="{ 'width': '28vw', 'flex': '1'}" placeholder='Type to enhance then press Enter ⏎' style="width: 100%; flex: 1;" class="flex-item" type="text"
-      pInputText formControlName="enhance" pTooltip="Press Enter ⏎ to Apply" tooltipPosition="left" />
+    <input [style]="{ 'width': '28vw', 'flex': '1'}" placeholder='Type to enhance then press Enter ⏎'
+      style="width: 100%; flex: 1;" class="flex-item" type="text" pInputText formControlName="enhance"
+      pTooltip="Press Enter ⏎ to Apply" tooltipPosition="left" />
   </form>
-</p-card>
-<app-typewriter class="wrapped-paragraph" *ngIf="content != '' && contentLoading == false" style="height: 100%; width: 75%" textToShow="{{ content }}"></app-typewriter> 
+</p-card> -->
 
-  <h3 *ngIf="content == '' && contentLoading == false">
-    <app-typewriter
-      textToShow="To get started, just go to the left and drop in a youtube link then click submit."></app-typewriter>
-  </h3>
+<app-facebookpost 
+  *ngIf="mediaMode == 'facebook'" 
+  [bodyContent]="content"
+  [avatarUrl]="avatarUrl"
+  [avatarName]="avatarName">
+</app-facebookpost>
+<app-linkedinpost 
+  *ngIf="mediaMode == 'linkedin'" 
+  [bodyContent]="content"
+  [avatarUrl]="avatarUrl"
+  [avatarName]="avatarName">
+</app-linkedinpost>
+<app-twitternpost 
+  *ngIf="mediaMode == 'twitter'" 
+  [bodyContent]="content"
+  [avatarUrl]="avatarUrl"
+  [avatarName]="avatarName">
+</app-twitternpost>
 
-  <app-twitternpost></app-twitternpost>
-
-  <div *ngIf="contentLoading" class="border-round border-1 surface-border p-4 surface-card"
-    style="width: 70v2; height: 100vh">
-    <div class="flex">
-      <div style="flex: 1">
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <br/>
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <br />
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </div>
-    <br />
-    <div class="flex">
-      <div style="flex: 1">
-        <br />
-        <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
-        <br />
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
+<div *ngIf="contentLoading" class="border-round border-1 surface-border p-4 surface-card"
+  style="width: 70v2; height: 100vh">
+  <div class="flex">
+    <div style="flex: 1">
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
     </div>
   </div>
+  <br />
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+  <br />
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+  <br />
+  <div class="flex">
+    <div style="flex: 1">
+      <br />
+      <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+      <br />
+      <p-skeleton width="75%"></p-skeleton>
+    </div>
+  </div>
+</div>

@@ -5,9 +5,9 @@
         <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
         <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
         <div class="col" style="margin-left: 1rem">
-          <strong style="margin: 0; padding: 0; line-height: 1;">{{ title }}</strong>
-          <p style="margin: 0; padding: 0; line-height: 1;">{{ subtitle }}</p>
-          <p style="margin: 0; padding: 0; line-height: 1;">{{ subtitle }}</p>
+          <strong style="margin: 0; padding: 0; line-height: 1;">{{ avatarName }}</strong>
+          <p style="margin: 0; padding: 0; line-height: 1;">{{ topTitle }}</p>
+          <p style="margin: 0; padding: 0; line-height: 1;">{{ bottomTitle }}</p>
         </div>
       </div>
       <div class="row">
@@ -16,14 +16,16 @@
       </div>
     </div>
   </ng-template>
+
+  <app-typewriter class="wrapped-paragraph" style="height: 100%; width: 75%" textToShow="{{ bodyContent }}"></app-typewriter> 
   
   <ng-template pTemplate="footer">
     <div class="container-row" style="align-items: baseline;">
       <div style="flex-direction: row; display: flex;">
         <i class="pi pi-heart-fill mr-2" style="margin: 1rem; color: red"></i>
-        <p>58</p>
+        <p>5,008</p>
       </div>
-      <p>17 comments</p>
+      <p>1,007 comments</p>
     </div>
     <p-divider></p-divider>
     <div class="footer-links">

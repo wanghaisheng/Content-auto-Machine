@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-twitternpost',
@@ -7,8 +7,9 @@ import { Component } from '@angular/core';
 })
 export class TwitternpostComponent {
 
-  avatarUrl = '';
-  title = 'John Doe';
-  subtitle = 'September 28';
+  @Input() bodyContent: string = '';
+  @Input() avatarUrl: string = '';
+  @Input() avatarName: string = '';
+  subtitle = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 
 }

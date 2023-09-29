@@ -5,21 +5,23 @@
         <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="large" shape="circle"></p-avatar>
         <p-avatar *ngIf="avatarUrl == ''" icon="pi pi-user" styleClass="mr-2" size="large" shape="circle"></p-avatar>
         <div class="col" style="margin-left: 1rem">
-          <strong>{{ title }}</strong>
+          <strong>{{ avatarName }}</strong>
           <p>{{ subtitle }}</p>
         </div>
       </div>
       <i class="pi pi-ellipsis-h mr-2" style="margin: 1rem;"></i>
     </div>
   </ng-template>
+
+  <app-typewriter class="wrapped-paragraph" style="height: 100%; width: 75%" textToShow="{{ bodyContent }}"></app-typewriter> 
   
   <ng-template pTemplate="footer">
     <div class="container-row" style="align-items: baseline;">
       <div style="flex-direction: row; display: flex;">
         <i class="pi pi-heart-fill mr-2" style="margin: 1rem; color: red"></i>
-        <p>58</p>
+        <p>5,800</p>
       </div>
-      <p>17 comments    7 shares</p>
+      <p>1,700 comments    700 shares</p>
     </div>
     <p-divider></p-divider>
     <div class="footer-links">

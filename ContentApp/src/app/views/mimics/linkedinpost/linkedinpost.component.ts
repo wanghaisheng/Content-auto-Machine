@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-linkedinpost',
@@ -7,8 +7,10 @@ import { Component } from '@angular/core';
 })
 export class LinkedinpostComponent {
 
-  avatarUrl = '';
-  title = 'John Doe';
-  subtitle = 'September 28';
+  @Input() bodyContent: string = '';
+  @Input() avatarUrl: string = '';
+  @Input() avatarName: string = '';
+  topTitle = 'CEO, Founder, Philanthropist, Investor, Author, Speaker';
+  bottomTitle = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 
 }
