@@ -166,23 +166,19 @@ export class AppComponent implements OnInit {
       newBreadcrumbs = dashboardCrumb.label
       ? [...breadcrumbs, dashboardCrumb, typeCrumb]
       : [...breadcrumbs];
-      console.log("🚀 ~ file: app.component.ts:143 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
     } else {
       const breadcrumb = {
         label,
         url: nextUrl,
       };
-      console.log("🚀 ~ file: app.component.ts:140 ~ AppComponent ~ breadcrumb:", breadcrumb)
   
       newBreadcrumbs = breadcrumb.label
       ? [...breadcrumbs, breadcrumb]
       : [...breadcrumbs];
-      console.log("🚀 ~ file: app.component.ts:143 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
     }
     if (route.firstChild) {
       return this.buildBreadcrumb(route.firstChild, nextUrl, newBreadcrumbs);
     }
-    console.log("🚀 ~ file: app.component.ts:150 ~ AppComponent ~ newBreadcrumbs:", newBreadcrumbs)
     return newBreadcrumbs;
   }
 
