@@ -17,6 +17,7 @@ import { ZoomRedirectComponent } from './views/redirects/zoomredirect.component'
 import { SettingsComponent } from './views/settings/settings.component';
 import { TermsComponent } from './views/terms/terms.component';
 import { LibraryComponent } from './views/library/library.component';
+import { authGuard } from './service/guard/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -26,17 +27,20 @@ const routes: Routes = [
   { 
     path: '', 
     component: AnythinghubComponent,
-    data: { breadcrumb: 'Homebase' }
+    data: { breadcrumb: 'Homebase' },
+    canActivate: [authGuard]
   },
   { 
     path: 'dashboard/:type', 
     component: ContentDashboardComponent,
-    data: { breadcrumb: 'Dashboard' }
+    data: { breadcrumb: 'Dashboard' },
+    canActivate: [authGuard]
   },
   {
     path: 'settings',
     component: SettingsComponent,
-    data: { breadcrumb: 'Settings' }
+    data: { breadcrumb: 'Settings' },
+    canActivate: [authGuard]
   },
   {
     path: 'terms/:type',
@@ -46,7 +50,8 @@ const routes: Routes = [
   {
     path: 'library',
     component: LibraryComponent,
-    data: { breadcrumb: 'Library' }
+    data: { breadcrumb: 'Library' },
+    canActivate: [authGuard]
   },
   { path: '**', component: PageNotFoundComponent }
 ];

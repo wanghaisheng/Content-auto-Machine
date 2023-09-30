@@ -193,8 +193,4 @@ export class AppComponent implements OnInit {
   onSettingsClick() {
     this.navigationService.navigateToSettings();
   }
-
-  onTermsClick(type: string) {
-    this.navigationService.navigateToTerms(type);
-  }
 }
