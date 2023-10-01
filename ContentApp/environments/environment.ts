@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  // apiUrl: 'https://legion-ai-content-machine.uc.r.appspot.com',
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://legion-ai-content-machine.uc.r.appspot.com',
+  // apiUrl: 'http://localhost:3000',
   firebaseConfig: {
     apiKey: "AIzaSyA05f7gvWPe78sV5jR1jM-0e4Hy-aDEXIQ",
     authDomain: "legion-ai-content-machine.firebaseapp.com",
