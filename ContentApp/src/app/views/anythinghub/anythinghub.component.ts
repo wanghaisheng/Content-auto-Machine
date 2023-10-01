@@ -186,4 +186,9 @@ export class AnythinghubComponent implements OnInit, AfterViewInit {
   errorCallback(error: any) {
     this.messengerService.setErrorMessage('Can not record audio in your browser');
   }
+
+  onTermsClick(type: string) {
+    this.navigationService.navigateToTerms(type);
+  }
+  
 }

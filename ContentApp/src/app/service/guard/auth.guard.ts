@@ -13,6 +13,7 @@ import {
 } from '@angular/router';
 import { FireAuthRepository } from '../../repository/database/fireauth.repo';
 import { map } from 'rxjs';
+import { NavigationService } from '../navigation.service';
 
 export const authGuard = (next: ActivatedRouteSnapshot) => {
   const sessionUserPresent = inject(FireAuthRepository).currentSessionUser !== undefined && inject(FireAuthRepository).currentSessionUser !== null;
@@ -20,20 +21,13 @@ export const authGuard = (next: ActivatedRouteSnapshot) => {
     console.log("🚀 ~ file: auth.guard.ts:12 ~ authGuard ~ sessionUserPresent:", sessionUserPresent)
     return true;
   } else {
-    return inject(FireAuthRepository)
-      .getUserAuthObservable()
-      .pipe(
-        map((user) => {
-          console.log("🚀 ~ file: auth.guard.ts:19 ~ map ~ user:", user)
-          if (!user) {
-            console.log('🚀 ~ file: auth.guard.ts:11 ~ map ~ user:', user);
-            inject(Router).navigate(['/lander']);
-            return false;
-          } else {
-            console.log('🚀 ~ file: auth.guard.ts:15 ~ map ~ user:', user);
-            return true;
-          }
-        })
-      );
+    const repo =  inject(FireAuthRepository).currentSessionUser;
+    console.log("🚀 ~ file: auth.guard.ts:25 ~ authGuard ~ repo:", repo)
+    if (repo !== undefined && repo !== null) {
+      return true;
+    } else {
+      inject(NavigationService).navigateToLogin();
+      return false;
+    }
   }
 };

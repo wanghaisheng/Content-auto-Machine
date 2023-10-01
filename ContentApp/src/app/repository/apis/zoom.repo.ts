@@ -12,13 +12,14 @@ import { FireAuthRepository } from "../database/fireauth.repo";
 import { ApiResponse } from "src/app/model/response/apiresponse.model";
 import { Meeting, Recording, ZoomRecordings } from "src/app/model/source/zoomrecordings.model";
 import { Content } from "src/app/model/content/content.model";
+import { environment } from "environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
 export class ZoomRepository {
 
-  contentMachineUrlv2 = 'http://localhost:3000/api/v2';
+  contentMachineUrlv2 = `${environment.apiUrl}/api/v2`;
 
   constructor(
     private firebaseAuthRepo: FireAuthRepository

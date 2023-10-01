@@ -18,3 +18,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+@media screen and (max-width: 576px) {
+  .split-card {
+    width: 100%; 
+    margin: 8px;
+  }
+}

@@ -14,8 +14,9 @@ import { Generators } from '../model/admin/generators.model';
 import { FireAuthRepository } from './database/fireauth.repo';
 import { FirestoreRepository } from './database/firestore.repo';
 import { FirebaseUser } from '../model/user/user.model';
+import { environment } from 'environments/environment';
 
-const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
+const contentMachineUrlv2 = `${environment.apiUrl}/api/v2`;
 
 @Injectable({
   providedIn: 'root',

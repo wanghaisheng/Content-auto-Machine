@@ -117,10 +117,6 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.messengerService.setErrorMessage('Brand Engine only available for premium members.');
       return;
     }
-    if (this.formGroup.value.url === '') {
-      this.messengerService.setErrorMessage('Please enter a url');
-      return;
-    }
 
     this.formGroup.patchValue({ 'title': '' })
     this.disabledState = true;
@@ -129,6 +125,7 @@ export class CreatepanelComponent implements OnInit, AfterContentInit {
       this.hubDashboardService.createZoomContent(
         this.formGroup.value.title,
         this.selectedMeeting.id,
+        this.selectedMeeting.duration,
         this.selectedItem?.key ?? '',
         this.createMode
         )

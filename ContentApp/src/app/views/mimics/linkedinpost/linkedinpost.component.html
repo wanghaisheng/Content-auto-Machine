@@ -20,13 +20,6 @@
   <app-typewriter class="wrapped-paragraph" style="height: 100%; width: 75%" textToShow="{{ bodyContent }}"></app-typewriter> 
   
   <ng-template pTemplate="footer">
-    <div class="container-row" style="align-items: baseline;">
-      <div style="flex-direction: row; display: flex;">
-        <i class="pi pi-heart-fill mr-2" style="margin: 1rem; color: red"></i>
-        <p>5,008</p>
-      </div>
-      <p>1,007 comments</p>
-    </div>
     <p-divider></p-divider>
     <div class="footer-links">
       <p-avatar *ngIf="avatarUrl !== ''" [image]="avatarUrl" styleClass="mr-2" size="medium" shape="circle"></p-avatar>

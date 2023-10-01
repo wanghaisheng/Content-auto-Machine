@@ -14,9 +14,10 @@ import { FireAuthRepository } from './database/fireauth.repo';
 import { Content } from '../model/content/content.model';
 import { YoutubeInfo } from '../model/source/youtubeinfo.model';
 import { FirestoreRepository } from './database/firestore.repo';
+import { environment } from 'environments/environment';
 
-const contentMachineUrl = 'http://localhost:3000/api';
-const contentMachineUrlv2 = 'http://localhost:3000/api/v2';
+const contentMachineUrl = `${environment.apiUrl}/api`;
+const contentMachineUrlv2 = `${environment.apiUrl}/api/v2`;
 
 @Injectable({
   providedIn: 'root',

@@ -24,6 +24,7 @@ import {
   PAGE
 } from '../../repository/database/firestore.repo';
 import { YoutubeAuthRepository } from './youtubeauth.repo';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -99,7 +100,7 @@ export class SocialAuthRepository {
 
   getZoomAuthConfig(zoomCode: string, userId: string) {
     return from(
-      axios.get<{message: string, result: any}>('http://localhost:3000/api/v2/config/zoom', {
+      axios.get<{message: string, result: any}>(`${ environment.apiUrl }/api/v2/config/zoom`, {
         params: {
           code: zoomCode,
           userId: userId,

@@ -28,7 +28,7 @@
 
 <div *ngFor="let root of generatorsList" class="grid-container">
   <h1>{{ root.header }}</h1>
-  <div class="grid">
+  <div class="grid" fxLayout="column wrap" fxLayout.xs="column" fxLayout.gt-xs="column wrap">
     <p-card 
       *ngFor="let item of root.items"
       (click)="itemClick(item.type)"  
@@ -38,6 +38,18 @@
     </p-card>
   </div>
 </div>
+
+<footer>
+  <div class="footer-links">
+    <a (click)="onTermsClick('terms')">Terms</a>
+    <p> | </p>
+    <a (click)="onTermsClick('privacy')">Privacy</a>
+    <p> | </p>
+    <a href="#">Contact Us</a>
+    <br/>
+  </div>
+  <p class="footer-links">© 2021 Flight Deprived, LLC. - All Rights Reserved</p>
+</footer>
 
 <p-dialog header="Voice to Viral Content" [(visible)]="showVoiceDialog" [style]="{ width: '50vw' }">
   <div style="text-align:center;margin-top: 1rem;" >
